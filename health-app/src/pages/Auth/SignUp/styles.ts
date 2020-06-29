@@ -11,7 +11,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
   font-size: 24px;
   color: #17181d;
-  font-family: 'DroidSerif-Bold';
+  font-family: 'Roboto-Medium';
   margin-top: 10px;
 
   margin-bottom: 24px;
@@ -28,7 +28,7 @@ export const BackToSignInButton = styled.TouchableOpacity`
 export const BackToSignInText = styled.Text`
   color: #17181d;
   font-size: 18px;
-  font-family: 'DroidSerif';
+  font-family: 'Roboto-Regular';
 
   margin-left: 10px;
 `;

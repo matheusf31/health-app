@@ -34,14 +34,16 @@ export const Container = styled.View<IContainerProps>`
     `}
 `;
 
+export const IconContainer = styled.View`
+  width: 30px;
+`;
+
+export const Icon = styled(Ionicons)``;
+
 export const TextInput = styled.TextInput`
   flex: 1;
   height: 100%;
   color: #17181d;
   font-size: 16px;
-  font-family: 'DroidSerif';
-`;
-
-export const Icon = styled(Ionicons)`
-  margin-right: 16px;
+  font-family: 'Roboto-Regular';
 `;
