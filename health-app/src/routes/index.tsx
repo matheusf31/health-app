@@ -7,7 +7,13 @@ import SignOut from '../pages/SignOut';
 const Auth = createStackNavigator();
 
 const AuthRoutes: React.FC = () => (
-  <Auth.Navigator>
+  <Auth.Navigator
+    screenOptions={{
+      cardStyle: {
+        backgroundColor: '#EBFDFF',
+      },
+    }}
+  >
     <Auth.Screen name="SignIn" component={SignIn} />
     <Auth.Screen name="SignOut" component={SignOut} />
   </Auth.Navigator>
