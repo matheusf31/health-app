@@ -41,7 +41,7 @@ const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const { signIn, user } = useAuth();
+  const { signIn } = useAuth();
 
   const navigation = useNavigation();
 
@@ -65,8 +65,6 @@ const SignIn: React.FC = () => {
           email: data.email,
           password: data.password,
         });
-
-        // navigation.navigate('Dashboard');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -79,7 +77,7 @@ const SignIn: React.FC = () => {
         Alert.alert('Erro na autenticação!', JSON.stringify(err));
       }
     },
-    [signIn],
+    [signIn, navigation],
   );
 
   return (
