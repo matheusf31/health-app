@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import { Platform, Text, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView } from 'react-native';
 import Emoji from 'react-native-emoji';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getAlarms } from 'react-native-simple-alarm';
@@ -32,23 +32,6 @@ const Dashboard: React.FC = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [addAlarmModalVisible, setAddAlarmModalVisible] = useState(false);
-
-  // useEffect(() => {
-  //   async function setAlarm(): Promise<void> {
-  //     try {
-  //       await createAlarm({
-  //         active: true,
-  //         date: moment().format(),
-  //         message: 'message',
-  //         snooze: 0,
-  //       });
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-
-  //   setAlarm();
-  // }, []);
 
   useEffect(() => {
     async function loadAlarms(): Promise<void> {

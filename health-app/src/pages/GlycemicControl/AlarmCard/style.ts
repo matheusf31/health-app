@@ -24,10 +24,7 @@ export const TimeText = styled.Text`
 
 export const MessageContainer = styled.TouchableOpacity`
   width: 300px;
-
-  /* flex: 1;
-  align-items: center;
-  margin: 0 20px; */
+  padding: 10px;
 `;
 
 export const MessageText = styled.Text`
