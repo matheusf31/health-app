@@ -1,7 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
-import { format } from 'date-fns';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { createAlarm } from 'react-native-simple-alarm';
@@ -16,7 +15,7 @@ import {
   ModalCreateAlarmButton,
 } from './styles';
 
-interface IAddAlarmModal {
+interface IAddAlarmModalProps {
   modalVisible: boolean;
   onModalChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -25,7 +24,7 @@ interface IFormSubmit {
   message: string;
 }
 
-const AddAlarmModal: React.FC<IAddAlarmModal> = ({
+const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   modalVisible,
   onModalChange,
 }) => {

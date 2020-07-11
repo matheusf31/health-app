@@ -23,7 +23,7 @@ export const TimeText = styled.Text`
 `;
 
 export const MessageContainer = styled.TouchableOpacity`
-  width: 300px;
+  flex: 1;
   padding: 10px;
 `;
 
@@ -34,29 +34,3 @@ export const MessageText = styled.Text`
 `;
 
 export const CancelButtonContainer = styled.TouchableOpacity``;
-
-/** Modal */
-export const ModalContainer = styled.View`
-  width: 100%;
-  height: 60%;
-  background: #fbfbfb;
-  border-radius: 10px;
-
-  padding: 0 24px;
-`;
-
-export const ModalTitleContainer = styled.View`
-  flex-direction: row;
-
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
-`;
-
-export const ModalTitle = styled.Text`
-  color: #17181d;
-  font-family: 'Roboto-Medium';
-  font-size: 24px;
-
-  margin-left: 10px;
-`;

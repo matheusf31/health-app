@@ -60,6 +60,7 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
           mode={mode === 'time' ? 'time' : 'date'}
           is24Hour
           onChange={handleDateChanged}
+          textColor="#17181d"
         />
       )}
     </>

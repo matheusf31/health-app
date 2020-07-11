@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import Modal from 'react-native-modal';
 import { format, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Emoji from 'react-native-emoji';
 import { deleteAlarmById } from 'react-native-simple-alarm';
+
+import AlarmDetails from './AlarmDetails';
 
 import {
   Container,
@@ -12,9 +12,6 @@ import {
   MessageContainer,
   MessageText,
   CancelButtonContainer,
-  ModalContainer,
-  ModalTitleContainer,
-  ModalTitle,
 } from './style';
 
 import { IAlarm } from '../index';
@@ -60,19 +57,10 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({ alarm, onChangeAlarms }) => {
         />
       </CancelButtonContainer>
 
-      <Modal
-        isVisible={modalVisible}
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
-        useNativeDriver
-      >
-        <ModalContainer>
-          <ModalTitleContainer>
-            <Emoji name=":pencil2:" style={{ fontSize: 16 }} />
-            <ModalTitle>Anotações</ModalTitle>
-          </ModalTitleContainer>
-        </ModalContainer>
-      </Modal>
+      <AlarmDetails
+        modalVisible={modalVisible}
+        onModalChange={setModalVisible}
+      />
     </Container>
   );
 };
