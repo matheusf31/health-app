@@ -1,5 +1,6 @@
 package com.healthapp;
 
+import com.horcrux.svg.SvgPackage;
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
