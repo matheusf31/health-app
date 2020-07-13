@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
 import Modal from 'react-native-modal';
+import Emoji from 'react-native-emoji';
 
 import DateInput from '../../../../components/DateInput';
+import Button from '../../../../components/Button';
 
-import { ModalContainer, ModalTitle, ModalTitleContainer } from './styles';
+import {
+  ModalContainer,
+  ModalTitle,
+  ModalTitleContainer,
+  ModalAlarmMessageContainer,
+  ModalAlarmMessageTextContainer,
+  ModalAlarmMessageText,
+  ModalAlarmMessageButton,
+} from './styles';
+
+import { IAlarm } from '../../index';
 
 interface IAlarmDetailsProps {
+  alarm: IAlarm;
   modalVisible: boolean;
   onModalChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
+  alarm,
   modalVisible,
   onModalChange,
 }) => {
@@ -25,7 +39,9 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
       useNativeDriver
     >
       <ModalContainer>
-        <ModalTitleContainer>
+        <ModalTitleContainer
+          style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
+        >
           <ModalTitle>Edite o horário</ModalTitle>
         </ModalTitleContainer>
 
@@ -35,16 +51,31 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
           onSelectedDateChange={setSelectedDate}
           showDateTimePicker={showDatePicker}
           onShowDateTimePickerChange={setShowDatePicker}
+          containerStyle={{ marginTop: -15, marginBottom: 20 }}
         />
 
         <ModalTitleContainer>
           <ModalTitle>Edite a mensagem do alarme</ModalTitle>
         </ModalTitleContainer>
 
+        <ModalAlarmMessageContainer>
+          <ModalAlarmMessageTextContainer>
+            {alarm && (
+              <ModalAlarmMessageText>{alarm.message}</ModalAlarmMessageText>
+            )}
+          </ModalAlarmMessageTextContainer>
+
+          <ModalAlarmMessageButton>
+            <Emoji name=":pencil2:" style={{ fontSize: 16 }} />
+          </ModalAlarmMessageButton>
+        </ModalAlarmMessageContainer>
+
         <ModalTitleContainer>
           <ModalTitle>Registro de aplicação</ModalTitle>
         </ModalTitleContainer>
       </ModalContainer>
+
+      <Button>Salvar</Button>
     </Modal>
   );
 };

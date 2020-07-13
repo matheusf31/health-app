@@ -24,7 +24,7 @@ interface IAlarmCardProps {
 const AlarmCard: React.FC<IAlarmCardProps> = ({ alarm, onChangeAlarms }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
-  const formatedDate = useMemo(() => format(parseISO(alarm.date), 'hh:mm'), [
+  const formatedDate = useMemo(() => format(parseISO(alarm.date), 'HH:mm'), [
     alarm,
   ]);
 
@@ -58,6 +58,7 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({ alarm, onChangeAlarms }) => {
       </CancelButtonContainer>
 
       <AlarmDetails
+        alarm={alarm}
         modalVisible={modalVisible}
         onModalChange={setModalVisible}
       />
