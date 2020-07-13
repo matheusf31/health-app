@@ -1,10 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleProp, ViewStyle } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 
-import { OpenDatePickerButton, OpenDatePickerButtonText } from './styles';
+import {
+  Container,
+  OpenDatePickerButton,
+  OpenDatePickerButtonText,
+} from './styles';
 
 interface IDateTimePickerInput {
   selectedDate: Date;
@@ -12,6 +16,7 @@ interface IDateTimePickerInput {
   showDateTimePicker: boolean;
   onShowDateTimePickerChange: React.Dispatch<React.SetStateAction<boolean>>;
   mode: 'time' | 'calendar';
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
@@ -20,6 +25,7 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
   onSelectedDateChange,
   showDateTimePicker,
   onShowDateTimePickerChange,
+  containerStyle,
 }) => {
   const handleDateChanged = useCallback(
     (event: any, date: Date | undefined) => {
@@ -47,7 +53,7 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
   }, [selectedDate, mode]);
 
   return (
-    <>
+    <Container style={containerStyle}>
       <OpenDatePickerButton
         onPress={() => onShowDateTimePickerChange(prevState => !prevState)}
       >
@@ -63,7 +69,7 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
           textColor="#17181d"
         />
       )}
-    </>
+    </Container>
   );
 };
 

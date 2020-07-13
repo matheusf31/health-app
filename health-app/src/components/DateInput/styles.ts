@@ -14,5 +14,5 @@ export const OpenDatePickerButton = styled.TouchableOpacity`
 export const OpenDatePickerButtonText = styled.Text`
   color: #146ba8;
   font-family: 'Roboto-Medium';
-  font-size: 22px;
+  font-size: 24px;
 `;
