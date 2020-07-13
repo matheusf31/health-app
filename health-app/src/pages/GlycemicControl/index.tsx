@@ -7,6 +7,7 @@ import { getAlarms } from 'react-native-simple-alarm';
 import DateInput from '../../components/DateInput';
 import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
+import Emojis from './Emojis';
 
 import {
   Container,
@@ -25,13 +26,14 @@ export interface IAlarm {
   message: string;
 }
 
-const Dashboard: React.FC = () => {
+const GlycemicControl: React.FC = () => {
   const { signOut } = useAuth();
 
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [addAlarmModalVisible, setAddAlarmModalVisible] = useState(false);
+  const [selectedFeels, setSelectedFeels] = useState('');
 
   useEffect(() => {
     async function loadAlarms(): Promise<void> {
@@ -60,7 +62,7 @@ const Dashboard: React.FC = () => {
 
         <AlarmContainer>
           <TitleContainer>
-            <Emoji name=":alarm_clock:" style={{ fontSize: 16 }} />
+            <Emoji name=":alarm_clock:" style={{ fontSize: 20 }} />
             <Title>Alarmes</Title>
           </TitleContainer>
 
@@ -84,9 +86,14 @@ const Dashboard: React.FC = () => {
 
         <FeelsContainer>
           <TitleContainer>
-            <Emoji name=":grinning:" style={{ fontSize: 16 }} />
+            <Emoji name=":grinning:" style={{ fontSize: 20 }} />
             <Title>Como está se sentindo hoje?</Title>
           </TitleContainer>
+
+          <Emojis
+            selectedFeels={selectedFeels}
+            onSelectedFeelsChange={setSelectedFeels}
+          />
         </FeelsContainer>
       </ScrollView>
 
@@ -98,4 +105,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default GlycemicControl;

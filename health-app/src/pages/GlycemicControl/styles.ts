@@ -18,7 +18,7 @@ export const TitleContainer = styled.View`
 export const Title = styled.Text`
   color: #17181d;
   font-family: 'Roboto-Medium';
-  font-size: 24px;
+  font-size: 26px;
 
   margin-left: 10px;
 `;
@@ -29,7 +29,9 @@ export const AlarmContainer = styled.View`
 
 export const AlarmList = styled(FlatList as new () => FlatList<IAlarm>)``;
 
-export const AddAlarmButton = styled.TouchableOpacity``;
+export const AddAlarmButton = styled.TouchableOpacity`
+  margin-bottom: 20px;
+`;
 
 export const AnotationsContainer = styled.View`
   margin: 0 24px;
