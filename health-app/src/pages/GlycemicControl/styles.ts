@@ -27,16 +27,20 @@ export const AlarmContainer = styled.View`
   margin: 0 24px;
 `;
 
-export const AlarmList = styled(FlatList as new () => FlatList<IAlarm>)``;
+export const AlarmCategoryText = styled.Text`
+  color: #17181d;
+  font-family: 'Roboto-Regular';
+  font-size: 20px;
+`;
+
+export const AlarmCardListContainer = styled.View`
+  margin-bottom: 20px;
+`;
 
 export const AddAlarmButton = styled.TouchableOpacity`
   margin-bottom: 20px;
 `;
 
-export const AnotationsContainer = styled.View`
-  margin: 0 24px;
-`;
-
 export const FeelsContainer = styled.View`
-  margin: 0 24px;
+  margin: 0 24px 40px;
 `;
