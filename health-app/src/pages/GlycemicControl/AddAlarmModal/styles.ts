@@ -2,6 +2,14 @@ import styled, { css } from 'styled-components/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/Button';
 
+interface IModalRepetitionButton {
+  selected: boolean;
+}
+
+interface IModalRepetitionButtonText {
+  selected: boolean;
+}
+
 interface IModalCategoryButton {
   selected: boolean;
 }
@@ -30,17 +38,52 @@ export const ModalTitle = styled.Text`
   font-size: 24px;
 `;
 
-export const ModalCategoryContainer = styled.View`
+export const ModalRepetitionContainer = styled.View`
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 10px;
   margin-bottom: 30px;
 `;
 
-export const ModalCategoryButton = styled.TouchableOpacity<
-  IModalCategoryButton
+export const ModalRepetitionButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})<IModalRepetitionButton>`
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #146ba8;
+  padding: 10px;
+
+  ${props =>
+    props.selected &&
+    css`
+      background: #146ba8;
+    `}
+`;
+
+export const ModalRepetitionButtonText = styled.Text<
+  IModalRepetitionButtonText
 >`
-  margin-right: 10px;
+  color: #17181d;
+  font-family: 'Roboto-Medium';
+  font-size: 16px;
+
+  ${props =>
+    props.selected &&
+    css`
+      color: #fff;
+    `}
+`;
+
+export const ModalCategoryContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 30px;
+`;
+
+export const ModalCategoryButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})<IModalCategoryButton>`
   border-radius: 10px;
   border-width: 2px;
   border-color: #146ba8;

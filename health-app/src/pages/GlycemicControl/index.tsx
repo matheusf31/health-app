@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { ScrollView, Button } from 'react-native';
+import { ScrollView } from 'react-native';
 import Emoji from 'react-native-emoji';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getAlarms } from 'react-native-simple-alarm';
@@ -44,13 +44,15 @@ const GlycemicControl: React.FC = () => {
   useEffect(() => {
     async function loadAlarms(): Promise<void> {
       try {
-        const allAlarms: IAlarm[] = await getAlarms();
+        let allAlarms: IAlarm[] = await getAlarms();
 
-        // allAlarms = allAlarms.filter(alarm =>
-        //   isSameDay(parseISO(alarm.date), selectedDate),
-        // );
+        allAlarms = allAlarms.filter(alarm =>
+          isSameDay(parseISO(alarm.date), selectedDate),
+        );
 
         setAlarms(allAlarms);
+
+        // await deleteAllAlarms();
       } catch (e) {
         console.log(e);
       }
@@ -103,6 +105,7 @@ const GlycemicControl: React.FC = () => {
 
               {physicalActivity.map(alarm => (
                 <AlarmCard
+                  selectedDate={selectedDate}
                   key={alarm.id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
@@ -117,6 +120,7 @@ const GlycemicControl: React.FC = () => {
 
               {bloodGlucose.map(alarm => (
                 <AlarmCard
+                  selectedDate={selectedDate}
                   key={alarm.id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
@@ -131,6 +135,7 @@ const GlycemicControl: React.FC = () => {
 
               {insulinTherapy.map(alarm => (
                 <AlarmCard
+                  selectedDate={selectedDate}
                   key={alarm.id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
@@ -145,6 +150,7 @@ const GlycemicControl: React.FC = () => {
 
               {withoutCategory.map(alarm => (
                 <AlarmCard
+                  selectedDate={selectedDate}
                   key={alarm.id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
@@ -177,8 +183,10 @@ const GlycemicControl: React.FC = () => {
       </ScrollView>
 
       <AddAlarmModal
+        selectedDate={selectedDate}
         modalVisible={addAlarmModalVisible}
-        onModalChange={setAddAlarmModalVisible}
+        onModalVisibleChange={setAddAlarmModalVisible}
+        onSelectedDateChange={setSelectedDate}
       />
 
       {/* <Button title="sair" onPress={() => signOut()} /> */}
