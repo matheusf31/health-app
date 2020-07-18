@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isSameDay } from 'date-fns';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { deleteAlarmById } from 'react-native-simple-alarm';
 
@@ -19,9 +19,14 @@ import { IAlarm } from '../index';
 interface IAlarmCardProps {
   alarm: IAlarm;
   onChangeAlarms: React.Dispatch<React.SetStateAction<IAlarm[]>>;
+  selectedDate: Date;
 }
 
-const AlarmCard: React.FC<IAlarmCardProps> = ({ alarm, onChangeAlarms }) => {
+const AlarmCard: React.FC<IAlarmCardProps> = ({
+  alarm,
+  selectedDate,
+  onChangeAlarms,
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const formattedDate = useMemo(() => format(parseISO(alarm.date), 'HH:mm'), [
@@ -30,13 +35,17 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({ alarm, onChangeAlarms }) => {
 
   const deleteAlarm = useCallback(async () => {
     try {
-      const attAlarms = await deleteAlarmById(alarm.id);
+      let attAlarms: IAlarm[] = await deleteAlarmById(alarm.id);
+
+      attAlarms = attAlarms.filter(eachAlarm =>
+        isSameDay(parseISO(eachAlarm.date), selectedDate),
+      );
 
       onChangeAlarms(attAlarms);
     } catch (e) {
       console.log(e);
     }
-  }, [alarm, onChangeAlarms]);
+  }, [alarm, onChangeAlarms, selectedDate]);
 
   return (
     <Container>

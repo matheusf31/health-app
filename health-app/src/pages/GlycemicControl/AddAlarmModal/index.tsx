@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
 import { createAlarm } from 'react-native-simple-alarm';
+import { addDays, lastDayOfYear, differenceInDays } from 'date-fns';
 
 import DateInput from '../../../components/DateInput';
 
@@ -9,6 +10,9 @@ import {
   ModalContainer,
   ModalTitle,
   ModalTitleContainer,
+  ModalRepetitionContainer,
+  ModalRepetitionButton,
+  ModalRepetitionButtonText,
   ModalCategoryContainer,
   ModalCategoryButton,
   ModalCategoryButtonText,
@@ -20,30 +24,36 @@ import {
 } from './styles';
 
 interface IAddAlarmModalProps {
+  selectedDate: Date;
   modalVisible: boolean;
-  onModalChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onModalVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onSelectedDateChange: React.Dispatch<React.SetStateAction<Date>>;
 }
 
 const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
+  selectedDate,
   modalVisible,
-  onModalChange,
+  onModalVisibleChange,
+  onSelectedDateChange,
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  // const [selectedDate, setSelectedDate] = useState(new Date());
   const [category, setCategory] = useState('');
+  const [repeat, setRepeat] = useState('');
   const [message, setMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
   const handleLeaveModal = useCallback(() => {
-    onModalChange(false);
+    onModalVisibleChange(false);
     setCategory('');
+    setRepeat('');
     setMessage('');
-    setSelectedDate(new Date());
-  }, [onModalChange]);
+    onSelectedDateChange(new Date());
+  }, [onModalVisibleChange, onSelectedDateChange]);
 
   const handleAddAlarm = useCallback(async () => {
-    let autoMessage;
+    let autoMessage: string | undefined;
 
     if (category === 'blood-glucose') autoMessage = 'medir';
 
@@ -59,12 +69,33 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
           category,
         },
       });
+
+      const compareDate = differenceInDays(
+        lastDayOfYear(selectedDate),
+        selectedDate,
+      );
+
+      if (repeat === 'daily') {
+        // ARRUMAR i < compareDate
+        for (let i = 1; i <= compareDate + 1; i++) {
+          // eslint-disable-next-line no-await-in-loop
+          await createAlarm({
+            active: true,
+            date: addDays(selectedDate, i),
+            message: autoMessage || message,
+            snooze: 0,
+            userInfo: {
+              category,
+            },
+          });
+        }
+      }
     } catch (e) {
       console.log(e);
     }
 
     handleLeaveModal();
-  }, [selectedDate, category, handleLeaveModal, message]);
+  }, [selectedDate, category, handleLeaveModal, message, repeat]);
 
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
@@ -93,20 +124,65 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
           <DateInput
             mode="time"
             selectedDate={selectedDate}
-            onSelectedDateChange={setSelectedDate}
+            onSelectedDateChange={onSelectedDateChange}
             showDateTimePicker={showDatePicker}
             onShowDateTimePickerChange={setShowDatePicker}
             containerStyle={{ marginTop: -10 }}
           />
 
-          <ModalTitleContainer style={{ marginTop: 20 }}>
+          <ModalTitleContainer>
+            <ModalTitle>Repetir</ModalTitle>
+          </ModalTitleContainer>
+
+          <ModalRepetitionContainer>
+            <ModalRepetitionButton
+              selected={repeat === 'daily'}
+              onPress={() =>
+                setRepeat(prevState => (prevState === 'daily' ? '' : 'daily'))
+              }
+            >
+              <ModalRepetitionButtonText selected={repeat === 'daily'}>
+                Diariamente
+              </ModalRepetitionButtonText>
+            </ModalRepetitionButton>
+
+            <ModalRepetitionButton
+              selected={repeat === 'weekly'}
+              onPress={() =>
+                setRepeat(prevState => (prevState === 'weekly' ? '' : 'weekly'))
+              }
+            >
+              <ModalRepetitionButtonText selected={repeat === 'weekly'}>
+                Semanalmente
+              </ModalRepetitionButtonText>
+            </ModalRepetitionButton>
+
+            <ModalRepetitionButton
+              selected={repeat === 'monthly'}
+              onPress={() =>
+                setRepeat(prevState =>
+                  prevState === 'monthly' ? '' : 'monthly',
+                )
+              }
+            >
+              <ModalRepetitionButtonText selected={repeat === 'monthly'}>
+                Mensalmente
+              </ModalRepetitionButtonText>
+            </ModalRepetitionButton>
+          </ModalRepetitionContainer>
+
+          <ModalTitleContainer>
             <ModalTitle>Selecione a categoria</ModalTitle>
           </ModalTitleContainer>
 
           <ModalCategoryContainer>
             <ModalCategoryButton
               selected={category === 'physical-activity'}
-              onPress={() => setCategory('physical-activity')}
+              onPress={() =>
+                setCategory(prevState =>
+                  prevState === 'physical-activity' ? '' : 'physical-activity',
+                )
+              }
             >
               <ModalCategoryButtonText
                 selected={category === 'physical-activity'}
@@ -117,7 +193,11 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
             <ModalCategoryButton
               selected={category === 'blood-glucose'}
-              onPress={() => setCategory('blood-glucose')}
+              onPress={() =>
+                setCategory(prevState =>
+                  prevState === 'blood-glucose' ? '' : 'blood-glucose',
+                )
+              }
             >
               <ModalCategoryButtonText selected={category === 'blood-glucose'}>
                 Glicemia
@@ -126,7 +206,11 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
             <ModalCategoryButton
               selected={category === 'insulin-therapy'}
-              onPress={() => setCategory('insulin-therapy')}
+              onPress={() =>
+                setCategory(prevState =>
+                  prevState === 'insulin-therapy' ? '' : 'insulin-therapy',
+                )
+              }
             >
               <ModalCategoryButtonText
                 selected={category === 'insulin-therapy'}
