@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import React, { useEffect, useState, useMemo } from 'react';
+import { ScrollView, Button } from 'react-native';
 import Emoji from 'react-native-emoji';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getAlarms } from 'react-native-simple-alarm';
+import { parseISO, isSameDay } from 'date-fns';
 
 import DateInput from '../../components/DateInput';
 import AlarmCard from './AlarmCard';
@@ -14,6 +15,8 @@ import {
   Title,
   TitleContainer,
   AlarmContainer,
+  AlarmCategoryText,
+  AlarmCardListContainer,
   AddAlarmButton,
   FeelsContainer,
 } from './styles';
@@ -24,6 +27,9 @@ export interface IAlarm {
   id: number;
   date: string;
   message: string;
+  userInfo: {
+    category: string;
+  };
 }
 
 const GlycemicControl: React.FC = () => {
@@ -38,7 +44,11 @@ const GlycemicControl: React.FC = () => {
   useEffect(() => {
     async function loadAlarms(): Promise<void> {
       try {
-        const allAlarms = await getAlarms();
+        const allAlarms: IAlarm[] = await getAlarms();
+
+        // allAlarms = allAlarms.filter(alarm =>
+        //   isSameDay(parseISO(alarm.date), selectedDate),
+        // );
 
         setAlarms(allAlarms);
       } catch (e) {
@@ -47,7 +57,28 @@ const GlycemicControl: React.FC = () => {
     }
 
     loadAlarms();
-  }, [addAlarmModalVisible]);
+  }, [addAlarmModalVisible, selectedDate]);
+
+  const physicalActivity = useMemo(
+    () =>
+      alarms.filter(alarm => alarm.userInfo.category === 'physical-activity'),
+    [alarms],
+  );
+
+  const bloodGlucose = useMemo(
+    () => alarms.filter(alarm => alarm.userInfo.category === 'blood-glucose'),
+    [alarms],
+  );
+
+  const insulinTherapy = useMemo(
+    () => alarms.filter(alarm => alarm.userInfo.category === 'insulin-therapy'),
+    [alarms],
+  );
+
+  const withoutCategory = useMemo(
+    () => alarms.filter(alarm => alarm.userInfo.category === ''),
+    [alarms],
+  );
 
   return (
     <Container>
@@ -66,13 +97,61 @@ const GlycemicControl: React.FC = () => {
             <Title>Alarmes</Title>
           </TitleContainer>
 
-          {alarms.map(alarm => (
-            <AlarmCard
-              key={alarm.id}
-              alarm={alarm}
-              onChangeAlarms={setAlarms}
-            />
-          ))}
+          {physicalActivity.length > 0 && (
+            <AlarmCardListContainer>
+              <AlarmCategoryText>Atividade física</AlarmCategoryText>
+
+              {physicalActivity.map(alarm => (
+                <AlarmCard
+                  key={alarm.id}
+                  alarm={alarm}
+                  onChangeAlarms={setAlarms}
+                />
+              ))}
+            </AlarmCardListContainer>
+          )}
+
+          {bloodGlucose.length > 0 && (
+            <AlarmCardListContainer>
+              <AlarmCategoryText>Glicemia</AlarmCategoryText>
+
+              {bloodGlucose.map(alarm => (
+                <AlarmCard
+                  key={alarm.id}
+                  alarm={alarm}
+                  onChangeAlarms={setAlarms}
+                />
+              ))}
+            </AlarmCardListContainer>
+          )}
+
+          {insulinTherapy.length > 0 && (
+            <AlarmCardListContainer>
+              <AlarmCategoryText>Insulinoterapia</AlarmCategoryText>
+
+              {insulinTherapy.map(alarm => (
+                <AlarmCard
+                  key={alarm.id}
+                  alarm={alarm}
+                  onChangeAlarms={setAlarms}
+                />
+              ))}
+            </AlarmCardListContainer>
+          )}
+
+          {withoutCategory.length > 0 && (
+            <AlarmCardListContainer>
+              <AlarmCategoryText>Sem categoria</AlarmCategoryText>
+
+              {withoutCategory.map(alarm => (
+                <AlarmCard
+                  key={alarm.id}
+                  alarm={alarm}
+                  onChangeAlarms={setAlarms}
+                />
+              ))}
+            </AlarmCardListContainer>
+          )}
 
           <AddAlarmButton onPress={() => setAddAlarmModalVisible(true)}>
             <Icon
@@ -101,6 +180,8 @@ const GlycemicControl: React.FC = () => {
         modalVisible={addAlarmModalVisible}
         onModalChange={setAddAlarmModalVisible}
       />
+
+      {/* <Button title="sair" onPress={() => signOut()} /> */}
     </Container>
   );
 };

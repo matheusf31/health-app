@@ -42,7 +42,7 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
         <ModalTitleContainer
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
         >
-          <ModalTitle>Edite o horário</ModalTitle>
+          <ModalTitle>Horário</ModalTitle>
         </ModalTitleContainer>
 
         <DateInput
@@ -55,7 +55,7 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
         />
 
         <ModalTitleContainer>
-          <ModalTitle>Edite a mensagem do alarme</ModalTitle>
+          <ModalTitle>Mensagem</ModalTitle>
         </ModalTitleContainer>
 
         <ModalAlarmMessageContainer>
@@ -71,7 +71,7 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
         </ModalAlarmMessageContainer>
 
         <ModalTitleContainer>
-          <ModalTitle>Registro de aplicação</ModalTitle>
+          <ModalTitle>Registro</ModalTitle>
         </ModalTitleContainer>
       </ModalContainer>
 

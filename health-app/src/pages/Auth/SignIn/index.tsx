@@ -77,7 +77,7 @@ const SignIn: React.FC = () => {
         Alert.alert('Erro na autenticação!', JSON.stringify(err));
       }
     },
-    [signIn, navigation],
+    [signIn],
   );
 
   return (

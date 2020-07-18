@@ -1,17 +1,21 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
-import { Form } from '@unform/mobile';
-import { FormHandles } from '@unform/core';
 import { createAlarm } from 'react-native-simple-alarm';
 
 import DateInput from '../../../components/DateInput';
-import Input from '../../../components/Input';
 
 import {
   ModalContainer,
   ModalTitle,
   ModalTitleContainer,
+  ModalCategoryContainer,
+  ModalCategoryButton,
+  ModalCategoryButtonText,
+  TextInputContainer,
+  TextInputIconContainer,
+  Icon,
+  TextInput,
   ModalCreateAlarmButton,
 } from './styles';
 
@@ -20,48 +24,70 @@ interface IAddAlarmModalProps {
   onModalChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface IFormSubmit {
-  message: string;
-}
-
 const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   modalVisible,
   onModalChange,
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [category, setCategory] = useState('');
+  const [message, setMessage] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
 
-  const formRef = useRef<FormHandles>(null);
+  const handleLeaveModal = useCallback(() => {
+    onModalChange(false);
+    setCategory('');
+    setMessage('');
+    setSelectedDate(new Date());
+  }, [onModalChange]);
 
-  const handleAddAlarm = useCallback(
-    async (data: IFormSubmit) => {
-      try {
-        await createAlarm({
-          active: true,
-          date: selectedDate,
-          message: data.message,
-          snooze: 0,
-        });
-      } catch (e) {
-        console.log(e);
-      }
+  const handleAddAlarm = useCallback(async () => {
+    let autoMessage;
 
-      onModalChange(false);
-    },
-    [selectedDate, onModalChange],
-  );
+    if (category === 'blood-glucose') autoMessage = 'medir';
+
+    if (category === 'insulin-therapy') autoMessage = 'aplicar';
+
+    try {
+      await createAlarm({
+        active: true,
+        date: selectedDate,
+        message: autoMessage || message,
+        snooze: 0,
+        userInfo: {
+          category,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+
+    handleLeaveModal();
+  }, [selectedDate, category, handleLeaveModal, message]);
+
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+
+    // Arrumar
+    setIsFilled(message !== '');
+  }, [message]);
 
   return (
     <Modal
       isVisible={modalVisible}
-      onBackButtonPress={() => onModalChange(false)}
-      onBackdropPress={() => onModalChange(false)}
+      onBackButtonPress={handleLeaveModal}
+      onBackdropPress={handleLeaveModal}
       useNativeDriver
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <ModalContainer>
           <ModalTitleContainer>
-            <ModalTitle>Escolha a hora</ModalTitle>
+            <ModalTitle>Selecione a hora</ModalTitle>
           </ModalTitleContainer>
 
           <DateInput
@@ -70,28 +96,80 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             onSelectedDateChange={setSelectedDate}
             showDateTimePicker={showDatePicker}
             onShowDateTimePickerChange={setShowDatePicker}
+            containerStyle={{ marginTop: -10 }}
           />
 
-          <ModalTitleContainer>
-            <ModalTitle>Deixe uma mensagem</ModalTitle>
+          <ModalTitleContainer style={{ marginTop: 20 }}>
+            <ModalTitle>Selecione a categoria</ModalTitle>
           </ModalTitleContainer>
 
-          <Form ref={formRef} onSubmit={handleAddAlarm}>
-            <Input
-              containerStyle={{ marginTop: 20 }}
-              autoCapitalize="none"
-              name="message"
-              icon="ios-attach"
-              returnKeyType="send"
-              onSubmitEditing={() => formRef.current?.submitForm()}
-            />
-          </Form>
+          <ModalCategoryContainer>
+            <ModalCategoryButton
+              selected={category === 'physical-activity'}
+              onPress={() => setCategory('physical-activity')}
+            >
+              <ModalCategoryButtonText
+                selected={category === 'physical-activity'}
+              >
+                Atividade física
+              </ModalCategoryButtonText>
+            </ModalCategoryButton>
 
-          <ModalCreateAlarmButton onPress={() => formRef.current?.submitForm()}>
-            Criar alarme
-          </ModalCreateAlarmButton>
+            <ModalCategoryButton
+              selected={category === 'blood-glucose'}
+              onPress={() => setCategory('blood-glucose')}
+            >
+              <ModalCategoryButtonText selected={category === 'blood-glucose'}>
+                Glicemia
+              </ModalCategoryButtonText>
+            </ModalCategoryButton>
+
+            <ModalCategoryButton
+              selected={category === 'insulin-therapy'}
+              onPress={() => setCategory('insulin-therapy')}
+            >
+              <ModalCategoryButtonText
+                selected={category === 'insulin-therapy'}
+              >
+                Insulinoterapia
+              </ModalCategoryButtonText>
+            </ModalCategoryButton>
+          </ModalCategoryContainer>
+
+          {category === 'physical-activity' && (
+            <>
+              <ModalTitleContainer>
+                <ModalTitle>Atividade</ModalTitle>
+              </ModalTitleContainer>
+
+              <TextInputContainer isFocused={isFocused}>
+                <TextInputIconContainer>
+                  <Icon
+                    name="pencil"
+                    size={20}
+                    color={isFocused || isFilled ? '#146ba8' : '#89828E'}
+                  />
+                </TextInputIconContainer>
+
+                <TextInput
+                  keyboardAppearance="dark"
+                  placeholderTextColor="#89828E"
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                  defaultValue={message}
+                  onChangeText={value => {
+                    setMessage(value);
+                  }}
+                />
+              </TextInputContainer>
+            </>
+          )}
         </ModalContainer>
       </TouchableWithoutFeedback>
+
+      <ModalCreateAlarmButton onPress={handleAddAlarm}>
+        Criar alarme
+      </ModalCreateAlarmButton>
     </Modal>
   );
 };
