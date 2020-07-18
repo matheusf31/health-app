@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
-import { createAlarm } from 'react-native-simple-alarm';
-import { addDays, lastDayOfYear, differenceInDays } from 'date-fns';
+// import { createAlarm } from 'react-native-simple-alarm';
+
+import { useAlarm } from '../../../hooks/alarm';
 
 import DateInput from '../../../components/DateInput';
 
@@ -36,8 +37,9 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   onModalVisibleChange,
   onSelectedDateChange,
 }) => {
+  const { createAlarm } = useAlarm();
+
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // const [selectedDate, setSelectedDate] = useState(new Date());
   const [category, setCategory] = useState('');
   const [repeat, setRepeat] = useState('');
   const [message, setMessage] = useState('');
@@ -61,41 +63,40 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
     try {
       await createAlarm({
-        active: true,
         date: selectedDate,
         message: autoMessage || message,
-        snooze: 0,
+        repeatType: undefined,
         userInfo: {
           category,
         },
       });
 
-      const compareDate = differenceInDays(
-        lastDayOfYear(selectedDate),
-        selectedDate,
-      );
+      // const compareDate = differenceInDays(
+      //   lastDayOfYear(selectedDate),
+      //   selectedDate,
+      // );
 
-      if (repeat === 'daily') {
-        // ARRUMAR i < compareDate
-        for (let i = 1; i <= compareDate + 1; i++) {
-          // eslint-disable-next-line no-await-in-loop
-          await createAlarm({
-            active: true,
-            date: addDays(selectedDate, i),
-            message: autoMessage || message,
-            snooze: 0,
-            userInfo: {
-              category,
-            },
-          });
-        }
-      }
+      // if (repeat === 'daily') {
+      //   // ARRUMAR i < compareDate
+      //   for (let i = 1; i <= compareDate + 1; i++) {
+      //     // eslint-disable-next-line no-await-in-loop
+      //     await createAlarm({
+      //       active: true,
+      //       date: addDays(selectedDate, i),
+      //       message: autoMessage || message,
+      //       snooze: 0,
+      //       userInfo: {
+      //         category,
+      //       },
+      //     });
+      //   }
+      // }
     } catch (e) {
       console.log(e);
     }
 
     handleLeaveModal();
-  }, [selectedDate, category, handleLeaveModal, message, repeat]);
+  }, [selectedDate, category, handleLeaveModal, message, createAlarm]);
 
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);

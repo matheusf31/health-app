@@ -2,13 +2,14 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ScrollView } from 'react-native';
 import Emoji from 'react-native-emoji';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getAlarms } from 'react-native-simple-alarm';
-import { parseISO, isSameDay } from 'date-fns';
 
 import DateInput from '../../components/DateInput';
 import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
 import Emojis from './Emojis';
+
+// import { useAuth } from '../../hooks/auth';
+import { useAlarm } from '../../hooks/alarm';
 
 import {
   Container,
@@ -21,19 +22,19 @@ import {
   FeelsContainer,
 } from './styles';
 
-import { useAuth } from '../../hooks/auth';
-
 export interface IAlarm {
-  id: number;
-  date: string;
+  id: string;
   message: string;
+  date: string;
+  repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
   };
 }
 
 const GlycemicControl: React.FC = () => {
-  const { signOut } = useAuth();
+  // const { signOut } = useAuth();
+  const { getAlarmByDate } = useAlarm();
 
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -44,22 +45,16 @@ const GlycemicControl: React.FC = () => {
   useEffect(() => {
     async function loadAlarms(): Promise<void> {
       try {
-        let allAlarms: IAlarm[] = await getAlarms();
-
-        allAlarms = allAlarms.filter(alarm =>
-          isSameDay(parseISO(alarm.date), selectedDate),
-        );
+        const allAlarms: IAlarm[] = getAlarmByDate(selectedDate);
 
         setAlarms(allAlarms);
-
-        // await deleteAllAlarms();
       } catch (e) {
         console.log(e);
       }
     }
 
     loadAlarms();
-  }, [addAlarmModalVisible, selectedDate]);
+  }, [addAlarmModalVisible, selectedDate, getAlarmByDate]);
 
   const physicalActivity = useMemo(
     () =>
@@ -85,6 +80,7 @@ const GlycemicControl: React.FC = () => {
   return (
     <Container>
       <ScrollView>
+        {console.log(alarms)}
         <DateInput
           mode="calendar"
           selectedDate={selectedDate}
@@ -95,8 +91,8 @@ const GlycemicControl: React.FC = () => {
 
         <AlarmContainer>
           <TitleContainer>
-            <Emoji name=":alarm_clock:" style={{ fontSize: 20 }} />
             <Title>Alarmes</Title>
+            <Emoji name=":alarm_clock:" style={{ fontSize: 20 }} />
           </TitleContainer>
 
           {physicalActivity.length > 0 && (
@@ -171,8 +167,8 @@ const GlycemicControl: React.FC = () => {
 
         <FeelsContainer>
           <TitleContainer>
-            <Emoji name=":grinning:" style={{ fontSize: 20 }} />
             <Title>Como está se sentindo hoje?</Title>
+            <Emoji name=":grinning:" style={{ fontSize: 20 }} />
           </TitleContainer>
 
           <Emojis

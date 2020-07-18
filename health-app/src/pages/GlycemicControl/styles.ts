@@ -1,7 +1,4 @@
 import styled from 'styled-components/native';
-import { FlatList } from 'react-native';
-
-import { IAlarm } from './index';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
@@ -20,7 +17,7 @@ export const Title = styled.Text`
   font-family: 'Roboto-Medium';
   font-size: 26px;
 
-  margin-left: 10px;
+  margin-right: 10px;
 `;
 
 export const AlarmContainer = styled.View`

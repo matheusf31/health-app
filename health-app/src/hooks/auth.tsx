@@ -34,7 +34,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {
-      const userExists = await AsyncStorage.getItem('@GoyazBarber:user');
+      const userExists = await AsyncStorage.getItem('@HealthApp:user');
 
       if (userExists) {
         setUser(JSON.parse(userExists));
@@ -53,13 +53,13 @@ const AuthProvider: React.FC = ({ children }) => {
 
     delete loggedUser.password;
 
-    await AsyncStorage.setItem('@GoyazBarber:user', JSON.stringify(loggedUser));
+    await AsyncStorage.setItem('@HealthApp:user', JSON.stringify(loggedUser));
 
     setUser(loggedUser);
   }, []);
 
   const signOut = useCallback(async () => {
-    await AsyncStorage.removeItem('@GoyazBarber:user');
+    await AsyncStorage.removeItem('@HealthApp:user');
 
     setUser({} as IUser);
   }, []);

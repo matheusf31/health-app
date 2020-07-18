@@ -1,7 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { format, parseISO, isSameDay } from 'date-fns';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { deleteAlarmById } from 'react-native-simple-alarm';
+// import { deleteAlarmById } from 'react-native-simple-alarm';
+
+import { useAlarm } from '../../../hooks/alarm';
 
 import AlarmDetails from './AlarmDetails';
 
@@ -27,6 +29,8 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
   selectedDate,
   onChangeAlarms,
 }) => {
+  const { deleteAlarmById } = useAlarm();
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const formattedDate = useMemo(() => format(parseISO(alarm.date), 'HH:mm'), [
@@ -45,7 +49,7 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
     } catch (e) {
       console.log(e);
     }
-  }, [alarm, onChangeAlarms, selectedDate]);
+  }, [alarm, onChangeAlarms, selectedDate, deleteAlarmById]);
 
   return (
     <Container>
