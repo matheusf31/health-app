@@ -23,12 +23,13 @@ import {
 } from './styles';
 
 export interface IAlarm {
-  id: string;
   message: string;
   date: string;
   repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
+    user_id: string;
+    alarm_id: string;
   };
 }
 
@@ -80,7 +81,6 @@ const GlycemicControl: React.FC = () => {
   return (
     <Container>
       <ScrollView>
-        {console.log(alarms)}
         <DateInput
           mode="calendar"
           selectedDate={selectedDate}
@@ -102,7 +102,7 @@ const GlycemicControl: React.FC = () => {
               {physicalActivity.map(alarm => (
                 <AlarmCard
                   selectedDate={selectedDate}
-                  key={alarm.id}
+                  key={alarm.userInfo.alarm_id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
                 />
@@ -117,7 +117,7 @@ const GlycemicControl: React.FC = () => {
               {bloodGlucose.map(alarm => (
                 <AlarmCard
                   selectedDate={selectedDate}
-                  key={alarm.id}
+                  key={alarm.userInfo.alarm_id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
                 />
@@ -132,7 +132,7 @@ const GlycemicControl: React.FC = () => {
               {insulinTherapy.map(alarm => (
                 <AlarmCard
                   selectedDate={selectedDate}
-                  key={alarm.id}
+                  key={alarm.userInfo.alarm_id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
                 />
@@ -147,7 +147,7 @@ const GlycemicControl: React.FC = () => {
               {withoutCategory.map(alarm => (
                 <AlarmCard
                   selectedDate={selectedDate}
-                  key={alarm.id}
+                  key={alarm.userInfo.alarm_id}
                   alarm={alarm}
                   onChangeAlarms={setAlarms}
                 />

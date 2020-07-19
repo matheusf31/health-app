@@ -9,8 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
 import { parseISO, isSameDay } from 'date-fns';
 import 'react-native-get-random-values';
-import { CardStyleInterpolators } from '@react-navigation/stack';
-// import { uuid } from 'uuidv4';
+import { uuid } from 'uuidv4';
 
 // import api from '../services/api';
 
@@ -24,12 +23,13 @@ interface ICreateAlarmDTO {
 }
 
 interface IAlarm {
-  id: string;
   message: string;
   date: string;
   repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
+    user_id: string;
+    alarm_id: string;
   };
 }
 
@@ -72,6 +72,8 @@ const AlarmProvider: React.FC = ({ children }) => {
     async ({ date, message, repeatType, userInfo }: ICreateAlarmDTO) => {
       const storage = await AsyncStorage.getItem('@HealthApp:user:alarm');
 
+      Object.assign(userInfo, { alarm_id: uuid() });
+
       const alarm = {
         date,
         message,
@@ -100,7 +102,9 @@ const AlarmProvider: React.FC = ({ children }) => {
 
     if (storage && storage.length > 0) {
       const parsedStorage: IAlarm[] = JSON.parse(storage);
-      const updatedStorage = parsedStorage.filter(alarm => alarm.id !== id);
+      const updatedStorage = parsedStorage.filter(
+        alarm => alarm.userInfo.alarm_id !== id,
+      );
 
       PushNotification.cancelLocalNotifications({ id });
 

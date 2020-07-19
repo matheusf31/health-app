@@ -11,7 +11,9 @@ import {
   ModalContainer,
   ModalTitle,
   ModalTitleContainer,
+  Test,
   ModalRepetitionContainer,
+  ModalRadioContainer,
   ModalRepetitionButton,
   ModalRepetitionButtonText,
   ModalCategoryContainer,
@@ -31,6 +33,15 @@ interface IAddAlarmModalProps {
   onSelectedDateChange: React.Dispatch<React.SetStateAction<Date>>;
 }
 
+type IRepeat =
+  | 'month'
+  | 'week'
+  | 'day'
+  | 'time'
+  | 'hour'
+  | 'minute'
+  | undefined;
+
 const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   selectedDate,
   modalVisible,
@@ -41,7 +52,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [category, setCategory] = useState('');
-  const [repeat, setRepeat] = useState('');
+  const [repeat, setRepeat] = useState<IRepeat>(undefined);
   const [message, setMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -49,7 +60,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   const handleLeaveModal = useCallback(() => {
     onModalVisibleChange(false);
     setCategory('');
-    setRepeat('');
+    setRepeat(undefined);
     setMessage('');
     onSelectedDateChange(new Date());
   }, [onModalVisibleChange, onSelectedDateChange]);
@@ -65,32 +76,11 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
       await createAlarm({
         date: selectedDate,
         message: autoMessage || message,
-        repeatType: undefined,
+        repeatType: 'hour',
         userInfo: {
           category,
         },
       });
-
-      // const compareDate = differenceInDays(
-      //   lastDayOfYear(selectedDate),
-      //   selectedDate,
-      // );
-
-      // if (repeat === 'daily') {
-      //   // ARRUMAR i < compareDate
-      //   for (let i = 1; i <= compareDate + 1; i++) {
-      //     // eslint-disable-next-line no-await-in-loop
-      //     await createAlarm({
-      //       active: true,
-      //       date: addDays(selectedDate, i),
-      //       message: autoMessage || message,
-      //       snooze: 0,
-      //       userInfo: {
-      //         category,
-      //       },
-      //     });
-      //   }
-      // }
     } catch (e) {
       console.log(e);
     }
@@ -135,42 +125,71 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             <ModalTitle>Repetir</ModalTitle>
           </ModalTitleContainer>
 
-          <ModalRepetitionContainer>
-            <ModalRepetitionButton
-              selected={repeat === 'daily'}
-              onPress={() =>
-                setRepeat(prevState => (prevState === 'daily' ? '' : 'daily'))
-              }
-            >
-              <ModalRepetitionButtonText selected={repeat === 'daily'}>
-                Diariamente
-              </ModalRepetitionButtonText>
-            </ModalRepetitionButton>
+          <Test>
+            <ModalRepetitionContainer>
+              <ModalRadioContainer>
+                <ModalRepetitionButton
+                  selected={repeat === 'hour'}
+                  onPress={() =>
+                    setRepeat(prevState =>
+                      prevState === 'hour' ? undefined : 'hour',
+                    )
+                  }
+                />
 
-            <ModalRepetitionButton
-              selected={repeat === 'weekly'}
-              onPress={() =>
-                setRepeat(prevState => (prevState === 'weekly' ? '' : 'weekly'))
-              }
-            >
-              <ModalRepetitionButtonText selected={repeat === 'weekly'}>
-                Semanalmente
-              </ModalRepetitionButtonText>
-            </ModalRepetitionButton>
+                <ModalRepetitionButtonText selected={repeat === 'hour'}>
+                  Por hora
+                </ModalRepetitionButtonText>
+              </ModalRadioContainer>
 
-            <ModalRepetitionButton
-              selected={repeat === 'monthly'}
-              onPress={() =>
-                setRepeat(prevState =>
-                  prevState === 'monthly' ? '' : 'monthly',
-                )
-              }
-            >
-              <ModalRepetitionButtonText selected={repeat === 'monthly'}>
-                Mensalmente
-              </ModalRepetitionButtonText>
-            </ModalRepetitionButton>
-          </ModalRepetitionContainer>
+              <ModalRadioContainer>
+                <ModalRepetitionButton
+                  selected={repeat === 'day'}
+                  onPress={() =>
+                    setRepeat(prevState =>
+                      prevState === 'day' ? undefined : 'day',
+                    )
+                  }
+                />
+
+                <ModalRepetitionButtonText selected={repeat === 'day'}>
+                  Diariamente
+                </ModalRepetitionButtonText>
+              </ModalRadioContainer>
+            </ModalRepetitionContainer>
+
+            <ModalRepetitionContainer>
+              <ModalRadioContainer>
+                <ModalRepetitionButton
+                  selected={repeat === 'week'}
+                  onPress={() =>
+                    setRepeat(prevState =>
+                      prevState === 'week' ? undefined : 'week',
+                    )
+                  }
+                />
+
+                <ModalRepetitionButtonText selected={repeat === 'week'}>
+                  Semanalmente
+                </ModalRepetitionButtonText>
+              </ModalRadioContainer>
+
+              <ModalRadioContainer>
+                <ModalRepetitionButton
+                  selected={repeat === 'month'}
+                  onPress={() =>
+                    setRepeat(prevState =>
+                      prevState === 'month' ? undefined : 'month',
+                    )
+                  }
+                />
+
+                <ModalRepetitionButtonText selected={repeat === 'month'}>
+                  Mensalmente
+                </ModalRepetitionButtonText>
+              </ModalRadioContainer>
+            </ModalRepetitionContainer>
+          </Test>
 
           <ModalTitleContainer>
             <ModalTitle>Selecione a categoria</ModalTitle>
@@ -253,7 +272,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
       </TouchableWithoutFeedback>
 
       <ModalCreateAlarmButton onPress={handleAddAlarm}>
-        Criar alarme
+        Criar notificação
       </ModalCreateAlarmButton>
     </Modal>
   );

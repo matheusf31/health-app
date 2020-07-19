@@ -39,7 +39,7 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
 
   const deleteAlarm = useCallback(async () => {
     try {
-      let attAlarms: IAlarm[] = await deleteAlarmById(alarm.id);
+      let attAlarms: IAlarm[] = await deleteAlarmById(alarm.userInfo.alarm_id);
 
       attAlarms = attAlarms.filter(eachAlarm =>
         isSameDay(parseISO(eachAlarm.date), selectedDate),

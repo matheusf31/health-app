@@ -38,20 +38,32 @@ export const ModalTitle = styled.Text`
   font-size: 24px;
 `;
 
-export const ModalRepetitionContainer = styled.View`
+export const Test = styled.View`
   flex-direction: row;
+  justify-content: flex-start;
+`;
+
+export const ModalRepetitionContainer = styled.View`
+  flex: 1;
   justify-content: space-between;
-  margin-top: 10px;
-  margin-bottom: 30px;
+  margin: 10px;
+`;
+
+export const ModalRadioContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin: 10px;
 `;
 
 export const ModalRepetitionButton = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.8,
+  activeOpacity: 1,
 })<IModalRepetitionButton>`
   border-radius: 10px;
-  border-width: 2px;
+  border-width: 1px;
   border-color: #146ba8;
-  padding: 10px;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 
   ${props =>
     props.selected &&
@@ -64,13 +76,13 @@ export const ModalRepetitionButtonText = styled.Text<
   IModalRepetitionButtonText
 >`
   color: #17181d;
-  font-family: 'Roboto-Medium';
+  font-family: 'Roboto-Regular';
   font-size: 16px;
 
   ${props =>
     props.selected &&
     css`
-      color: #fff;
+      color: #000;
     `}
 `;
 
@@ -85,7 +97,7 @@ export const ModalCategoryButton = styled.TouchableOpacity.attrs({
   activeOpacity: 0.8,
 })<IModalCategoryButton>`
   border-radius: 10px;
-  border-width: 2px;
+  border-width: 1px;
   border-color: #146ba8;
   padding: 10px;
 
@@ -98,7 +110,7 @@ export const ModalCategoryButton = styled.TouchableOpacity.attrs({
 
 export const ModalCategoryButtonText = styled.Text<IModalCategoryButtonText>`
   color: #17181d;
-  font-family: 'Roboto-Medium';
+  font-family: 'Roboto-Regular';
   font-size: 16px;
 
   ${props =>
