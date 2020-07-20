@@ -38,7 +38,7 @@ export const ModalTitle = styled.Text`
   font-size: 24px;
 `;
 
-export const Test = styled.View`
+export const ModalRepetitionColumn = styled.View`
   flex-direction: row;
   justify-content: flex-start;
 `;
@@ -49,15 +49,16 @@ export const ModalRepetitionContainer = styled.View`
   margin: 10px;
 `;
 
-export const ModalRadioContainer = styled.View`
+export const ModalRadioContainer = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.9,
+})`
   flex-direction: row;
   align-items: center;
-  margin: 10px;
+  margin: 5px;
+  padding: 10px;
 `;
 
-export const ModalRepetitionButton = styled.TouchableOpacity.attrs({
-  activeOpacity: 1,
-})<IModalRepetitionButton>`
+export const ModalRepetitionButton = styled.View<IModalRepetitionButton>`
   border-radius: 10px;
   border-width: 1px;
   border-color: #146ba8;

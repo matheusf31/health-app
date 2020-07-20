@@ -11,7 +11,7 @@ import {
   ModalContainer,
   ModalTitle,
   ModalTitleContainer,
-  Test,
+  ModalRepetitionColumn,
   ModalRepetitionContainer,
   ModalRadioContainer,
   ModalRepetitionButton,
@@ -125,32 +125,30 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             <ModalTitle>Repetir</ModalTitle>
           </ModalTitleContainer>
 
-          <Test>
+          <ModalRepetitionColumn>
             <ModalRepetitionContainer>
-              <ModalRadioContainer>
-                <ModalRepetitionButton
-                  selected={repeat === 'hour'}
-                  onPress={() =>
-                    setRepeat(prevState =>
-                      prevState === 'hour' ? undefined : 'hour',
-                    )
-                  }
-                />
+              <ModalRadioContainer
+                onPress={() =>
+                  setRepeat(prevState =>
+                    prevState === 'hour' ? undefined : 'hour',
+                  )
+                }
+              >
+                <ModalRepetitionButton selected={repeat === 'hour'} />
 
                 <ModalRepetitionButtonText selected={repeat === 'hour'}>
                   Por hora
                 </ModalRepetitionButtonText>
               </ModalRadioContainer>
 
-              <ModalRadioContainer>
-                <ModalRepetitionButton
-                  selected={repeat === 'day'}
-                  onPress={() =>
-                    setRepeat(prevState =>
-                      prevState === 'day' ? undefined : 'day',
-                    )
-                  }
-                />
+              <ModalRadioContainer
+                onPress={() =>
+                  setRepeat(prevState =>
+                    prevState === 'day' ? undefined : 'day',
+                  )
+                }
+              >
+                <ModalRepetitionButton selected={repeat === 'day'} />
 
                 <ModalRepetitionButtonText selected={repeat === 'day'}>
                   Diariamente
@@ -159,37 +157,35 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             </ModalRepetitionContainer>
 
             <ModalRepetitionContainer>
-              <ModalRadioContainer>
-                <ModalRepetitionButton
-                  selected={repeat === 'week'}
-                  onPress={() =>
-                    setRepeat(prevState =>
-                      prevState === 'week' ? undefined : 'week',
-                    )
-                  }
-                />
+              <ModalRadioContainer
+                onPress={() =>
+                  setRepeat(prevState =>
+                    prevState === 'week' ? undefined : 'week',
+                  )
+                }
+              >
+                <ModalRepetitionButton selected={repeat === 'week'} />
 
                 <ModalRepetitionButtonText selected={repeat === 'week'}>
                   Semanalmente
                 </ModalRepetitionButtonText>
               </ModalRadioContainer>
 
-              <ModalRadioContainer>
-                <ModalRepetitionButton
-                  selected={repeat === 'month'}
-                  onPress={() =>
-                    setRepeat(prevState =>
-                      prevState === 'month' ? undefined : 'month',
-                    )
-                  }
-                />
+              <ModalRadioContainer
+                onPress={() =>
+                  setRepeat(prevState =>
+                    prevState === 'month' ? undefined : 'month',
+                  )
+                }
+              >
+                <ModalRepetitionButton selected={repeat === 'month'} />
 
                 <ModalRepetitionButtonText selected={repeat === 'month'}>
                   Mensalmente
                 </ModalRepetitionButtonText>
               </ModalRadioContainer>
             </ModalRepetitionContainer>
-          </Test>
+          </ModalRepetitionColumn>
 
           <ModalTitleContainer>
             <ModalTitle>Selecione a categoria</ModalTitle>

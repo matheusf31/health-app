@@ -11,6 +11,7 @@ import { parseISO, isSameDay } from 'date-fns';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 
+import { useAuth } from './auth';
 // import api from '../services/api';
 
 interface ICreateAlarmDTO {
@@ -43,6 +44,7 @@ interface IAlarmContextData {
 const AlarmContext = createContext<IAlarmContextData>({} as IAlarmContextData);
 
 const AlarmProvider: React.FC = ({ children }) => {
+  const { user } = useAuth();
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
 
   const loadAlarms = useCallback(async () => {
@@ -72,7 +74,7 @@ const AlarmProvider: React.FC = ({ children }) => {
     async ({ date, message, repeatType, userInfo }: ICreateAlarmDTO) => {
       const storage = await AsyncStorage.getItem('@HealthApp:user:alarm');
 
-      Object.assign(userInfo, { alarm_id: uuid() });
+      Object.assign(userInfo, { alarm_id: uuid(), user_id: user.id });
 
       const alarm = {
         date,
