@@ -17,7 +17,7 @@ import { useAuth } from './auth';
 interface ICreateAlarmDTO {
   message: string;
   date: Date;
-  repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
+  repeatType: 'month' | 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
   };
@@ -26,7 +26,7 @@ interface ICreateAlarmDTO {
 interface IAlarm {
   message: string;
   date: string;
-  repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
+  repeatType: 'month' | 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
     user_id: string;
@@ -96,7 +96,7 @@ const AlarmProvider: React.FC = ({ children }) => {
       PushNotification.localNotificationSchedule(alarm);
       loadAlarms();
     },
-    [loadAlarms],
+    [loadAlarms, user.id],
   );
 
   const deleteAlarmById = useCallback(async (id: string) => {
