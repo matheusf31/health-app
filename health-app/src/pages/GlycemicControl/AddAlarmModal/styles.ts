@@ -90,7 +90,7 @@ export const ModalRepetitionButtonText = styled.Text<
 export const ModalCategoryContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 20px;
   margin-bottom: 30px;
 `;
 

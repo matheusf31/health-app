@@ -17,7 +17,7 @@ import { useAuth } from './auth';
 interface ICreateAlarmDTO {
   message: string;
   date: Date;
-  repeatType: 'month' | 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
+  repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
   };
@@ -26,7 +26,7 @@ interface ICreateAlarmDTO {
 interface IAlarm {
   message: string;
   date: string;
-  repeatType: 'month' | 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
+  repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
     user_id: string;

@@ -33,14 +33,7 @@ interface IAddAlarmModalProps {
   onSelectedDateChange: React.Dispatch<React.SetStateAction<Date>>;
 }
 
-type IRepeat =
-  | 'month'
-  | 'week'
-  | 'day'
-  | 'time'
-  | 'hour'
-  | 'minute'
-  | undefined;
+type IRepeat = 'week' | 'day' | 'time' | 'hour' | 'minute' | undefined;
 
 const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   selectedDate,
@@ -143,26 +136,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <ModalRepetitionButton selected={repeatType === 'hour'} />
 
                 <ModalRepetitionButtonText selected={repeatType === 'hour'}>
-                  Por hora
+                  A cada hora
                 </ModalRepetitionButtonText>
               </ModalRadioContainer>
 
-              <ModalRadioContainer
-                onPress={() =>
-                  setRepeatType(prevState =>
-                    prevState === 'day' ? undefined : 'day',
-                  )
-                }
-              >
-                <ModalRepetitionButton selected={repeatType === 'day'} />
-
-                <ModalRepetitionButtonText selected={repeatType === 'day'}>
-                  Diariamente
-                </ModalRepetitionButtonText>
-              </ModalRadioContainer>
-            </ModalRepetitionContainer>
-
-            <ModalRepetitionContainer>
               <ModalRadioContainer
                 onPress={() =>
                   setRepeatType(prevState =>
@@ -176,8 +153,24 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                   Semanalmente
                 </ModalRepetitionButtonText>
               </ModalRadioContainer>
+            </ModalRepetitionContainer>
 
+            <ModalRepetitionContainer>
               <ModalRadioContainer
+                onPress={() =>
+                  setRepeatType(prevState =>
+                    prevState === 'day' ? undefined : 'day',
+                  )
+                }
+              >
+                <ModalRepetitionButton selected={repeatType === 'day'} />
+
+                <ModalRepetitionButtonText selected={repeatType === 'day'}>
+                  Diariamente
+                </ModalRepetitionButtonText>
+              </ModalRadioContainer>
+
+              {/* <ModalRadioContainer
                 onPress={() =>
                   setRepeatType(prevState =>
                     prevState === 'month' ? undefined : 'month',
@@ -189,7 +182,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <ModalRepetitionButtonText selected={repeatType === 'month'}>
                   Mensalmente
                 </ModalRepetitionButtonText>
-              </ModalRadioContainer>
+              </ModalRadioContainer> */}
             </ModalRepetitionContainer>
           </ModalRepetitionColumn>
 
