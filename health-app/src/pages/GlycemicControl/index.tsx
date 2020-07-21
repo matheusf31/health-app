@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import DateInput from '../../components/DateInput';
 import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
+import AddRegistryButton from './AddRegistryButton';
 import Emojis from './Emojis';
 
 // import { useAuth } from '../../hooks/auth';
@@ -80,7 +81,7 @@ const GlycemicControl: React.FC = () => {
 
   return (
     <Container>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         <DateInput
           mode="calendar"
           selectedDate={selectedDate}
@@ -176,6 +177,13 @@ const GlycemicControl: React.FC = () => {
             onSelectedFeelsChange={setSelectedFeels}
           />
         </FeelsContainer>
+
+        <FeelsContainer>
+          <TitleContainer>
+            <Title>Registros</Title>
+          </TitleContainer>
+        </FeelsContainer>
+        {/* <AddRegistryButton /> */}
       </ScrollView>
 
       <AddAlarmModal
@@ -184,6 +192,7 @@ const GlycemicControl: React.FC = () => {
         onModalVisibleChange={setAddAlarmModalVisible}
       />
 
+      <AddRegistryButton />
       {/* <Button title="sair" onPress={() => signOut()} /> */}
     </Container>
   );

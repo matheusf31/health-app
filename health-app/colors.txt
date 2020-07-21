@@ -1,0 +1,5 @@
+MAIN COLOR = #EBF1F3
+
+SECOND MAIN COLOR = #146ba8
+
+underlayColor = #0E4B75
