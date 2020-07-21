@@ -182,7 +182,6 @@ const GlycemicControl: React.FC = () => {
         selectedDate={selectedDate}
         modalVisible={addAlarmModalVisible}
         onModalVisibleChange={setAddAlarmModalVisible}
-        onSelectedDateChange={setSelectedDate}
       />
 
       {/* <Button title="sair" onPress={() => signOut()} /> */}

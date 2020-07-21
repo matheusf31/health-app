@@ -73,7 +73,7 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
       <AlarmDetails
         alarm={alarm}
         modalVisible={modalVisible}
-        onModalChange={setModalVisible}
+        onModalVisibleChange={setModalVisible}
       />
     </Container>
   );

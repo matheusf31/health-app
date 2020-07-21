@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Modal from 'react-native-modal';
 import Emoji from 'react-native-emoji';
+import { parseISO } from 'date-fns';
 
 import DateInput from '../../../../components/DateInput';
 import Button from '../../../../components/Button';
@@ -20,22 +21,31 @@ import { IAlarm } from '../../index';
 interface IAlarmDetailsProps {
   alarm: IAlarm;
   modalVisible: boolean;
-  onModalChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onModalVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
   alarm,
   modalVisible,
-  onModalChange,
+  onModalVisibleChange,
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(parseISO(alarm.date));
+
+  const handleLeaveModal = useCallback(() => {
+    onModalVisibleChange(false);
+    setSelectedDate(parseISO(alarm.date));
+  }, [onModalVisibleChange, alarm.date]);
+
+  const handleEditAlarm = useCallback(() => {
+    // TODO
+  }, []);
 
   return (
     <Modal
       isVisible={modalVisible}
-      onBackButtonPress={() => onModalChange(false)}
-      onBackdropPress={() => onModalChange(false)}
+      onBackButtonPress={handleLeaveModal}
+      onBackdropPress={handleLeaveModal}
       useNativeDriver
     >
       <ModalContainer>
@@ -75,7 +85,7 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
         </ModalTitleContainer>
       </ModalContainer>
 
-      <Button>Salvar</Button>
+      <Button onPress={handleEditAlarm}>Salvar</Button>
     </Modal>
   );
 };

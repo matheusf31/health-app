@@ -30,7 +30,6 @@ interface IAddAlarmModalProps {
   selectedDate: Date;
   modalVisible: boolean;
   onModalVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
-  onSelectedDateChange: React.Dispatch<React.SetStateAction<Date>>;
 }
 
 type IRepeat = 'week' | 'day' | 'time' | 'hour' | 'minute' | undefined;
@@ -39,10 +38,18 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   selectedDate,
   modalVisible,
   onModalVisibleChange,
-  onSelectedDateChange,
 }) => {
   const { createAlarm } = useAlarm();
 
+  const [selectedHour, setSelectedHour] = useState(
+    new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      new Date().getHours(),
+      new Date().getMinutes(),
+    ),
+  );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [category, setCategory] = useState('');
   const [repeatType, setRepeatType] = useState<IRepeat>(undefined);
@@ -55,8 +62,16 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
     setCategory('');
     setRepeatType(undefined);
     setMessage('');
-    onSelectedDateChange(new Date());
-  }, [onModalVisibleChange, onSelectedDateChange]);
+    setSelectedHour(
+      new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        new Date().getHours(),
+        new Date().getMinutes(),
+      ),
+    );
+  }, [onModalVisibleChange, selectedDate]);
 
   const handleAddAlarm = useCallback(async () => {
     let autoMessage: string | undefined;
@@ -113,8 +128,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
           <DateInput
             mode="time"
-            selectedDate={selectedDate}
-            onSelectedDateChange={onSelectedDateChange}
+            selectedDate={selectedHour}
+            onSelectedDateChange={setSelectedHour}
             showDateTimePicker={showDatePicker}
             onShowDateTimePickerChange={setShowDatePicker}
             containerStyle={{ marginTop: -10 }}
