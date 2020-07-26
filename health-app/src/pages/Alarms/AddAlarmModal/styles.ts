@@ -126,6 +126,7 @@ export const TextInputContainer = styled.View<ITextInputContainerProps>`
   width: 100%;
   height: 55px;
   padding: 0 16px;
+  margin-top: 20px;
   margin-bottom: 10px;
 
   background: #f4f4f4;

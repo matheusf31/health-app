@@ -1,12 +1,16 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Emoji from 'react-native-emoji';
 
-import { ScrollView } from 'react-native-gesture-handler';
 import { useAlarm } from '../../hooks/alarm';
+
 import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
 import DateInput from '../../components/DateInput';
+import BottomButton from '../../components/BottomButton';
+
+import AlarmImage from '../../assets/logos/alarm.svg';
 
 import {
   Container,
@@ -89,6 +93,14 @@ const Alarm: React.FC = () => {
             <Emoji name=":alarm_clock:" style={{ fontSize: 20 }} />
           </TitleContainer>
 
+          {alarms.length === 0 && (
+            <AlarmImage
+              width={Dimensions.get('screen').width}
+              height={200}
+              style={{ marginTop: 20 }}
+            />
+          )}
+
           {physicalActivity.length > 0 && (
             <AlarmCardListContainer>
               <AlarmCategoryText>Atividade física</AlarmCategoryText>
@@ -148,15 +160,6 @@ const Alarm: React.FC = () => {
               ))}
             </AlarmCardListContainer>
           )}
-
-          <AddAlarmButton onPress={() => setAddAlarmModalVisible(true)}>
-            <Icon
-              name="ios-add"
-              size={30}
-              color="#146ba8"
-              style={{ alignSelf: 'center' }}
-            />
-          </AddAlarmButton>
         </AlarmContainer>
 
         <AddAlarmModal
@@ -165,6 +168,8 @@ const Alarm: React.FC = () => {
           onModalVisibleChange={setAddAlarmModalVisible}
         />
       </ScrollView>
+
+      <BottomButton onPress={() => setAddAlarmModalVisible(true)} />
     </Container>
   );
 };

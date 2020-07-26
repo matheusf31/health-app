@@ -30,15 +30,6 @@ export const ModalTitle = styled.Text`
   font-size: 24px;
 `;
 
-export const ModalRadioContainer = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.9,
-})`
-  flex-direction: row;
-  align-items: center;
-  margin: 5px;
-  padding: 10px;
-`;
-
 export const ModalCategoryContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -78,6 +69,7 @@ export const TextInputContainer = styled.View<ITextInputContainerProps>`
   width: 100%;
   height: 55px;
   padding: 0 16px;
+  margin-top: 20px;
   margin-bottom: 10px;
 
   background: #f4f4f4;

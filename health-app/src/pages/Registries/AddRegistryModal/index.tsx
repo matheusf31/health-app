@@ -1,9 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
-// import { createAlarm } from 'react-native-simple-alarm';
-
-import { useAlarm } from '../../../hooks/alarm';
 
 import DateInput from '../../../components/DateInput';
 
@@ -99,7 +96,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             onSelectedDateChange={setSelectedHour}
             showDateTimePicker={showDatePicker}
             onShowDateTimePickerChange={setShowDatePicker}
-            containerStyle={{ marginTop: -10 }}
+            containerStyle={{ marginTop: -10, marginBottom: 10 }}
           />
 
           <ModalTitleContainer>
@@ -161,6 +158,35 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <TextInputIconContainer>
                   <Icon
                     name="pencil"
+                    size={20}
+                    color={isFocused || isFilled ? '#146ba8' : '#89828E'}
+                  />
+                </TextInputIconContainer>
+
+                <TextInput
+                  keyboardAppearance="dark"
+                  placeholderTextColor="#89828E"
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                  defaultValue={message}
+                  onChangeText={value => {
+                    setMessage(value);
+                  }}
+                />
+              </TextInputContainer>
+            </>
+          )}
+
+          {category === 'blood-glucose' && (
+            <>
+              <ModalTitleContainer>
+                <ModalTitle>Glicose no sangue (mg/dL)</ModalTitle>
+              </ModalTitleContainer>
+
+              <TextInputContainer isFocused={isFocused}>
+                <TextInputIconContainer>
+                  <Icon
+                    name="water"
                     size={20}
                     color={isFocused || isFilled ? '#146ba8' : '#89828E'}
                   />

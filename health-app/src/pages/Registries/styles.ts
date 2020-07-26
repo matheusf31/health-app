@@ -7,7 +7,7 @@ export const Container = styled.SafeAreaView`
 `;
 
 export const RegisterContainer = styled.View`
-  margin: 0 24px 40px;
+  margin: 0 24px 20px;
 `;
 
 export const TitleContainer = styled.View`

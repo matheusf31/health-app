@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
+import PushNotification from 'react-native-push-notification';
 
 import RegisterImage from '../../assets/logos/note-list.svg';
 import DateInput from '../../components/DateInput';
-import AddRegistryButton from './AddRegistryButton';
+import BottomButton from '../../components/BottomButton';
 import AddRegistryModal from './AddRegistryModal';
 import Emojis from './Emojis';
 
@@ -18,8 +19,12 @@ import {
   RegisterContainer,
 } from './styles';
 
-const GlycemicControl: React.FC = () => {
+const Registries: React.FC = () => {
   // const { signOut } = useAuth();
+
+  useEffect(() => {
+    PushNotification.cancelAllLocalNotifications();
+  }, []);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -46,7 +51,7 @@ const GlycemicControl: React.FC = () => {
 
         <RegisterImage width={Dimensions.get('screen').width} height={200} />
 
-        <FeelsContainer>
+        {/* <FeelsContainer>
           <TitleContainer>
             <Title>Como está se sentindo hoje?</Title>
             <Emoji name=":grinning:" style={{ fontSize: 20 }} />
@@ -56,7 +61,7 @@ const GlycemicControl: React.FC = () => {
             selectedFeels={selectedFeels}
             onSelectedFeelsChange={setSelectedFeels}
           />
-        </FeelsContainer>
+        </FeelsContainer> */}
       </ScrollView>
 
       <AddRegistryModal
@@ -65,11 +70,11 @@ const GlycemicControl: React.FC = () => {
         onModalVisibleChange={setAddRegistryModalVisible}
       />
 
-      <AddRegistryButton onPress={() => setAddRegistryModalVisible(true)} />
+      <BottomButton onPress={() => setAddRegistryModalVisible(true)} />
 
       {/* <Button title="sair" onPress={() => signOut()} /> */}
     </Container>
   );
 };
 
-export default GlycemicControl;
+export default Registries;
