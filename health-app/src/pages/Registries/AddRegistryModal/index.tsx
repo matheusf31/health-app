@@ -1,8 +1,20 @@
-import React, { useState, useCallback } from 'react';
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import {
+  TouchableWithoutFeedback,
+  Keyboard,
+  Animated,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import Modal from 'react-native-modal';
 
 import DateInput from '../../../components/DateInput';
+
+import Fasting from '../../../assets/blood-glucose/jejum.svg';
+import PreMeal from '../../../assets/blood-glucose/pre-refeicao.svg';
+import PosMeal from '../../../assets/blood-glucose/pos-refeicao.svg';
+import BeforeBedtime from '../../../assets/blood-glucose/antes-de-dormir.svg';
+import General from '../../../assets/blood-glucose/geral.svg';
 
 import {
   ModalContainer,
@@ -15,7 +27,11 @@ import {
   TextInputIconContainer,
   Icon,
   TextInput,
-  ModalCreateAlarmButton,
+  ModalCreateRegisterButton,
+  StateContainer,
+  StateOptionContainer,
+  StateOptionButton,
+  StateOptionText,
 } from './styles';
 
 interface IAddAlarmModalProps {
@@ -24,7 +40,27 @@ interface IAddAlarmModalProps {
   onModalVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-type IRepeat = 'week' | 'day' | 'time' | 'hour' | 'minute' | undefined;
+interface IFadeInViewProps {
+  containerStyle?: StyleProp<ViewStyle>;
+}
+
+const FadeInView: React.FC<IFadeInViewProps> = ({ children, style }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 700,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
+  return (
+    <Animated.View style={{ ...style, opacity: fadeAnim }}>
+      {children}
+    </Animated.View>
+  );
+};
 
 const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   selectedDate,
@@ -44,6 +80,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [category, setCategory] = useState('');
+  const [selfState, setSelfState] = useState('');
   const [message, setMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -143,13 +180,13 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
               <ModalCategoryButtonText
                 selected={category === 'insulin-therapy'}
               >
-                Insulinoterapia
+                Insulina
               </ModalCategoryButtonText>
             </ModalCategoryButton>
           </ModalCategoryContainer>
 
           {category === 'physical-activity' && (
-            <>
+            <FadeInView>
               <ModalTitleContainer>
                 <ModalTitle>Atividade</ModalTitle>
               </ModalTitleContainer>
@@ -174,11 +211,11 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                   }}
                 />
               </TextInputContainer>
-            </>
+            </FadeInView>
           )}
 
           {category === 'blood-glucose' && (
-            <>
+            <FadeInView>
               <ModalTitleContainer>
                 <ModalTitle>Glicose no sangue (mg/dL)</ModalTitle>
               </ModalTitleContainer>
@@ -203,14 +240,129 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                   }}
                 />
               </TextInputContainer>
-            </>
+
+              <ModalTitleContainer>
+                <ModalTitle>Selecione seu estado</ModalTitle>
+              </ModalTitleContainer>
+
+              <StateContainer>
+                <StateOptionContainer>
+                  <StateOptionButton
+                    activeOpacity={0.8}
+                    selfState={selfState === 'fasting'}
+                    onPress={() =>
+                      setSelfState(oldState =>
+                        oldState === 'fasting' ? '' : 'fasting',
+                      )
+                    }
+                  >
+                    <Fasting width={30} height={30} />
+                  </StateOptionButton>
+
+                  <StateOptionText>Jejum</StateOptionText>
+                </StateOptionContainer>
+
+                <StateOptionContainer>
+                  <StateOptionButton
+                    activeOpacity={0.8}
+                    selfState={selfState === 'pre-meal'}
+                    onPress={() =>
+                      setSelfState(oldState =>
+                        oldState === 'pre-meal' ? '' : 'pre-meal',
+                      )
+                    }
+                  >
+                    <PreMeal width={30} height={30} />
+                  </StateOptionButton>
+
+                  <StateOptionText>Pré-refeição</StateOptionText>
+                </StateOptionContainer>
+
+                <StateOptionContainer>
+                  <StateOptionButton
+                    activeOpacity={0.8}
+                    selfState={selfState === 'pos-meal'}
+                    onPress={() =>
+                      setSelfState(oldState =>
+                        oldState === 'pos-meal' ? '' : 'pos-meal',
+                      )
+                    }
+                  >
+                    <PosMeal width={30} height={30} />
+                  </StateOptionButton>
+
+                  <StateOptionText>Pós-refeição</StateOptionText>
+                </StateOptionContainer>
+
+                <StateOptionContainer>
+                  <StateOptionButton
+                    activeOpacity={0.8}
+                    selfState={selfState === 'before-bedtime'}
+                    onPress={() =>
+                      setSelfState(oldState =>
+                        oldState === 'before-bedtime' ? '' : 'before-bedtime',
+                      )
+                    }
+                  >
+                    <BeforeBedtime width={30} height={30} />
+                  </StateOptionButton>
+
+                  <StateOptionText>Antes de dormir</StateOptionText>
+                </StateOptionContainer>
+
+                <StateOptionContainer>
+                  <StateOptionButton
+                    activeOpacity={0.8}
+                    selfState={selfState === 'geral'}
+                    onPress={() =>
+                      setSelfState(oldState =>
+                        oldState === 'geral' ? '' : 'geral',
+                      )
+                    }
+                  >
+                    <General width={30} height={30} />
+                  </StateOptionButton>
+
+                  <StateOptionText>Geral</StateOptionText>
+                </StateOptionContainer>
+              </StateContainer>
+            </FadeInView>
+          )}
+
+          {category === 'insulin-therapy' && (
+            <FadeInView>
+              <ModalTitleContainer>
+                <ModalTitle>Unidade(s)</ModalTitle>
+              </ModalTitleContainer>
+
+              <TextInputContainer isFocused={isFocused}>
+                <TextInputIconContainer>
+                  <Icon
+                    name="eyedropper-variant"
+                    size={20}
+                    color={isFocused || isFilled ? '#146ba8' : '#89828E'}
+                  />
+                </TextInputIconContainer>
+
+                <TextInput
+                  keyboardAppearance="dark"
+                  placeholderTextColor="#89828E"
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                  defaultValue={message}
+                  onChangeText={value => {
+                    setMessage(value);
+                  }}
+                />
+              </TextInputContainer>
+            </FadeInView>
           )}
         </ModalContainer>
       </TouchableWithoutFeedback>
 
-      <ModalCreateAlarmButton onPress={handleAddRegistry}>
+      <ModalCreateRegisterButton onPress={handleAddRegistry}>
         Criar registro
-      </ModalCreateAlarmButton>
+      </ModalCreateRegisterButton>
     </Modal>
   );
 };

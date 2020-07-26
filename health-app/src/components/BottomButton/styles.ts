@@ -1,9 +1,9 @@
 import styled from 'styled-components/native';
 
 export const Button = styled.TouchableHighlight`
-  height: 70px;
-  width: 70px;
-  border-radius: 35px;
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
   margin: 20px;
   background: #146ba8;
 

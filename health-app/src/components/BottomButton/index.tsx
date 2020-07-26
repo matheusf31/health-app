@@ -7,7 +7,7 @@ import { Button } from './styles';
 const BottomButton: React.FC<TouchableHighlightProperties> = ({ ...rest }) => {
   return (
     <Button underlayColor="#0E4B75" {...rest}>
-      <Icon name="ios-add" size={50} color="#fff" />
+      <Icon name="ios-add" size={40} color="#fff" />
     </Button>
   );
 };

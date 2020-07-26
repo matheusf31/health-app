@@ -14,6 +14,10 @@ interface ITextInputContainerProps {
   isFocused: boolean;
 }
 
+interface IStateOptionButton {
+  selfState: boolean;
+}
+
 export const ModalContainer = styled.View`
   width: 100%;
   background: #fbfbfb;
@@ -69,8 +73,8 @@ export const TextInputContainer = styled.View<ITextInputContainerProps>`
   width: 100%;
   height: 55px;
   padding: 0 16px;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 
   background: #f4f4f4;
 
@@ -102,4 +106,41 @@ export const TextInput = styled.TextInput`
   font-family: 'Roboto-Regular';
 `;
 
-export const ModalCreateAlarmButton = styled(Button)``;
+export const StateContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10px;
+`;
+
+export const StateOptionContainer = styled.View`
+  /* flex: 1; */
+  align-items: center;
+  justify-content: center;
+
+  margin: 5px;
+
+  /* background: red; */
+`;
+
+export const StateOptionButton = styled.TouchableOpacity<IStateOptionButton>`
+  background: #ebf1f3;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  align-items: center;
+  justify-content: center;
+
+  ${props =>
+    props.selfState &&
+    css`
+      background: #146ba8;
+    `}
+`;
+
+export const StateOptionText = styled.Text`
+  font-family: 'Roboto-Medium';
+  font-size: 12px;
+`;
+
+export const ModalCreateRegisterButton = styled(Button)``;

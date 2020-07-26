@@ -4,6 +4,7 @@ import Emoji from 'react-native-emoji';
 import PushNotification from 'react-native-push-notification';
 
 import RegisterImage from '../../assets/logos/note-list.svg';
+
 import DateInput from '../../components/DateInput';
 import BottomButton from '../../components/BottomButton';
 import AddRegistryModal from './AddRegistryModal';
