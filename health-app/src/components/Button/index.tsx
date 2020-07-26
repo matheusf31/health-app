@@ -1,9 +1,9 @@
 import React from 'react';
-import { RectButtonProperties } from 'react-native-gesture-handler';
+import { TouchableOpacityProperties } from 'react-native';
 
 import { Container, ButtonText } from './styles';
 
-interface IButtonProps extends RectButtonProperties {
+interface IButtonProps extends TouchableOpacityProperties {
   children: string;
 }
 

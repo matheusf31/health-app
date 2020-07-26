@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
-// import { createAlarm } from 'react-native-simple-alarm';
 
 import { useAlarm } from '../../../hooks/alarm';
 

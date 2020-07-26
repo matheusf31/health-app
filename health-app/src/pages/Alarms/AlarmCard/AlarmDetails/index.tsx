@@ -79,10 +79,6 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
             <Emoji name=":pencil2:" style={{ fontSize: 16 }} />
           </ModalAlarmMessageButton>
         </ModalAlarmMessageContainer>
-
-        <ModalTitleContainer>
-          <ModalTitle>Registro</ModalTitle>
-        </ModalTitleContainer>
       </ModalContainer>
 
       <Button onPress={handleEditAlarm}>Salvar</Button>

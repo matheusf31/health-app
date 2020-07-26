@@ -1,26 +1,21 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { ScrollView } from 'react-native';
-import Emoji from 'react-native-emoji';
+import React, { useMemo, useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Emoji from 'react-native-emoji';
 
-import DateInput from '../../components/DateInput';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useAlarm } from '../../hooks/alarm';
 import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
-import AddRegistryButton from './AddRegistryButton';
-import Emojis from './Emojis';
-
-// import { useAuth } from '../../hooks/auth';
-import { useAlarm } from '../../hooks/alarm';
+import DateInput from '../../components/DateInput';
 
 import {
   Container,
-  Title,
-  TitleContainer,
   AlarmContainer,
-  AlarmCategoryText,
+  TitleContainer,
+  Title,
   AlarmCardListContainer,
+  AlarmCategoryText,
   AddAlarmButton,
-  FeelsContainer,
 } from './styles';
 
 export interface IAlarm {
@@ -34,15 +29,13 @@ export interface IAlarm {
   };
 }
 
-const GlycemicControl: React.FC = () => {
-  // const { signOut } = useAuth();
-  const { getAlarmByDate } = useAlarm();
-
+const Alarm: React.FC = () => {
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [addAlarmModalVisible, setAddAlarmModalVisible] = useState(false);
-  const [selectedFeels, setSelectedFeels] = useState('');
+
+  const { getAlarmByDate } = useAlarm();
 
   useEffect(() => {
     async function loadAlarms(): Promise<void> {
@@ -166,36 +159,14 @@ const GlycemicControl: React.FC = () => {
           </AddAlarmButton>
         </AlarmContainer>
 
-        <FeelsContainer>
-          <TitleContainer>
-            <Title>Como está se sentindo hoje?</Title>
-            <Emoji name=":grinning:" style={{ fontSize: 20 }} />
-          </TitleContainer>
-
-          <Emojis
-            selectedFeels={selectedFeels}
-            onSelectedFeelsChange={setSelectedFeels}
-          />
-        </FeelsContainer>
-
-        <FeelsContainer>
-          <TitleContainer>
-            <Title>Registros</Title>
-          </TitleContainer>
-        </FeelsContainer>
-        {/* <AddRegistryButton /> */}
+        <AddAlarmModal
+          selectedDate={selectedDate}
+          modalVisible={addAlarmModalVisible}
+          onModalVisibleChange={setAddAlarmModalVisible}
+        />
       </ScrollView>
-
-      <AddAlarmModal
-        selectedDate={selectedDate}
-        modalVisible={addAlarmModalVisible}
-        onModalVisibleChange={setAddAlarmModalVisible}
-      />
-
-      <AddRegistryButton />
-      {/* <Button title="sair" onPress={() => signOut()} /> */}
     </Container>
   );
 };
 
-export default GlycemicControl;
+export default Alarm;

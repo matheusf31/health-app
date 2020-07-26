@@ -2,6 +2,12 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
+
+  background: #ebf1f3;
+`;
+
+export const RegisterContainer = styled.View`
+  margin: 0 24px 40px;
 `;
 
 export const TitleContainer = styled.View`
@@ -18,24 +24,6 @@ export const Title = styled.Text`
   font-size: 26px;
 
   margin-right: 10px;
-`;
-
-export const AlarmContainer = styled.View`
-  margin: 0 24px;
-`;
-
-export const AlarmCategoryText = styled.Text`
-  color: #17181d;
-  font-family: 'Roboto-Regular';
-  font-size: 20px;
-`;
-
-export const AlarmCardListContainer = styled.View`
-  margin-bottom: 20px;
-`;
-
-export const AddAlarmButton = styled.TouchableOpacity`
-  margin-bottom: 20px;
 `;
 
 export const FeelsContainer = styled.View`

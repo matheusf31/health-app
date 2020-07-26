@@ -1,17 +1,17 @@
 import React from 'react';
 
-import HappyColor from '../../../assets/svg/happy-color.svg';
-import Happy from '../../../assets/svg/happy.svg';
-import AngryColor from '../../../assets/svg/angry-color.svg';
-import Angry from '../../../assets/svg/angry.svg';
-import VeryHappyColor from '../../../assets/svg/very-happy-color.svg';
-import VeryHappy from '../../../assets/svg/very-happy.svg';
-import SadColor from '../../../assets/svg/sad-color.svg';
-import Sad from '../../../assets/svg/sad.svg';
-import VerySadColor from '../../../assets/svg/very-sad-color.svg';
-import VerySad from '../../../assets/svg/very-sad.svg';
-import NeutralColor from '../../../assets/svg/neutral-color.svg';
-import Neutral from '../../../assets/svg/neutral.svg';
+import HappyColor from '../../../assets/feels/happy-color.svg';
+import Happy from '../../../assets/feels/happy.svg';
+import AngryColor from '../../../assets/feels/angry-color.svg';
+import Angry from '../../../assets/feels/angry.svg';
+import VeryHappyColor from '../../../assets/feels/very-happy-color.svg';
+import VeryHappy from '../../../assets/feels/very-happy.svg';
+import SadColor from '../../../assets/feels/sad-color.svg';
+import Sad from '../../../assets/feels/sad.svg';
+import VerySadColor from '../../../assets/feels/very-sad-color.svg';
+import VerySad from '../../../assets/feels/very-sad.svg';
+import NeutralColor from '../../../assets/feels/neutral-color.svg';
+import Neutral from '../../../assets/feels/neutral.svg';
 
 import { EmojiContainer } from './styles';
 
