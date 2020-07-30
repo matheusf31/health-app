@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import Modal from 'react-native-modal';
 import Emoji from 'react-native-emoji';
-import { parseISO } from 'date-fns';
 
 import DateInput from '../../../../components/DateInput';
 import Button from '../../../../components/Button';
+
+import { useAlarm } from '../../../../hooks/alarm';
 
 import {
   ModalContainer,
@@ -29,17 +30,25 @@ const AlarmDetails: React.FC<IAlarmDetailsProps> = ({
   modalVisible,
   onModalVisibleChange,
 }) => {
+  const { updateAlarm } = useAlarm();
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(parseISO(alarm.date));
+  const [selectedDate, setSelectedDate] = useState(alarm.date);
 
   const handleLeaveModal = useCallback(() => {
     onModalVisibleChange(false);
-    setSelectedDate(parseISO(alarm.date));
+    setSelectedDate(alarm.date);
   }, [onModalVisibleChange, alarm.date]);
 
-  const handleEditAlarm = useCallback(() => {
-    // TODO
-  }, []);
+  const handleEditAlarm = useCallback(async () => {
+    await updateAlarm({
+      date: selectedDate,
+      message: alarm.message,
+      repeatType: alarm.repeatType,
+      userInfo: alarm.userInfo,
+    });
+
+    handleLeaveModal();
+  }, [alarm, selectedDate, updateAlarm, handleLeaveModal]);
 
   return (
     <Modal

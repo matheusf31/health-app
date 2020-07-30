@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Emoji from 'react-native-emoji';
 
+import { useNavigation } from '@react-navigation/native';
 import { useAlarm } from '../../hooks/alarm';
 
 import AlarmCard from './AlarmCard';
@@ -19,12 +19,11 @@ import {
   Title,
   AlarmCardListContainer,
   AlarmCategoryText,
-  AddAlarmButton,
 } from './styles';
 
 export interface IAlarm {
   message: string;
-  date: string;
+  date: Date;
   repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;

@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
-import { parseISO, isSameDay } from 'date-fns';
+import { isSameDay, parseISO } from 'date-fns';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 
@@ -25,6 +25,17 @@ interface ICreateAlarmDTO {
 
 interface IAlarm {
   message: string;
+  date: Date;
+  repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
+  userInfo: {
+    category: string;
+    user_id: string;
+    alarm_id: string;
+  };
+}
+
+interface IParsedAlarm {
+  message: string;
   date: string;
   repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
@@ -39,6 +50,7 @@ interface IAlarmContextData {
   getAlarmByDate(selectedDate: Date): IAlarm[];
   deleteAlarmById(id: string): Promise<IAlarm[]>;
   createAlarm(alarm: ICreateAlarmDTO): Promise<void>;
+  updateAlarm(alarm: IAlarm): Promise<void>;
 }
 
 const AlarmContext = createContext<IAlarmContextData>({} as IAlarmContextData);
@@ -51,7 +63,16 @@ const AlarmProvider: React.FC = ({ children }) => {
     const alarmsExists = await AsyncStorage.getItem('@HealthApp:user:alarm');
 
     if (alarmsExists) {
-      setAlarms(JSON.parse(alarmsExists));
+      const parsedAlarms: IParsedAlarm[] = JSON.parse(alarmsExists);
+
+      const allAlarms = parsedAlarms.map(alarm => ({
+        message: alarm.message,
+        date: parseISO(alarm.date),
+        repeatType: alarm.repeatType,
+        userInfo: alarm.userInfo,
+      }));
+
+      setAlarms(allAlarms);
     }
   }, []);
 
@@ -62,7 +83,7 @@ const AlarmProvider: React.FC = ({ children }) => {
   const getAlarmByDate = useCallback(
     (selectedDate: Date) => {
       const filterAlarms = alarms.filter(alarm =>
-        isSameDay(parseISO(alarm.date), selectedDate),
+        isSameDay(alarm.date, selectedDate),
       );
 
       return filterAlarms;
@@ -76,7 +97,7 @@ const AlarmProvider: React.FC = ({ children }) => {
 
       Object.assign(userInfo, { alarm_id: uuid(), user_id: user.id });
 
-      const alarm = {
+      const newAlarm = {
         date,
         message,
         repeatType,
@@ -84,44 +105,107 @@ const AlarmProvider: React.FC = ({ children }) => {
       };
 
       if (storage && storage.length > 0) {
-        const updatedStorage = JSON.stringify([...JSON.parse(storage), alarm]);
+        const parsedStorage: IParsedAlarm[] = JSON.parse(storage);
+
+        const allAlarms = parsedStorage.map(alarm => ({
+          message: alarm.message,
+          date: parseISO(alarm.date),
+          repeatType: alarm.repeatType,
+          userInfo: alarm.userInfo,
+        }));
+
+        const updatedStorage = JSON.stringify([...allAlarms, newAlarm]);
+
         await AsyncStorage.setItem('@HealthApp:user:alarm', updatedStorage);
       } else {
         await AsyncStorage.setItem(
           '@HealthApp:user:alarm',
-          JSON.stringify([alarm]),
+          JSON.stringify([newAlarm]),
         );
       }
 
-      PushNotification.localNotificationSchedule(alarm);
+      PushNotification.localNotificationSchedule(newAlarm);
+
       loadAlarms();
     },
     [loadAlarms, user.id],
   );
 
-  const deleteAlarmById = useCallback(async (id: string) => {
-    const storage = await AsyncStorage.getItem('@HealthApp:user:alarm');
+  const deleteAlarmById = useCallback(
+    async (id: string) => {
+      const storage = await AsyncStorage.getItem('@HealthApp:user:alarm');
 
-    if (storage && storage.length > 0) {
-      const parsedStorage: IAlarm[] = JSON.parse(storage);
-      const updatedStorage = parsedStorage.filter(
-        alarm => alarm.userInfo.alarm_id !== id,
-      );
+      if (storage && storage.length > 0) {
+        const parsedStorage: IParsedAlarm[] = JSON.parse(storage);
 
-      PushNotification.cancelLocalNotifications({ id });
+        const allAlarms = parsedStorage.map(alarm => ({
+          message: alarm.message,
+          date: parseISO(alarm.date),
+          repeatType: alarm.repeatType,
+          userInfo: alarm.userInfo,
+        }));
 
-      await AsyncStorage.setItem(
-        '@HealthApp:user:alarm',
-        JSON.stringify(updatedStorage),
-      );
+        const updatedStorage = allAlarms.filter(
+          alarm => alarm.userInfo.alarm_id !== id,
+        );
 
-      setAlarms(updatedStorage);
+        PushNotification.cancelLocalNotifications({ id });
 
-      return updatedStorage;
-    }
+        await AsyncStorage.setItem(
+          '@HealthApp:user:alarm',
+          JSON.stringify(updatedStorage),
+        );
 
-    throw new Error('No alarms are set');
-  }, []);
+        loadAlarms();
+
+        return updatedStorage;
+      }
+
+      throw new Error('No alarms are set');
+    },
+    [loadAlarms],
+  );
+
+  const updateAlarm = useCallback(
+    async ({ date, message, repeatType, userInfo }: IAlarm) => {
+      const storage = await AsyncStorage.getItem('@HealthApp:user:alarm');
+
+      if (storage && storage.length > 0) {
+        const parsedStorage: IParsedAlarm[] = JSON.parse(storage);
+
+        const allAlarms = parsedStorage.map(alarm => ({
+          message: alarm.message,
+          date: parseISO(alarm.date),
+          repeatType: alarm.repeatType,
+          userInfo: alarm.userInfo,
+        }));
+
+        const updatedAlarms = allAlarms.filter(
+          alarm => alarm.userInfo.alarm_id !== userInfo.alarm_id,
+        );
+
+        PushNotification.cancelLocalNotifications({ id: userInfo.alarm_id });
+
+        const newAlarm = {
+          date,
+          message,
+          repeatType,
+          userInfo,
+        };
+
+        const stringifyAlarms = JSON.stringify([...updatedAlarms, newAlarm]);
+
+        PushNotification.localNotificationSchedule(newAlarm);
+
+        await AsyncStorage.setItem('@HealthApp:user:alarm', stringifyAlarms);
+
+        return loadAlarms();
+      }
+
+      throw new Error('No alarms are set');
+    },
+    [loadAlarms],
+  );
 
   return (
     <AlarmContext.Provider
@@ -130,6 +214,7 @@ const AlarmProvider: React.FC = ({ children }) => {
         deleteAlarmById,
         getAlarmByDate,
         createAlarm,
+        updateAlarm,
       }}
     >
       {children}

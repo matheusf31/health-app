@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { format, parseISO, isSameDay } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import Icon from 'react-native-vector-icons/Ionicons';
 // import { deleteAlarmById } from 'react-native-simple-alarm';
 
@@ -14,7 +14,7 @@ import {
   MessageContainer,
   MessageText,
   CancelButtonContainer,
-} from './style';
+} from './styles';
 
 import { IAlarm } from '../index';
 
@@ -33,16 +33,14 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const formattedDate = useMemo(() => format(parseISO(alarm.date), 'HH:mm'), [
-    alarm,
-  ]);
+  const formattedDate = useMemo(() => format(alarm.date, 'HH:mm'), [alarm]);
 
   const deleteAlarm = useCallback(async () => {
     try {
       let attAlarms: IAlarm[] = await deleteAlarmById(alarm.userInfo.alarm_id);
 
       attAlarms = attAlarms.filter(eachAlarm =>
-        isSameDay(parseISO(eachAlarm.date), selectedDate),
+        isSameDay(eachAlarm.date, selectedDate),
       );
 
       onChangeAlarms(attAlarms);

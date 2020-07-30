@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Register from '../pages/Registries';
+import Registry from '../pages/Registries';
 import Alarm from '../pages/Alarms';
 
 interface ITabBarIcon {
@@ -26,7 +26,7 @@ const tabBarOptions = {
   },
 };
 
-const registerRoutesOptions = {
+const registryRoutesOptions = {
   tabBarLabel: 'Registros',
   tabBarIcon: ({ focused }: ITabBarIcon) => (
     <Icon
@@ -47,9 +47,9 @@ const alarmRoutesOptions = {
 const AppRoutes: React.FC = () => (
   <App.Navigator tabBarOptions={tabBarOptions}>
     <App.Screen
-      name="Register"
-      component={Register}
-      options={registerRoutesOptions}
+      name="Registry"
+      component={Registry}
+      options={registryRoutesOptions}
     />
     <App.Screen name="Alarm" component={Alarm} options={alarmRoutesOptions} />
   </App.Navigator>

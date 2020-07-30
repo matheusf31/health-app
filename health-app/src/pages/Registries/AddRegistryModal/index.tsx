@@ -1,12 +1,10 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import {
-  TouchableWithoutFeedback,
-  Keyboard,
-  Animated,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
+
+import api from '../../../services/api';
+
+import FadeInView from './FadeView';
 
 import DateInput from '../../../components/DateInput';
 
@@ -39,28 +37,6 @@ interface IAddAlarmModalProps {
   modalVisible: boolean;
   onModalVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-interface IFadeInViewProps {
-  containerStyle?: StyleProp<ViewStyle>;
-}
-
-const FadeInView: React.FC<IFadeInViewProps> = ({ children, style }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 700,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
-
-  return (
-    <Animated.View style={{ ...style, opacity: fadeAnim }}>
-      {children}
-    </Animated.View>
-  );
-};
 
 const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   selectedDate,
@@ -101,8 +77,20 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   }, [onModalVisibleChange, selectedDate]);
 
   const handleAddRegistry = useCallback(async () => {
-    console.log('add registry');
-  }, []);
+    await api.post('/registries', {
+      date: selectedDate,
+      category,
+      selfState,
+      message,
+    });
+
+    handleLeaveModal();
+  }, [selectedDate, category, selfState, message, handleLeaveModal]);
+
+  const handleCategoryChange = useCallback(() => {
+    setMessage('');
+    setSelfState('');
+  }, [category]);
 
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
@@ -143,11 +131,13 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
           <ModalCategoryContainer>
             <ModalCategoryButton
               selected={category === 'physical-activity'}
-              onPress={() =>
+              onPress={() => {
                 setCategory(prevState =>
                   prevState === 'physical-activity' ? '' : 'physical-activity',
-                )
-              }
+                );
+
+                return handleCategoryChange();
+              }}
             >
               <ModalCategoryButtonText
                 selected={category === 'physical-activity'}
@@ -158,11 +148,13 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
             <ModalCategoryButton
               selected={category === 'blood-glucose'}
-              onPress={() =>
+              onPress={() => {
                 setCategory(prevState =>
                   prevState === 'blood-glucose' ? '' : 'blood-glucose',
-                )
-              }
+                );
+
+                return handleCategoryChange();
+              }}
             >
               <ModalCategoryButtonText selected={category === 'blood-glucose'}>
                 Glicemia
@@ -171,11 +163,13 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
             <ModalCategoryButton
               selected={category === 'insulin-therapy'}
-              onPress={() =>
+              onPress={() => {
                 setCategory(prevState =>
                   prevState === 'insulin-therapy' ? '' : 'insulin-therapy',
-                )
-              }
+                );
+
+                return handleCategoryChange();
+              }}
             >
               <ModalCategoryButtonText
                 selected={category === 'insulin-therapy'}
@@ -231,6 +225,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
                 <TextInput
                   keyboardAppearance="dark"
+                  keyboardType="numeric"
                   placeholderTextColor="#89828E"
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
@@ -346,6 +341,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
                 <TextInput
                   keyboardAppearance="dark"
+                  keyboardType="numeric"
                   placeholderTextColor="#89828E"
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}

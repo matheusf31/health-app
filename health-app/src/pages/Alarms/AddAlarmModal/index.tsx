@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
+import { useNavigation } from '@react-navigation/native';
 
 import { useAlarm } from '../../../hooks/alarm';
 
@@ -39,6 +40,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   onModalVisibleChange,
 }) => {
   const { createAlarm } = useAlarm();
+  const navigation = useNavigation();
 
   const [selectedHour, setSelectedHour] = useState(
     new Date(
