@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
-import PushNotification from 'react-native-push-notification';
+import { useRoute } from '@react-navigation/native';
 
 import RegisterImage from '../../assets/logos/note-list.svg';
 
@@ -23,6 +23,10 @@ import {
   RegisterContainer,
 } from './styles';
 
+interface IRouteParams {
+  openModal: boolean;
+}
+
 export interface IRegistries {
   id: number;
   date: string;
@@ -38,6 +42,9 @@ const Registries: React.FC = () => {
   //   PushNotification.cancelAllLocalNotifications();
   // }, []);
 
+  const route = useRoute();
+  const routeParams = route.params as IRouteParams;
+
   const [registries, setRegistries] = useState<IRegistries[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -47,6 +54,14 @@ const Registries: React.FC = () => {
   useEffect(() => {
     api.get('/registries').then(response => setRegistries(response.data));
   }, [addRegistryModalVisible, selectedDate]);
+
+  useEffect(() => {
+    if (routeParams && routeParams.openModal) {
+      setAddRegistryModalVisible(true);
+
+      routeParams.openModal = false;
+    }
+  }, [routeParams]);
 
   const handleDeleteRegistry = useCallback((id: number) => {
     setRegistries(oldRegistries =>

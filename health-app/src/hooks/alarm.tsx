@@ -102,6 +102,7 @@ const AlarmProvider: React.FC = ({ children }) => {
         message,
         repeatType,
         userInfo,
+        actions: '["Yes", "No"]',
       };
 
       if (storage && storage.length > 0) {

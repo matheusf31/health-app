@@ -1,8 +1,10 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
 
 import { useNavigation } from '@react-navigation/native';
+import { setupPushNotification } from '../../utils/pushNotificationConfig';
+
 import { useAlarm } from '../../hooks/alarm';
 
 import AlarmCard from './AlarmCard';
@@ -33,6 +35,7 @@ export interface IAlarm {
 }
 
 const Alarm: React.FC = () => {
+  const navigation = useNavigation();
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -53,6 +56,22 @@ const Alarm: React.FC = () => {
 
     loadAlarms();
   }, [addAlarmModalVisible, selectedDate, getAlarmByDate]);
+
+  const handleNotificationOpen = useCallback(
+    notification => {
+      // consigo enviar a category por aqui
+      navigation.navigate('Registry', {
+        openModal: true,
+      });
+
+      console.log(notification);
+    },
+    [navigation],
+  );
+
+  useEffect(() => {
+    setupPushNotification(handleNotificationOpen);
+  }, [handleNotificationOpen]);
 
   const physicalActivity = useMemo(
     () =>
