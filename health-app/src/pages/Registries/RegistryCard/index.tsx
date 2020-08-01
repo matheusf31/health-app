@@ -42,20 +42,6 @@ const RegistryCard: React.FC<IRegistryCardProps> = ({
     [onDeleteRegistry],
   );
 
-  // const deleteAlarm = useCallback(async () => {
-  //   try {
-  //     let attAlarms: IAlarm[] = await deleteAlarmById(alarm.userInfo.alarm_id);
-
-  //     attAlarms = attAlarms.filter(eachAlarm =>
-  //       isSameDay(parseISO(eachAlarm.date), selectedDate),
-  //     );
-
-  //     onChangeAlarms(attAlarms);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }, [alarm, onChangeAlarms, selectedDate, deleteAlarmById]);
-
   return (
     <Container>
       <TimeContainer>

@@ -2,8 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
 import { useRoute } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 
 import RegisterImage from '../../assets/logos/note-list.svg';
+
+import { interactionSuccess } from '../../store/modules/notification/actions';
 
 import DateInput from '../../components/DateInput';
 import BottomButton from '../../components/BottomButton';
@@ -23,6 +26,8 @@ import {
   RegisterContainer,
 } from './styles';
 
+import { IStoreState } from '../../store/createStore';
+
 interface IRouteParams {
   openModal: boolean;
 }
@@ -41,6 +46,9 @@ const Registries: React.FC = () => {
   // useEffect(() => {
   //   PushNotification.cancelAllLocalNotifications();
   // }, []);
+
+  const notification = useSelector((state: IStoreState) => state.notification);
+  const dispatch = useDispatch();
 
   const route = useRoute();
   const routeParams = route.params as IRouteParams;
@@ -62,6 +70,16 @@ const Registries: React.FC = () => {
       routeParams.openModal = false;
     }
   }, [routeParams]);
+
+  useEffect(() => {
+    if (notification.hasNotificationInteraction) {
+      setAddRegistryModalVisible(true);
+      // mandar a categoria para o modal
+      console.log(notification.category);
+    }
+
+    dispatch(interactionSuccess());
+  }, [notification, dispatch]);
 
   const handleDeleteRegistry = useCallback((id: number) => {
     setRegistries(oldRegistries =>

@@ -1,11 +1,11 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
-
 import { useNavigation } from '@react-navigation/native';
-import { setupPushNotification } from '../../utils/pushNotificationConfig';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { useAlarm } from '../../hooks/alarm';
+import { interactionSuccess } from '../../store/modules/notification/actions';
 
 import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
@@ -13,6 +13,8 @@ import DateInput from '../../components/DateInput';
 import BottomButton from '../../components/BottomButton';
 
 import AlarmImage from '../../assets/logos/alarm.svg';
+
+import { IStoreState } from '../../store/createStore';
 
 import {
   Container,
@@ -35,7 +37,11 @@ export interface IAlarm {
 }
 
 const Alarm: React.FC = () => {
+  const notification = useSelector((state: IStoreState) => state.notification);
+
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -57,21 +63,15 @@ const Alarm: React.FC = () => {
     loadAlarms();
   }, [addAlarmModalVisible, selectedDate, getAlarmByDate]);
 
-  const handleNotificationOpen = useCallback(
-    notification => {
-      // consigo enviar a category por aqui
+  useEffect(() => {
+    if (notification.hasNotificationInteraction) {
       navigation.navigate('Registry', {
         openModal: true,
       });
+    }
 
-      console.log(notification);
-    },
-    [navigation],
-  );
-
-  useEffect(() => {
-    setupPushNotification(handleNotificationOpen);
-  }, [handleNotificationOpen]);
+    dispatch(interactionSuccess());
+  }, [notification, dispatch, navigation]);
 
   const physicalActivity = useMemo(
     () =>
