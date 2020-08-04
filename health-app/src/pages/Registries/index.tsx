@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ScrollView, Dimensions } from 'react-native';
+import { ScrollView, Dimensions, Button } from 'react-native';
 import Emoji from 'react-native-emoji';
-import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import RegisterImage from '../../assets/logos/note-list.svg';
-
-import { interactionSuccess } from '../../store/modules/notification/actions';
 
 import DateInput from '../../components/DateInput';
 import BottomButton from '../../components/BottomButton';
@@ -14,7 +11,7 @@ import AddRegistryModal from './AddRegistryModal';
 import RegistryCard from './RegistryCard';
 import Emojis from './Emojis';
 
-// import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/auth';
 
 import api from '../../services/api';
 
@@ -28,10 +25,6 @@ import {
 
 import { IStoreState } from '../../store/createStore';
 
-interface IRouteParams {
-  openModal: boolean;
-}
-
 export interface IRegistries {
   id: number;
   date: string;
@@ -41,7 +34,7 @@ export interface IRegistries {
 }
 
 const Registries: React.FC = () => {
-  // const { signOut } = useAuth();
+  const { signOut } = useAuth();
 
   // useEffect(() => {
   //   PushNotification.cancelAllLocalNotifications();
@@ -49,9 +42,6 @@ const Registries: React.FC = () => {
 
   const notification = useSelector((state: IStoreState) => state.notification);
   const dispatch = useDispatch();
-
-  const route = useRoute();
-  const routeParams = route.params as IRouteParams;
 
   const [registries, setRegistries] = useState<IRegistries[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -64,21 +54,9 @@ const Registries: React.FC = () => {
   }, [addRegistryModalVisible, selectedDate]);
 
   useEffect(() => {
-    if (routeParams && routeParams.openModal) {
-      setAddRegistryModalVisible(true);
-
-      routeParams.openModal = false;
-    }
-  }, [routeParams]);
-
-  useEffect(() => {
     if (notification.hasNotificationInteraction) {
       setAddRegistryModalVisible(true);
-      // mandar a categoria para o modal
-      console.log(notification.category);
     }
-
-    dispatch(interactionSuccess());
   }, [notification, dispatch]);
 
   const handleDeleteRegistry = useCallback((id: number) => {
@@ -129,6 +107,8 @@ const Registries: React.FC = () => {
             onSelectedFeelsChange={setSelectedFeels}
           />
         </FeelsContainer>
+
+        <Button title="sair" onPress={() => signOut()} />
       </ScrollView>
 
       <AddRegistryModal
@@ -138,8 +118,6 @@ const Registries: React.FC = () => {
       />
 
       <BottomButton onPress={() => setAddRegistryModalVisible(true)} />
-
-      {/* <Button title="sair" onPress={() => signOut()} /> */}
     </Container>
   );
 };

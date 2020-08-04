@@ -1,17 +1,39 @@
 import { Platform } from 'react-native';
-import PushNotification from 'react-native-push-notification';
+import PushNotification, {
+  PushNotification as IPushNotification,
+} from 'react-native-push-notification';
+
+import { interactionRequest } from '../store/modules/notification/actions';
+
+import { store } from '../store';
+
+interface INotification extends IPushNotification {
+  userInfo: {
+    category: string;
+  };
+}
+
+function handleNotificationOpen(notification: INotification): void {
+  // console.log(notification);
+
+  // disparar uma action
+  store.dispatch(
+    interactionRequest({
+      category: notification.userInfo.category,
+    }),
+  );
+}
 
 function setupPushNotification(
-  handleNotification: (param: typeof PushNotification) => void,
+  handleNotification: (param: INotification) => void,
 ): void {
   PushNotification.configure({
     requestPermissions: Platform.OS === 'ios',
 
     onNotification(notification) {
-      // console.log('NOTIFICATION:', notification);
-      handleNotification(notification);
+      handleNotification(notification as INotification);
     },
   });
 }
 
-export { setupPushNotification };
+export { setupPushNotification, handleNotificationOpen };

@@ -4,31 +4,28 @@
       "id": 1,
       "name": "Matheus",
       "email": "matheus@gmail.com",
-      "password": "123456"
+      "password": "123456",
+      "userInfo": {
+        "firstLogin": true
+      }
     },
     {
       "id": 2,
       "name": "Matheus",
       "email": "matheus2@gmail.com",
-      "password": "123456"
+      "password": "123456",
+      "userInfo": {
+        "firstLogin": true
+      }
     },
     {
-      "name": "Teste",
+      "name": "teste",
       "email": "teste@gmail.com",
       "password": "123456",
+      "userInfo": {
+        "firstLogin": true
+      },
       "id": 3
-    },
-    {
-      "name": "Teste 5",
-      "email": "teste5@gmail.com",
-      "password": "123455",
-      "id": 4
-    },
-    {
-      "name": "teste2",
-      "email": "teste2@gmail.com",
-      "password": "123456",
-      "id": 5
     }
   ],
   "registries": [

@@ -67,6 +67,9 @@ const SignUp: React.FC = () => {
           name,
           email,
           password,
+          userInfo: {
+            firstLogin: true,
+          },
         });
 
         Alert.alert('Cadastro realizado com sucesso!', 'Faça seu login.');

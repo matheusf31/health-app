@@ -5,7 +5,10 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
+import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import { interactionSuccess } from '../store/modules/notification/actions';
 
 import api from '../services/api';
 
@@ -19,6 +22,9 @@ interface IUser {
   name: string;
   email: string;
   password: string;
+  userInfo: {
+    firstLogin: boolean;
+  };
 }
 
 interface IAuthContextData {
@@ -31,6 +37,7 @@ const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState({} as IUser);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {
@@ -51,6 +58,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
     const loggedUser = response.data[0];
 
+    console.log(loggedUser);
     delete loggedUser.password;
 
     await AsyncStorage.setItem('@HealthApp:user', JSON.stringify(loggedUser));
@@ -61,8 +69,10 @@ const AuthProvider: React.FC = ({ children }) => {
   const signOut = useCallback(async () => {
     await AsyncStorage.removeItem('@HealthApp:user');
 
+    dispatch(interactionSuccess());
+
     setUser({} as IUser);
-  }, []);
+  }, [dispatch]);
 
   return (
     <AuthContext.Provider

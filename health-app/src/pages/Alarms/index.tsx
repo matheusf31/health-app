@@ -1,11 +1,10 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { useAlarm } from '../../hooks/alarm';
-import { interactionSuccess } from '../../store/modules/notification/actions';
 
 import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
@@ -39,7 +38,6 @@ export interface IAlarm {
 const Alarm: React.FC = () => {
   const notification = useSelector((state: IStoreState) => state.notification);
 
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
@@ -55,8 +53,8 @@ const Alarm: React.FC = () => {
         const allAlarms: IAlarm[] = getAlarmByDate(selectedDate);
 
         setAlarms(allAlarms);
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        console.log(err);
       }
     }
 
@@ -65,13 +63,9 @@ const Alarm: React.FC = () => {
 
   useEffect(() => {
     if (notification.hasNotificationInteraction) {
-      navigation.navigate('Registry', {
-        openModal: true,
-      });
+      navigation.navigate('Registry');
     }
-
-    dispatch(interactionSuccess());
-  }, [notification, dispatch, navigation]);
+  }, [notification, navigation]);
 
   const physicalActivity = useMemo(
     () =>

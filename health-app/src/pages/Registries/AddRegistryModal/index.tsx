@@ -1,6 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { IStoreState } from 'src/store/createStore';
+import { interactionSuccess } from '../../../store/modules/notification/actions';
 
 import api from '../../../services/api';
 
@@ -43,7 +47,9 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   modalVisible,
   onModalVisibleChange,
 }) => {
-  // const { createAlarm } = useAlarm();
+  const notification = useSelector((state: IStoreState) => state.notification);
+
+  const dispatch = useDispatch();
 
   const [selectedHour, setSelectedHour] = useState(
     new Date(
@@ -54,12 +60,18 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
       new Date().getMinutes(),
     ),
   );
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [category, setCategory] = useState('');
   const [selfState, setSelfState] = useState('');
   const [message, setMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+
+  useEffect(() => {
+    if (notification.hasNotificationInteraction)
+      setCategory(notification.category);
+  }, [notification]);
 
   const handleLeaveModal = useCallback(() => {
     onModalVisibleChange(false);
@@ -74,7 +86,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
         new Date().getMinutes(),
       ),
     );
-  }, [onModalVisibleChange, selectedDate]);
+    dispatch(interactionSuccess());
+  }, [onModalVisibleChange, selectedDate, dispatch]);
 
   const handleAddRegistry = useCallback(async () => {
     await api.post('/registries', {
@@ -132,8 +145,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             <ModalCategoryButton
               selected={category === 'physical-activity'}
               onPress={() => {
-                setCategory(prevState =>
-                  prevState === 'physical-activity' ? '' : 'physical-activity',
+                setCategory(oldCategory =>
+                  oldCategory === 'physical-activity'
+                    ? ''
+                    : 'physical-activity',
                 );
 
                 return handleCategoryChange();
@@ -149,8 +164,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             <ModalCategoryButton
               selected={category === 'blood-glucose'}
               onPress={() => {
-                setCategory(prevState =>
-                  prevState === 'blood-glucose' ? '' : 'blood-glucose',
+                setCategory(oldCategory =>
+                  oldCategory === 'blood-glucose' ? '' : 'blood-glucose',
                 );
 
                 return handleCategoryChange();
@@ -164,8 +179,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
             <ModalCategoryButton
               selected={category === 'insulin-therapy'}
               onPress={() => {
-                setCategory(prevState =>
-                  prevState === 'insulin-therapy' ? '' : 'insulin-therapy',
+                setCategory(oldCategory =>
+                  oldCategory === 'insulin-therapy' ? '' : 'insulin-therapy',
                 );
 
                 return handleCategoryChange();
