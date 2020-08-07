@@ -107,6 +107,7 @@ const AlarmProvider: React.FC = ({ children }) => {
       if (storage && storage.length > 0) {
         const parsedStorage: IParsedAlarm[] = JSON.parse(storage);
 
+        // meu date após fazer o parse vem como string
         const allAlarms = parsedStorage.map(alarm => ({
           message: alarm.message,
           date: parseISO(alarm.date),
