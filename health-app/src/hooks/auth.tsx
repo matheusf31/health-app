@@ -25,12 +25,14 @@ interface IUser {
   userInfo: {
     firstLogin: boolean;
   };
+  goals: string[];
 }
 
 interface IAuthContextData {
   user: IUser;
   signIn(credentials: ISignInCredentials): Promise<void>;
   signOut(): Promise<void>;
+  updateFirstLogin(): Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -58,9 +60,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
     const loggedUser = response.data[0];
 
-    console.log(loggedUser);
-    delete loggedUser.password;
-
     await AsyncStorage.setItem('@HealthApp:user', JSON.stringify(loggedUser));
 
     setUser(loggedUser);
@@ -74,12 +73,28 @@ const AuthProvider: React.FC = ({ children }) => {
     setUser({} as IUser);
   }, [dispatch]);
 
+  // definir as metas aqui dentro
+  const updateFirstLogin = useCallback(async () => {
+    const response = await api.patch(`/users/${user.id}`, {
+      userInfo: {
+        firstLogin: false,
+      },
+    });
+
+    const updatedUser = response.data;
+
+    await AsyncStorage.setItem('@HealthApp:user', JSON.stringify(updatedUser));
+
+    setUser(updatedUser);
+  }, [user]);
+
   return (
     <AuthContext.Provider
       value={{
         user,
         signIn,
         signOut,
+        updateFirstLogin,
       }}
     >
       {children}
