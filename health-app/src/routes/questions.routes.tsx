@@ -7,9 +7,6 @@ import ThirdQuestion from '../pages/Auth/Questions/Third';
 
 const Questions = createStackNavigator();
 
-// se ele já respondeu a pergunta não perguntar novamente
-// ou talvez marcar a resposta do usuário
-
 const QuestionsRoutes: React.FC = () => {
   return (
     <Questions.Navigator
