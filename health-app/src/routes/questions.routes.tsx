@@ -7,19 +7,34 @@ import ThirdQuestion from '../pages/Auth/Questions/Third';
 
 const Questions = createStackNavigator();
 
+// se ele já respondeu a pergunta não perguntar novamente
+// ou talvez marcar a resposta do usuário
+
 const QuestionsRoutes: React.FC = () => {
   return (
     <Questions.Navigator
       screenOptions={{
-        headerShown: false,
         cardStyle: {
           backgroundColor: '#EBF1F3',
         },
+        headerTransparent: true,
       }}
     >
-      <Questions.Screen name="FirstQuestion" component={FirstQuestion} />
-      <Questions.Screen name="SecondQuestion" component={SecondQuestion} />
-      <Questions.Screen name="ThirdQuestion" component={ThirdQuestion} />
+      <Questions.Screen
+        name="FirstQuestion"
+        component={FirstQuestion}
+        options={{ title: 'Pergunta 1/3' }}
+      />
+      <Questions.Screen
+        name="SecondQuestion"
+        component={SecondQuestion}
+        options={{ title: 'Pergunta 2/3' }}
+      />
+      <Questions.Screen
+        name="ThirdQuestion"
+        component={ThirdQuestion}
+        options={{ title: 'Pergunta 3/3' }}
+      />
     </Questions.Navigator>
   );
 };
