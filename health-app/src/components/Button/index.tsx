@@ -8,7 +8,7 @@ interface IButtonProps extends TouchableOpacityProperties {
 }
 
 const Button: React.FC<IButtonProps> = ({ children, ...rest }) => (
-  <Container {...rest}>
+  <Container activeOpacity={0.8} {...rest}>
     <ButtonText>{children}</ButtonText>
   </Container>
 );
