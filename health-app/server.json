@@ -5,27 +5,36 @@
       "name": "Matheus",
       "email": "matheus@gmail.com",
       "password": "123456",
+      "height": 0,
+      "weight": 0,
       "userInfo": {
         "firstLogin": true
-      }
+      },
+      "goals": []
     },
     {
       "id": 2,
       "name": "Matheus",
       "email": "matheus2@gmail.com",
       "password": "123456",
+      "height": 0,
+      "weight": 0,
       "userInfo": {
         "firstLogin": true
-      }
+      },
+      "goals": []
     },
     {
       "name": "teste",
       "email": "teste@gmail.com",
       "password": "123456",
+      "height": 0,
+      "weight": 0,
       "userInfo": {
         "firstLogin": true
       },
-      "id": 3
+      "id": 3,
+      "goals": []
     }
   ],
   "registries": [
