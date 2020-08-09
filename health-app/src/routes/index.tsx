@@ -16,7 +16,7 @@ setupPushNotification(handleNotificationOpen);
 const Routes: React.FC = () => {
   const { user } = useAuth();
 
-  if (user.id && user.userInfo.firstLogin) {
+  if (user.id && user.firstLogin) {
     return <QuestionsRoutes />;
   }
 

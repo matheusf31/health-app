@@ -22,9 +22,7 @@ interface IUser {
   name: string;
   email: string;
   password: string;
-  userInfo: {
-    firstLogin: boolean;
-  };
+  firstLogin: boolean;
   goals: string[];
 }
 
@@ -76,9 +74,8 @@ const AuthProvider: React.FC = ({ children }) => {
   // definir as metas aqui dentro
   const updateFirstLogin = useCallback(async () => {
     const response = await api.patch(`/users/${user.id}`, {
-      userInfo: {
-        firstLogin: false,
-      },
+      ...user,
+      firstLogin: false,
     });
 
     const updatedUser = response.data;
