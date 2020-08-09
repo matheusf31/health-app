@@ -5,16 +5,21 @@
       "name": "Matheus",
       "email": "matheus@gmail.com",
       "password": "123456",
-      "height": 0,
-      "weight": 0,
-      "firstLogin": true,
-      "goals": []
+      "height": 1.77,
+      "weight": 62,
+      "imc": 19.79,
+      "goals": [
+        "aplicar insulina",
+        "tomar os medicamentos seguindo os alarmes"
+      ],
+      "firstLogin": false
     },
     {
       "id": 2,
       "name": "Matheus",
       "email": "matheus2@gmail.com",
       "password": "123456",
+      "imc": 0,
       "height": 0,
       "weight": 0,
       "firstLogin": true,
@@ -24,6 +29,7 @@
       "name": "teste",
       "email": "teste@gmail.com",
       "password": "123456",
+      "imc": 0,
       "height": 0,
       "weight": 0,
       "firstLogin": true,

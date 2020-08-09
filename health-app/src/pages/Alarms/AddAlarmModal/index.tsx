@@ -268,9 +268,9 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
                 <TextInput
                   keyboardAppearance="dark"
-                  placeholderTextColor="#89828E"
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
+                  placeholderTextColor="#89828E"
                   defaultValue={message}
                   onChangeText={value => {
                     setMessage(value);

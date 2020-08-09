@@ -30,7 +30,14 @@ interface IAuthContextData {
   user: IUser;
   signIn(credentials: ISignInCredentials): Promise<void>;
   signOut(): Promise<void>;
-  updateFirstLogin(): Promise<void>;
+  submitFirstLogin(data: ISubmitFirstLogin): Promise<void>;
+}
+
+interface ISubmitFirstLogin {
+  height: number;
+  weight: number;
+  firstQuestion: boolean;
+  secondQuestion: boolean;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -72,18 +79,44 @@ const AuthProvider: React.FC = ({ children }) => {
   }, [dispatch]);
 
   // definir as metas aqui dentro
-  const updateFirstLogin = useCallback(async () => {
-    const response = await api.patch(`/users/${user.id}`, {
-      ...user,
-      firstLogin: false,
-    });
+  const submitFirstLogin = useCallback(
+    async ({
+      height,
+      weight,
+      firstQuestion,
+      secondQuestion,
+    }: ISubmitFirstLogin) => {
+      const imc = parseFloat((weight / height ** 2).toFixed(2));
+      const goals = [];
 
-    const updatedUser = response.data;
+      if (firstQuestion) {
+        goals.push('aplicar insulina');
+      }
 
-    await AsyncStorage.setItem('@HealthApp:user', JSON.stringify(updatedUser));
+      if (secondQuestion) {
+        goals.push('tomar os medicamentos seguindo os alarmes');
+      }
 
-    setUser(updatedUser);
-  }, [user]);
+      const response = await api.put(`/users/${user.id}`, {
+        ...user,
+        height,
+        weight,
+        imc,
+        goals,
+        firstLogin: false,
+      });
+
+      const updatedUser = response.data;
+
+      await AsyncStorage.setItem(
+        '@HealthApp:user',
+        JSON.stringify(updatedUser),
+      );
+
+      setUser(updatedUser);
+    },
+    [user],
+  );
 
   return (
     <AuthContext.Provider
@@ -91,7 +124,7 @@ const AuthProvider: React.FC = ({ children }) => {
         user,
         signIn,
         signOut,
-        updateFirstLogin,
+        submitFirstLogin,
       }}
     >
       {children}

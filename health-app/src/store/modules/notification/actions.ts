@@ -7,7 +7,6 @@ interface IInteractionRequest {
 export function interactionRequest({
   category,
 }: IInteractionRequest): { type: string; payload: IInteractionRequest } {
-  // action(type, payload)
   return action('@notification/INTERACTION_REQUEST', {
     category,
   });
