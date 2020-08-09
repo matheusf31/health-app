@@ -7,9 +7,7 @@
       "password": "123456",
       "height": 0,
       "weight": 0,
-      "userInfo": {
-        "firstLogin": true
-      },
+      "firstLogin": true,
       "goals": []
     },
     {
@@ -19,9 +17,7 @@
       "password": "123456",
       "height": 0,
       "weight": 0,
-      "userInfo": {
-        "firstLogin": true
-      },
+      "firstLogin": true,
       "goals": []
     },
     {
@@ -30,9 +26,7 @@
       "password": "123456",
       "height": 0,
       "weight": 0,
-      "userInfo": {
-        "firstLogin": true
-      },
+      "firstLogin": true,
       "id": 3,
       "goals": []
     }

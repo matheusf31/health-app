@@ -76,9 +76,7 @@ const AuthProvider: React.FC = ({ children }) => {
   // definir as metas aqui dentro
   const updateFirstLogin = useCallback(async () => {
     const response = await api.patch(`/users/${user.id}`, {
-      userInfo: {
-        firstLogin: false,
-      },
+      firstLogin: false,
     });
 
     const updatedUser = response.data;
