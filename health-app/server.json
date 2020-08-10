@@ -12,6 +12,10 @@
         "aplicar insulina",
         "tomar os medicamentos seguindo os alarmes"
       ],
+      "game": {
+        "lvl": 1,
+        "xp": 0
+      },
       "firstLogin": false
     },
     {
@@ -23,7 +27,11 @@
       "height": 0,
       "weight": 0,
       "firstLogin": true,
-      "goals": []
+      "goals": [],
+      "game": {
+        "lvl": 1,
+        "xp": 0
+      }
     },
     {
       "name": "teste",
@@ -34,7 +42,11 @@
       "weight": 0,
       "firstLogin": true,
       "id": 3,
-      "goals": []
+      "goals": [],
+      "game": {
+        "lvl": 1,
+        "xp": 0
+      }
     }
   ],
   "registries": [

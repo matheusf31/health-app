@@ -2,10 +2,13 @@ import React from 'react';
 
 import { AuthProvider } from './auth';
 import { AlarmProvider } from './alarm';
+import { GameProvider } from './game';
 
 const AppProvider: React.FC = ({ children }) => (
   <AuthProvider>
-    <AlarmProvider>{children}</AlarmProvider>
+    <AlarmProvider>
+      <GameProvider>{children}</GameProvider>
+    </AlarmProvider>
   </AuthProvider>
 );
 

@@ -3,13 +3,12 @@ import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { IStoreState } from 'src/store/createStore';
+import { IStoreState } from '../../../store/createStore';
 import { interactionSuccess } from '../../../store/modules/notification/actions';
 
 import api from '../../../services/api';
 
 import FadeInView from './FadeView';
-
 import DateInput from '../../../components/DateInput';
 
 import Fasting from '../../../assets/blood-glucose/jejum.svg';
@@ -17,6 +16,8 @@ import PreMeal from '../../../assets/blood-glucose/pre-refeicao.svg';
 import PosMeal from '../../../assets/blood-glucose/pos-refeicao.svg';
 import BeforeBedtime from '../../../assets/blood-glucose/antes-de-dormir.svg';
 import General from '../../../assets/blood-glucose/geral.svg';
+
+import { useGame } from '../../../hooks/game';
 
 import {
   ModalContainer,
@@ -48,6 +49,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   onModalVisibleChange,
 }) => {
   const notification = useSelector((state: IStoreState) => state.notification);
+  const { hasInsulinGoal } = useGame();
 
   const dispatch = useDispatch();
 
@@ -69,8 +71,9 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   const [isFilled, setIsFilled] = useState(false);
 
   useEffect(() => {
-    if (notification.hasNotificationInteraction)
+    if (notification.hasNotificationInteraction) {
       setCategory(notification.category);
+    }
   }, [notification]);
 
   const handleLeaveModal = useCallback(() => {
@@ -87,7 +90,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
       ),
     );
     dispatch(interactionSuccess());
-  }, [onModalVisibleChange, selectedDate, dispatch]);
+    hasInsulinGoal();
+  }, [onModalVisibleChange, selectedDate, dispatch, hasInsulinGoal]);
 
   const handleAddRegistry = useCallback(async () => {
     await api.post('/registries', {

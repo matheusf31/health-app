@@ -24,6 +24,10 @@ interface IUser {
   password: string;
   firstLogin: boolean;
   goals: string[];
+  game: {
+    lvl: number;
+    xp: number;
+  };
 }
 
 interface IAuthContextData {
