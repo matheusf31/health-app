@@ -108,7 +108,7 @@ const Registries: React.FC = () => {
           />
         </FeelsContainer>
 
-        {/* <Button title="sair" onPress={() => signOut()} /> */}
+        <Button title="sair" onPress={() => signOut()} />
       </ScrollView>
 
       <AddRegistryModal
