@@ -12,11 +12,12 @@
         "aplicar insulina",
         "tomar os medicamentos seguindo os alarmes"
       ],
+      "firstLogin": false,
       "game": {
-        "lvl": 1,
-        "xp": 0
-      },
-      "firstLogin": false
+        "lvl": 2,
+        "xp": 5,
+        "daySequence": 8
+      }
     },
     {
       "id": 2,
@@ -30,7 +31,8 @@
       "goals": [],
       "game": {
         "lvl": 1,
-        "xp": 0
+        "xp": 0,
+        "daySequence": 0
       }
     },
     {
@@ -45,17 +47,31 @@
       "goals": [],
       "game": {
         "lvl": 1,
-        "xp": 0
+        "xp": 0,
+        "daySequence": 0
       }
     }
   ],
   "registries": [
     {
-      "date": "2020-08-01T18:45:04.208Z",
-      "category": "blood-glucose",
-      "selfState": "pos-meal",
-      "message": "21",
+      "date": "2020-08-12T20:43:24.731Z",
+      "category": "insulin-therapy",
+      "selfState": "",
+      "message": "",
+      "day": 12,
+      "month": 7,
+      "year": 2020,
       "id": 1
+    },
+    {
+      "date": "2020-08-13T20:53:05.265Z",
+      "category": "insulin-therapy",
+      "selfState": "",
+      "message": "",
+      "day": 13,
+      "month": 7,
+      "year": 2020,
+      "id": 2
     }
   ]
 }
