@@ -49,7 +49,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   onModalVisibleChange,
 }) => {
   const notification = useSelector((state: IStoreState) => state.notification);
-  const { hasInsulinGoal } = useGame();
+  const { insulinLogic } = useGame();
 
   const dispatch = useDispatch();
 
@@ -89,20 +89,32 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
         new Date().getMinutes(),
       ),
     );
+
     dispatch(interactionSuccess());
-    hasInsulinGoal();
-  }, [onModalVisibleChange, selectedDate, dispatch, hasInsulinGoal]);
+  }, [onModalVisibleChange, selectedDate, dispatch]);
 
   const handleAddRegistry = useCallback(async () => {
+    await insulinLogic(selectedDate);
+
     await api.post('/registries', {
       date: selectedDate,
       category,
       selfState,
       message,
+      day: selectedDate.getDate(),
+      month: selectedDate.getMonth(),
+      year: selectedDate.getFullYear(),
     });
 
     handleLeaveModal();
-  }, [selectedDate, category, selfState, message, handleLeaveModal]);
+  }, [
+    selectedDate,
+    category,
+    selfState,
+    message,
+    handleLeaveModal,
+    insulinLogic,
+  ]);
 
   const handleCategoryChange = useCallback(() => {
     setMessage('');
