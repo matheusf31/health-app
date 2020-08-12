@@ -27,6 +27,7 @@ interface IUser {
   game: {
     lvl: number;
     xp: number;
+    daySequence: number;
   };
 }
 

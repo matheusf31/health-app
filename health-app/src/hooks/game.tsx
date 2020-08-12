@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+} from 'react';
+import { subDays } from 'date-fns';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../services/api';
 
@@ -14,40 +22,124 @@ interface IUser {
   game: {
     lvl: number;
     xp: number;
+    daySequence: number;
   };
+}
+
+interface IRegistries {
+  date: Date;
+  category: string;
+  selfState: string;
+  message: string;
+  day: number;
+  month: number;
+  year: number;
+  id: number;
 }
 
 // talvez eu não precise do usuário logado no meu contexto
 interface IGameContextData {
   loggedUser: IUser;
-  hasInsulinGoal(): void;
+  insulinLogic(selectedDate: Date): Promise<void>;
 }
 
 const GameContext = createContext<IGameContextData>({} as IGameContextData);
 
+/**
+ * Lógica do jogo
+ */
 const GameProvider: React.FC = ({ children }) => {
-  const { user: loggedUser } = useAuth();
+  const { user } = useAuth();
 
-  // criar função que dá os pontos ao usuário
-  const winXp = useCallback(() => {
-    /* TO DO
-     * 1° verificar o lvl e decidir quanto ela vai ganhar
-     * (lvl 1 -> ganha 100xp // lvl 2 -> ganha 50xp // lvl 3 -> ganha 33.3px // lvl 4 -> ganha 25pxp)
-     * 2° verificar o xp da pessoa e ver se ela vai upar
-     */
+  const [loggedUser, setLoggedUser] = useState(user);
+
+  useEffect(() => {
+    setLoggedUser(user);
+  }, [user]);
+
+  const updateUser = useCallback(async (userToUpdate: IUser) => {
+    const response = await api.put<IUser>(`users/${userToUpdate.id}`, {
+      ...userToUpdate,
+    });
+
+    await AsyncStorage.setItem(
+      '@HealthApp:user',
+      JSON.stringify(response.data),
+    );
+
+    setLoggedUser(userToUpdate);
   }, []);
 
-  const hasInsulinGoal = useCallback(() => {
-    if (loggedUser.goals.includes('aplicar insulina')) {
-      winXp();
+  const winXp = useCallback(async (newXp: number, updatedUser: IUser) => {
+    // true: quer dizer que o usuário upou de nível
+    if (updatedUser.game.xp + newXp >= updatedUser.game.lvl * 100) {
+      updatedUser.game.xp =
+        updatedUser.game.xp + newXp - updatedUser.game.lvl * 100;
+
+      updatedUser.game.lvl += updatedUser.game.lvl;
+
+      return;
     }
-  }, [loggedUser.goals, winXp]);
+
+    updatedUser.game.xp += newXp;
+  }, []);
+
+  const insulinLogic = useCallback(
+    async (selectedDate: Date) => {
+      const updatedUser = loggedUser;
+
+      if (loggedUser.goals.includes('aplicar insulina')) {
+        const searchDate = subDays(selectedDate, 1);
+
+        // chegando se existe registro no dia selecionado
+        let response = await api.get<IRegistries[]>(
+          `/registries?day=${selectedDate.getDate()}&month=${selectedDate.getMonth()}&year=${selectedDate.getFullYear()}&category=insulin-therapy`,
+        );
+
+        const hasTodayRegistry = response.data;
+
+        if (hasTodayRegistry.length > 0) {
+          return;
+        }
+
+        await winXp(5, updatedUser);
+
+        // checando se existe registro 1 dia antes do dia selecionado
+        response = await api.get<IRegistries[]>(
+          `/registries?day=${searchDate.getDate()}&month=${searchDate.getMonth()}&year=${searchDate.getFullYear()}&category=insulin-therapy`,
+        );
+
+        const hasOldRegistry = response.data;
+
+        if (hasOldRegistry.length > 0) {
+          // marcou 7 dias seguidos (10 xp)
+          if (updatedUser.game.daySequence % 7 === 0) {
+            await winXp(10, updatedUser);
+          }
+
+          // marcou 30 dias seguidos (25 xp)
+          if (updatedUser.game.daySequence % 30 === 0) {
+            await winXp(25, updatedUser);
+          }
+
+          updatedUser.game.daySequence += 1;
+
+          await updateUser(updatedUser);
+        } else {
+          updatedUser.game.daySequence = 1;
+
+          await updateUser(updatedUser);
+        }
+      }
+    },
+    [loggedUser, winXp, updateUser],
+  );
 
   return (
     <GameContext.Provider
       value={{
         loggedUser,
-        hasInsulinGoal,
+        insulinLogic,
       }}
     >
       {children}
