@@ -1,7 +1,7 @@
 import React from 'react';
 
 import AuthRoutes from './auth.routes';
-import AppRoutes from './app.routes';
+import DrawerRoutes from './drawer.routes';
 import QuestionsRoutes from './questions.routes';
 
 import { useAuth } from '../hooks/auth';
@@ -20,7 +20,7 @@ const Routes: React.FC = () => {
     return <QuestionsRoutes />;
   }
 
-  return user.id ? <AppRoutes /> : <AuthRoutes />;
+  return user.id ? <DrawerRoutes /> : <AuthRoutes />;
 };
 
 export default Routes;

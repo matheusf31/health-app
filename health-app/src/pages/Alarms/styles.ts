@@ -5,6 +5,18 @@ export const Container = styled.SafeAreaView`
   background: #ebf1f3;
 `;
 
+export const HeaderContainer = styled.View`
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 24px;
+`;
+
+export const AlarmContainer = styled.View`
+  margin: 0 24px;
+`;
+
 export const TitleContainer = styled.View`
   flex-direction: row;
 
@@ -19,10 +31,6 @@ export const Title = styled.Text`
   font-size: 26px;
 
   margin-right: 10px;
-`;
-
-export const AlarmContainer = styled.View`
-  margin: 0 24px;
 `;
 
 export const AlarmCategoryText = styled.Text`

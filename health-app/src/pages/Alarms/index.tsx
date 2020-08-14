@@ -10,6 +10,7 @@ import AlarmCard from './AlarmCard';
 import AddAlarmModal from './AddAlarmModal';
 import DateInput from '../../components/DateInput';
 import BottomButton from '../../components/BottomButton';
+import OpenDrawerButton from '../../components/OpenDrawerButton';
 
 import AlarmImage from '../../assets/logos/alarm.svg';
 
@@ -17,6 +18,7 @@ import { IStoreState } from '../../store/createStore';
 
 import {
   Container,
+  HeaderContainer,
   AlarmContainer,
   TitleContainer,
   Title,
@@ -91,13 +93,17 @@ const Alarm: React.FC = () => {
   return (
     <Container>
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-        <DateInput
-          mode="calendar"
-          selectedDate={selectedDate}
-          onSelectedDateChange={setSelectedDate}
-          showDateTimePicker={showDatePicker}
-          onShowDateTimePickerChange={setShowDatePicker}
-        />
+        <HeaderContainer>
+          <OpenDrawerButton />
+
+          <DateInput
+            mode="calendar"
+            selectedDate={selectedDate}
+            onSelectedDateChange={setSelectedDate}
+            showDateTimePicker={showDatePicker}
+            onShowDateTimePickerChange={setShowDatePicker}
+          />
+        </HeaderContainer>
 
         <AlarmContainer>
           <TitleContainer>

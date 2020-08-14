@@ -40,7 +40,7 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
     [onSelectedDateChange, onShowDateTimePickerChange],
   );
 
-  const formatedDate = useMemo(() => {
+  const formattedDate = useMemo(() => {
     if (mode === 'calendar') {
       return format(selectedDate, "dd 'de' MMMM 'de' yyyy", {
         locale: pt,
@@ -57,7 +57,7 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
       <OpenDatePickerButton
         onPress={() => onShowDateTimePickerChange(prevState => !prevState)}
       >
-        <OpenDatePickerButtonText>{formatedDate}</OpenDatePickerButtonText>
+        <OpenDatePickerButtonText>{formattedDate}</OpenDatePickerButtonText>
       </OpenDatePickerButton>
 
       {showDateTimePicker && (

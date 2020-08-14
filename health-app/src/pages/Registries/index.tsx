@@ -7,6 +7,7 @@ import RegisterImage from '../../assets/logos/note-list.svg';
 
 import DateInput from '../../components/DateInput';
 import BottomButton from '../../components/BottomButton';
+import OpenDrawerButton from '../../components/OpenDrawerButton';
 import AddRegistryModal from './AddRegistryModal';
 import RegistryCard from './RegistryCard';
 import Emojis from './Emojis';
@@ -17,10 +18,11 @@ import api from '../../services/api';
 
 import {
   Container,
-  Title,
-  TitleContainer,
-  FeelsContainer,
+  HeaderContainer,
   RegisterContainer,
+  TitleContainer,
+  Title,
+  FeelsContainer,
 } from './styles';
 
 import { IStoreState } from '../../store/createStore';
@@ -68,13 +70,17 @@ const Registries: React.FC = () => {
   return (
     <Container>
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-        <DateInput
-          mode="calendar"
-          selectedDate={selectedDate}
-          onSelectedDateChange={setSelectedDate}
-          showDateTimePicker={showDatePicker}
-          onShowDateTimePickerChange={setShowDatePicker}
-        />
+        <HeaderContainer>
+          <OpenDrawerButton />
+
+          <DateInput
+            mode="calendar"
+            selectedDate={selectedDate}
+            onSelectedDateChange={setSelectedDate}
+            showDateTimePicker={showDatePicker}
+            onShowDateTimePickerChange={setShowDatePicker}
+          />
+        </HeaderContainer>
 
         <RegisterContainer>
           <TitleContainer>

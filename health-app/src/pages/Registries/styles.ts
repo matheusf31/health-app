@@ -6,6 +6,14 @@ export const Container = styled.SafeAreaView`
   background: #ebf1f3;
 `;
 
+export const HeaderContainer = styled.View`
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 24px;
+`;
+
 export const RegisterContainer = styled.View`
   margin: 0 24px 20px;
 `;
