@@ -5,6 +5,7 @@
       "name": "Matheus",
       "email": "matheus@gmail.com",
       "password": "123456",
+      "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
       "height": 1.77,
       "weight": 62,
       "imc": 19.79,
@@ -15,8 +16,8 @@
       "firstLogin": false,
       "game": {
         "lvl": 2,
-        "xp": 5,
-        "daySequence": 8
+        "xp": 10,
+        "daySequence": 1
       }
     },
     {
@@ -24,6 +25,7 @@
       "name": "Matheus",
       "email": "matheus2@gmail.com",
       "password": "123456",
+      "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
       "imc": 0,
       "height": 0,
       "weight": 0,
@@ -39,6 +41,7 @@
       "name": "teste",
       "email": "teste@gmail.com",
       "password": "123456",
+      "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
       "imc": 0,
       "height": 0,
       "weight": 0,
@@ -54,24 +57,14 @@
   ],
   "registries": [
     {
-      "date": "2020-08-12T20:43:24.731Z",
+      "date": "2020-08-16T14:41:21.160Z",
       "category": "insulin-therapy",
       "selfState": "",
       "message": "",
-      "day": 12,
+      "day": 16,
       "month": 7,
       "year": 2020,
       "id": 1
-    },
-    {
-      "date": "2020-08-13T20:53:05.265Z",
-      "category": "insulin-therapy",
-      "selfState": "",
-      "message": "",
-      "day": 13,
-      "month": 7,
-      "year": 2020,
-      "id": 2
     }
   ]
 }
