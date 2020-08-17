@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 import AppProvider from './hooks/index';
 
@@ -14,11 +15,13 @@ import { store } from './store';
 const App: React.FC = () => (
   <NavigationContainer>
     <ReduxProvider store={store}>
-      <StatusBar backgroundColor="#EBF1F3" barStyle="dark-content" />
+      <PaperProvider>
+        <StatusBar backgroundColor="#EBF1F3" barStyle="dark-content" />
 
-      <AppProvider>
-        <Routes />
-      </AppProvider>
+        <AppProvider>
+          <Routes />
+        </AppProvider>
+      </PaperProvider>
     </ReduxProvider>
   </NavigationContainer>
 );

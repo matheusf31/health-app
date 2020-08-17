@@ -2,7 +2,6 @@ import React, { useMemo, useCallback } from 'react';
 import { format, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-// import AlarmDetails from './AlarmDetails';
 import api from '../../../services/api';
 
 import {
@@ -48,20 +47,29 @@ const RegistryCard: React.FC<IRegistryCardProps> = ({
         <TimeText>{formattedDate}</TimeText>
       </TimeContainer>
 
-      <MessageContainer onPress={() => console.log('open modal')}>
-        <MessageText>{registry.message} (colocar tipo da medida)</MessageText>
-        <MessageText>{registry.selfState}</MessageText>
-      </MessageContainer>
+      {registry.selfState ? (
+        <MessageContainer onPress={() => console.log('open modal')}>
+          <MessageText>{registry.message || 0} mg/dL</MessageText>
+          <MessageText>{registry.selfState}</MessageText>
+        </MessageContainer>
+      ) : (
+        <MessageContainer onPress={() => console.log('open modal')}>
+          <MessageText>
+            {registry.message || '-'}{' '}
+            {registry.category === 'physical-activity'
+              ? ''
+              : registry.category === 'blood-glucose'
+              ? 'mg/dL'
+              : registry.message
+              ? 'UI'
+              : ''}
+          </MessageText>
+        </MessageContainer>
+      )}
 
       <DeleteButtonContainer onPress={() => handleDeleteRegistry(registry.id)}>
         <Icon name="ios-close" size={30} color="red" />
       </DeleteButtonContainer>
-
-      {/* <AlarmDetails
-        alarm={alarm}
-        modalVisible={modalVisible}
-        onModalVisibleChange={setModalVisible}
-      /> */}
     </Container>
   );
 };

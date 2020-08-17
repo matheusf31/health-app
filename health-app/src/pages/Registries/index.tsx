@@ -12,8 +12,6 @@ import AddRegistryModal from './AddRegistryModal';
 import RegistryCard from './RegistryCard';
 import Emojis from './Emojis';
 
-import { useAuth } from '../../hooks/auth';
-
 import api from '../../services/api';
 
 import {
@@ -31,13 +29,11 @@ export interface IRegistries {
   id: number;
   date: string;
   message: string;
-  category: string;
+  category: 'blood-glucose' | 'insulin-therapy' | 'physical-activity';
   selfState: string;
 }
 
 const Registries: React.FC = () => {
-  const { signOut } = useAuth();
-
   // useEffect(() => {
   //   PushNotification.cancelAllLocalNotifications();
   // }, []);
@@ -113,8 +109,6 @@ const Registries: React.FC = () => {
             onSelectedFeelsChange={setSelectedFeels}
           />
         </FeelsContainer>
-
-        <Button title="sair" onPress={() => signOut()} />
       </ScrollView>
 
       <AddRegistryModal

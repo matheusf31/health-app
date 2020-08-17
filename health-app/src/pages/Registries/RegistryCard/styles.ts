@@ -8,7 +8,6 @@ export const Container = styled.View`
   border-radius: 10px;
   flex-direction: row;
 
-  justify-content: space-between;
   align-items: center;
 `;
 
@@ -18,7 +17,7 @@ export const TimeContainer = styled.View`
 
 export const TimeText = styled.Text`
   font-family: 'Roboto-Medium';
-  font-size: 18px;
+  font-size: 16px;
   color: #17181d;
 `;
 
@@ -36,6 +35,5 @@ export const MessageText = styled.Text`
 export const DeleteButtonContainer = styled.TouchableOpacity`
   padding: 10px;
   align-items: center;
-  justify-content: center;
   flex: 1;
 `;

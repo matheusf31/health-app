@@ -16,7 +16,7 @@
       "firstLogin": false,
       "game": {
         "lvl": 2,
-        "xp": 10,
+        "xp": 15,
         "daySequence": 1
       }
     },
@@ -42,29 +42,21 @@
       "email": "teste@gmail.com",
       "password": "123456",
       "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
-      "imc": 0,
-      "height": 0,
-      "weight": 0,
-      "firstLogin": true,
       "id": 3,
-      "goals": [],
       "game": {
         "lvl": 1,
-        "xp": 0,
-        "daySequence": 0
-      }
+        "xp": 15,
+        "daySequence": 1
+      },
+      "height": 1.77,
+      "weight": 50,
+      "imc": 15.96,
+      "goals": [
+        "aplicar insulina",
+        "tomar os medicamentos seguindo os alarmes"
+      ],
+      "firstLogin": false
     }
   ],
-  "registries": [
-    {
-      "date": "2020-08-16T14:41:21.160Z",
-      "category": "insulin-therapy",
-      "selfState": "",
-      "message": "",
-      "day": 16,
-      "month": 7,
-      "year": 2020,
-      "id": 1
-    }
-  ]
+  "registries": []
 }

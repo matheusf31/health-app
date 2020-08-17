@@ -275,10 +275,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <StateOptionContainer>
                   <StateOptionButton
                     activeOpacity={0.8}
-                    selfState={selfState === 'fasting'}
+                    selfState={selfState === 'jejum'}
                     onPress={() =>
                       setSelfState(oldState =>
-                        oldState === 'fasting' ? '' : 'fasting',
+                        oldState === 'jejum' ? '' : 'jejum',
                       )
                     }
                   >
@@ -291,10 +291,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <StateOptionContainer>
                   <StateOptionButton
                     activeOpacity={0.8}
-                    selfState={selfState === 'pre-meal'}
+                    selfState={selfState === 'pré-refeição'}
                     onPress={() =>
                       setSelfState(oldState =>
-                        oldState === 'pre-meal' ? '' : 'pre-meal',
+                        oldState === 'pré-refeição' ? '' : 'pré-refeição',
                       )
                     }
                   >
@@ -307,10 +307,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <StateOptionContainer>
                   <StateOptionButton
                     activeOpacity={0.8}
-                    selfState={selfState === 'pos-meal'}
+                    selfState={selfState === 'pós-refeição'}
                     onPress={() =>
                       setSelfState(oldState =>
-                        oldState === 'pos-meal' ? '' : 'pos-meal',
+                        oldState === 'pós-refeição' ? '' : 'pós-refeição',
                       )
                     }
                   >
@@ -323,10 +323,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <StateOptionContainer>
                   <StateOptionButton
                     activeOpacity={0.8}
-                    selfState={selfState === 'before-bedtime'}
+                    selfState={selfState === 'antes de dormir'}
                     onPress={() =>
                       setSelfState(oldState =>
-                        oldState === 'before-bedtime' ? '' : 'before-bedtime',
+                        oldState === 'antes de dormir' ? '' : 'antes de dormir',
                       )
                     }
                   >

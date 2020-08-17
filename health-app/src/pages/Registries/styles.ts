@@ -35,5 +35,5 @@ export const Title = styled.Text`
 `;
 
 export const FeelsContainer = styled.View`
-  margin: 0 24px 40px;
+  margin: 100px 24px 40px;
 `;

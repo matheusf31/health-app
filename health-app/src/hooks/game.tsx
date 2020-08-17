@@ -5,6 +5,7 @@ import React, {
   useState,
   useEffect,
 } from 'react';
+import { Alert } from 'react-native';
 import { subDays } from 'date-fns';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -17,6 +18,7 @@ interface IUser {
   name: string;
   email: string;
   password: string;
+  avatar_url: string;
   firstLogin: boolean;
   goals: string[];
   game: {
@@ -82,6 +84,8 @@ const GameProvider: React.FC = ({ children }) => {
     }
 
     updatedUser.game.xp += newXp;
+
+    Alert.alert('Parabéns!', `Você ganhou ${newXp} xp`);
   }, []);
 
   const insulinLogic = useCallback(
