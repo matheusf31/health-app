@@ -45,7 +45,7 @@
       "id": 3,
       "game": {
         "lvl": 1,
-        "xp": 15,
+        "xp": 20,
         "daySequence": 1
       },
       "height": 1.77,
@@ -58,5 +58,28 @@
       "firstLogin": false
     }
   ],
-  "registries": []
+  "registries": [
+    {
+      "user_id": 3,
+      "date": "2020-08-18T19:20:56.428Z",
+      "category": "insulin-therapy",
+      "selfState": "",
+      "message": "12",
+      "day": 18,
+      "month": 7,
+      "year": 2020,
+      "id": 2
+    },
+    {
+      "user_id": 3,
+      "date": "2020-08-18T19:23:40.393Z",
+      "category": "insulin-therapy",
+      "selfState": "",
+      "message": "11",
+      "day": 18,
+      "month": 7,
+      "year": 2020,
+      "id": 3
+    }
+  ]
 }

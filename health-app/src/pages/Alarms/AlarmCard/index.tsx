@@ -49,6 +49,16 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
     }
   }, [alarm, onChangeAlarms, selectedDate, deleteAlarmById]);
 
+  const repeatTypeFormatted = useMemo(() => {
+    return alarm.repeatType === 'day'
+      ? 'dia'
+      : alarm.repeatType === 'hour'
+      ? 'hora'
+      : alarm.repeatType === 'week'
+      ? 'semana'
+      : '';
+  }, [alarm]);
+
   return (
     <Container>
       <TimeContainer>
@@ -56,7 +66,10 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
       </TimeContainer>
 
       <MessageContainer onPress={() => setModalVisible(true)}>
-        <MessageText>{alarm.message}</MessageText>
+        <MessageText style={{ fontWeight: 'bold' }}>
+          {alarm.message}
+        </MessageText>
+        <MessageText>repetindo por {repeatTypeFormatted}</MessageText>
       </MessageContainer>
 
       <CancelButtonContainer onPress={deleteAlarm}>

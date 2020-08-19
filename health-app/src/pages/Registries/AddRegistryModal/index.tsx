@@ -18,6 +18,7 @@ import BeforeBedtime from '../../../assets/blood-glucose/antes-de-dormir.svg';
 import General from '../../../assets/blood-glucose/geral.svg';
 
 import { useGame } from '../../../hooks/game';
+import { useAuth } from '../../../hooks/auth';
 
 import {
   ModalContainer,
@@ -50,6 +51,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 }) => {
   const notification = useSelector((state: IStoreState) => state.notification);
   const { insulinLogic } = useGame();
+  const { user } = useAuth();
 
   const dispatch = useDispatch();
 
@@ -97,6 +99,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
     await insulinLogic(selectedDate);
 
     await api.post('/registries', {
+      user_id: user.id,
       date: selectedDate,
       category,
       selfState,
@@ -108,6 +111,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
     handleLeaveModal();
   }, [
+    user,
     selectedDate,
     category,
     selfState,

@@ -3,6 +3,8 @@ import { ScrollView, Dimensions, Button } from 'react-native';
 import Emoji from 'react-native-emoji';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { isSameDay } from 'date-fns';
+import { parseISO } from 'date-fns/esm';
 import RegisterImage from '../../assets/logos/note-list.svg';
 
 import DateInput from '../../components/DateInput';
@@ -24,6 +26,7 @@ import {
 } from './styles';
 
 import { IStoreState } from '../../store/createStore';
+import { useAuth } from '../../hooks/auth';
 
 export interface IRegistries {
   id: number;
@@ -41,6 +44,8 @@ const Registries: React.FC = () => {
   const notification = useSelector((state: IStoreState) => state.notification);
   const dispatch = useDispatch();
 
+  const { user } = useAuth();
+
   const [registries, setRegistries] = useState<IRegistries[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -48,8 +53,14 @@ const Registries: React.FC = () => {
   const [addRegistryModalVisible, setAddRegistryModalVisible] = useState(false);
 
   useEffect(() => {
-    api.get('/registries').then(response => setRegistries(response.data));
-  }, [addRegistryModalVisible, selectedDate]);
+    api.get<IRegistries[]>(`/registries?user_id=${user.id}`).then(response => {
+      const filterRegister = response.data.filter(filteredRegistry =>
+        isSameDay(parseISO(filteredRegistry.date), selectedDate),
+      );
+
+      return setRegistries(filterRegister);
+    });
+  }, [addRegistryModalVisible, selectedDate, user]);
 
   useEffect(() => {
     if (notification.hasNotificationInteraction) {

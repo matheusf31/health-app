@@ -46,7 +46,6 @@ interface IParsedAlarm {
 }
 
 interface IAlarmContextData {
-  alarms: IAlarm[];
   getAlarmByDate(selectedDate: Date): IAlarm[];
   deleteAlarmById(id: string): Promise<IAlarm[]>;
   createAlarm(alarm: ICreateAlarmDTO): Promise<void>;
@@ -211,7 +210,6 @@ const AlarmProvider: React.FC = ({ children }) => {
   return (
     <AlarmContext.Provider
       value={{
-        alarms,
         deleteAlarmById,
         getAlarmByDate,
         createAlarm,
