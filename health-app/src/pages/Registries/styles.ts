@@ -2,16 +2,17 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-
   background: #ebf1f3;
 `;
 
 export const HeaderContainer = styled.View`
   flex-direction: row;
 
-  align-items: center;
-  justify-content: flex-start;
   margin: 0 24px;
+`;
+
+export const HeaderDateInputView = styled.View`
+  margin: 0 auto;
 `;
 
 export const RegisterContainer = styled.View`

@@ -100,7 +100,7 @@ export const ModalCategoryButton = styled.TouchableOpacity.attrs({
   border-radius: 10px;
   border-width: 1px;
   border-color: #146ba8;
-  padding: 10px;
+  padding: 8px;
 
   ${props =>
     props.selected &&
@@ -112,7 +112,7 @@ export const ModalCategoryButton = styled.TouchableOpacity.attrs({
 export const ModalCategoryButtonText = styled.Text<IModalCategoryButtonText>`
   color: #17181d;
   font-family: 'Roboto-Regular';
-  font-size: 16px;
+  font-size: 14px;
 
   ${props =>
     props.selected &&
@@ -126,7 +126,7 @@ export const TextInputContainer = styled.View<ITextInputContainerProps>`
   width: 100%;
   height: 55px;
   padding: 0 16px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 10px;
 
   background: #f4f4f4;

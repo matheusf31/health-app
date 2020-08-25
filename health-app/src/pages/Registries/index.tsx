@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ScrollView, Dimensions, Button } from 'react-native';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
 import { useDispatch, useSelector } from 'react-redux';
+import { format, parseISO, isSameDay } from 'date-fns';
+import pt from 'date-fns/locale/pt-BR';
 
-import { isSameDay } from 'date-fns';
-import { parseISO } from 'date-fns/esm';
+// import PushNotification from 'react-native-push-notification';
+
 import RegisterImage from '../../assets/logos/note-list.svg';
 
 import DateInput from '../../components/DateInput';
@@ -19,6 +21,7 @@ import api from '../../services/api';
 import {
   Container,
   HeaderContainer,
+  HeaderDateInputView,
   RegisterContainer,
   TitleContainer,
   Title,
@@ -48,14 +51,16 @@ const Registries: React.FC = () => {
 
   const [registries, setRegistries] = useState<IRegistries[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() =>
+    format(new Date(), "yyyy-MM-dd'T'HH:mm:ssxxx", { locale: pt }),
+  );
   const [selectedFeels, setSelectedFeels] = useState('');
   const [addRegistryModalVisible, setAddRegistryModalVisible] = useState(false);
 
   useEffect(() => {
     api.get<IRegistries[]>(`/registries?user_id=${user.id}`).then(response => {
       const filterRegister = response.data.filter(filteredRegistry =>
-        isSameDay(parseISO(filteredRegistry.date), selectedDate),
+        isSameDay(parseISO(filteredRegistry.date), parseISO(selectedDate)),
       );
 
       return setRegistries(filterRegister);
@@ -80,13 +85,15 @@ const Registries: React.FC = () => {
         <HeaderContainer>
           <OpenDrawerButton />
 
-          <DateInput
-            mode="calendar"
-            selectedDate={selectedDate}
-            onSelectedDateChange={setSelectedDate}
-            showDateTimePicker={showDatePicker}
-            onShowDateTimePickerChange={setShowDatePicker}
-          />
+          <HeaderDateInputView>
+            <DateInput
+              mode="calendar"
+              selectedDate={selectedDate}
+              onSelectedDateChange={setSelectedDate}
+              showDateTimePicker={showDatePicker}
+              onShowDateTimePickerChange={setShowDatePicker}
+            />
+          </HeaderDateInputView>
         </HeaderContainer>
 
         <RegisterContainer>
@@ -125,6 +132,7 @@ const Registries: React.FC = () => {
       <AddRegistryModal
         selectedDate={selectedDate}
         modalVisible={addRegistryModalVisible}
+        onSelectedDateChange={setSelectedDate}
         onModalVisibleChange={setAddRegistryModalVisible}
       />
 

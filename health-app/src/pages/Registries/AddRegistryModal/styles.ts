@@ -47,7 +47,7 @@ export const ModalCategoryButton = styled.TouchableOpacity.attrs({
   border-radius: 10px;
   border-width: 1px;
   border-color: #146ba8;
-  padding: 10px;
+  padding: 8px;
 
   ${props =>
     props.selected &&
@@ -59,7 +59,7 @@ export const ModalCategoryButton = styled.TouchableOpacity.attrs({
 export const ModalCategoryButtonText = styled.Text<IModalCategoryButtonText>`
   color: #17181d;
   font-family: 'Roboto-Regular';
-  font-size: 16px;
+  font-size: 14px;
 
   ${props =>
     props.selected &&

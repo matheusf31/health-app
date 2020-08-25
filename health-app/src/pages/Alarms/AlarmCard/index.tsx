@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { format, isSameDay } from 'date-fns';
+import { format, isSameDay, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/Ionicons';
 // import { deleteAlarmById } from 'react-native-simple-alarm';
 
@@ -21,7 +21,7 @@ import { IAlarm } from '../index';
 interface IAlarmCardProps {
   alarm: IAlarm;
   onChangeAlarms: React.Dispatch<React.SetStateAction<IAlarm[]>>;
-  selectedDate: Date;
+  selectedDate: string;
 }
 
 const AlarmCard: React.FC<IAlarmCardProps> = ({
@@ -33,14 +33,16 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const formattedDate = useMemo(() => format(alarm.date, 'HH:mm'), [alarm]);
+  const formattedDate = useMemo(() => format(parseISO(alarm.date), 'HH:mm'), [
+    alarm,
+  ]);
 
   const deleteAlarm = useCallback(async () => {
     try {
       let attAlarms: IAlarm[] = await deleteAlarmById(alarm.userInfo.alarm_id);
 
       attAlarms = attAlarms.filter(eachAlarm =>
-        isSameDay(eachAlarm.date, selectedDate),
+        isSameDay(parseISO(eachAlarm.date), parseISO(selectedDate)),
       );
 
       onChangeAlarms(attAlarms);
@@ -66,10 +68,15 @@ const AlarmCard: React.FC<IAlarmCardProps> = ({
       </TimeContainer>
 
       <MessageContainer onPress={() => setModalVisible(true)}>
-        <MessageText style={{ fontWeight: 'bold' }}>
-          {alarm.message}
-        </MessageText>
-        <MessageText>repetindo por {repeatTypeFormatted}</MessageText>
+        {alarm.message !== '' && (
+          <MessageText style={{ fontWeight: 'bold' }}>
+            {alarm.message}
+          </MessageText>
+        )}
+
+        {repeatTypeFormatted !== '' && (
+          <MessageText>repetido por {repeatTypeFormatted}</MessageText>
+        )}
       </MessageContainer>
 
       <CancelButtonContainer onPress={deleteAlarm}>

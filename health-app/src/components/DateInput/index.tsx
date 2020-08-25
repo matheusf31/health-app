@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { Platform, StyleProp, ViewStyle } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 
 import {
@@ -11,8 +11,8 @@ import {
 } from './styles';
 
 interface IDateTimePickerInput {
-  selectedDate: Date;
-  onSelectedDateChange: React.Dispatch<React.SetStateAction<Date>>;
+  selectedDate: string;
+  onSelectedDateChange: React.Dispatch<React.SetStateAction<string>>;
   showDateTimePicker: boolean;
   onShowDateTimePickerChange: React.Dispatch<React.SetStateAction<boolean>>;
   mode: 'time' | 'calendar';
@@ -34,7 +34,9 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
       }
 
       if (date) {
-        onSelectedDateChange(date);
+        onSelectedDateChange(() =>
+          format(date, "yyyy-MM-dd'T'HH:mm:ssxxx", { locale: pt }),
+        );
       }
     },
     [onSelectedDateChange, onShowDateTimePickerChange],
@@ -42,12 +44,12 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
 
   const formattedDate = useMemo(() => {
     if (mode === 'calendar') {
-      return format(selectedDate, "dd 'de' MMMM 'de' yyyy", {
+      return format(parseISO(selectedDate), "dd 'de' MMMM 'de' yyyy", {
         locale: pt,
       });
     }
 
-    return format(selectedDate, "HH':'mm", {
+    return format(parseISO(selectedDate), "HH':'mm", {
       locale: pt,
     });
   }, [selectedDate, mode]);
@@ -62,7 +64,7 @@ const DateTimePickerInput: React.FC<IDateTimePickerInput> = ({
 
       {showDateTimePicker && (
         <DateTimePicker
-          value={selectedDate}
+          value={parseISO(selectedDate)}
           mode={mode === 'time' ? 'time' : 'date'}
           is24Hour
           onChange={handleDateChanged}

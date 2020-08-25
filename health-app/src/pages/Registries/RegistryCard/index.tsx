@@ -17,7 +17,7 @@ import { IRegistries } from '../index';
 
 interface IRegistryCardProps {
   registry: IRegistries;
-  selectedDate: Date;
+  selectedDate: string;
   onDeleteRegistry(id: number): void;
 }
 
@@ -47,25 +47,24 @@ const RegistryCard: React.FC<IRegistryCardProps> = ({
         <TimeText>{formattedDate}</TimeText>
       </TimeContainer>
 
-      {registry.selfState ? (
-        <MessageContainer onPress={() => console.log('open modal')}>
-          <MessageText>{registry.message || 0} mg/dL</MessageText>
-          <MessageText>{registry.selfState}</MessageText>
-        </MessageContainer>
-      ) : (
-        <MessageContainer onPress={() => console.log('open modal')}>
+      <MessageContainer onPress={() => console.log('open modal')}>
+        {registry.message !== '' ? (
           <MessageText>
-            {registry.message || '-'}{' '}
-            {registry.category === 'physical-activity'
-              ? ''
-              : registry.category === 'blood-glucose'
+            {registry.message}{' '}
+            {registry.category === 'blood-glucose'
               ? 'mg/dL'
-              : registry.message
+              : registry.category === 'insulin-therapy'
               ? 'UI'
               : ''}
           </MessageText>
-        </MessageContainer>
-      )}
+        ) : (
+          <MessageText>-</MessageText>
+        )}
+
+        {registry.selfState !== '' && (
+          <MessageText>{registry.selfState}</MessageText>
+        )}
+      </MessageContainer>
 
       <DeleteButtonContainer onPress={() => handleDeleteRegistry(registry.id)}>
         <Icon name="ios-close" size={30} color="red" />

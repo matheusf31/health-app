@@ -7,18 +7,22 @@
       "password": "123456",
       "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
       "height": 1.77,
-      "weight": 62,
-      "imc": 19.79,
-      "goals": [
-        "aplicar insulina",
-        "tomar os medicamentos seguindo os alarmes"
-      ],
-      "firstLogin": false,
       "game": {
-        "lvl": 2,
-        "xp": 15,
-        "daySequence": 1
-      }
+        "lvl": 4,
+        "xp": 10,
+        "insulinDaySequence": 1,
+        "medicineDaySequence": {
+          "sequency": 3,
+          "lastDay": "2020-08-26T23:30:59-03:00"
+        }
+      },
+      "goals": {
+        "aplicar insulina": true,
+        "tomar os medicamentos seguindo os alarmes": true
+      },
+      "firstLogin": false,
+      "weight": 100,
+      "imc": 31.92
     },
     {
       "id": 2,
@@ -26,16 +30,23 @@
       "email": "matheus2@gmail.com",
       "password": "123456",
       "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
-      "imc": 0,
-      "height": 0,
-      "weight": 0,
-      "firstLogin": true,
-      "goals": [],
       "game": {
         "lvl": 1,
-        "xp": 0,
-        "daySequence": 0
-      }
+        "xp": 15,
+        "insulinDaySequence": 0,
+        "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        }
+      },
+      "height": 1.88,
+      "weight": 90,
+      "imc": 25.46,
+      "goals": {
+        "aplicar insulina": false,
+        "tomar os medicamentos seguindo os alarmes": true
+      },
+      "firstLogin": false
     },
     {
       "name": "teste",
@@ -46,40 +57,41 @@
       "game": {
         "lvl": 1,
         "xp": 20,
-        "daySequence": 1
+        "insulinDaySequence": 1,
+        "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        }
       },
       "height": 1.77,
       "weight": 50,
       "imc": 15.96,
-      "goals": [
-        "aplicar insulina",
-        "tomar os medicamentos seguindo os alarmes"
-      ],
+      "goals": {},
       "firstLogin": false
     }
   ],
   "registries": [
     {
-      "user_id": 3,
-      "date": "2020-08-18T19:20:56.428Z",
-      "category": "insulin-therapy",
+      "user_id": 1,
+      "date": "2020-08-25T11:29:59-03:00",
+      "category": "medicine",
       "selfState": "",
-      "message": "12",
-      "day": 18,
+      "message": "",
+      "day": 25,
+      "month": 7,
+      "year": 2020,
+      "id": 1
+    },
+    {
+      "user_id": 1,
+      "date": "2020-08-26T23:30:59-03:00",
+      "category": "medicine",
+      "selfState": "",
+      "message": "",
+      "day": 26,
       "month": 7,
       "year": 2020,
       "id": 2
-    },
-    {
-      "user_id": 3,
-      "date": "2020-08-18T19:23:40.393Z",
-      "category": "insulin-therapy",
-      "selfState": "",
-      "message": "11",
-      "day": 18,
-      "month": 7,
-      "year": 2020,
-      "id": 3
     }
   ]
 }

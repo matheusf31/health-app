@@ -13,6 +13,10 @@ export const HeaderContainer = styled.View`
   margin: 0 24px;
 `;
 
+export const HeaderDateInputView = styled.View`
+  margin: 0 auto;
+`;
+
 export const AlarmContainer = styled.View`
   margin: 0 24px;
 `;

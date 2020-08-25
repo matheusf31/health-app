@@ -3,6 +3,8 @@ import { ScrollView, Dimensions } from 'react-native';
 import Emoji from 'react-native-emoji';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { format } from 'date-fns';
+import pt from 'date-fns/locale/pt-BR';
 
 import { useAlarm } from '../../hooks/alarm';
 
@@ -19,6 +21,7 @@ import { IStoreState } from '../../store/createStore';
 import {
   Container,
   HeaderContainer,
+  HeaderDateInputView,
   AlarmContainer,
   TitleContainer,
   Title,
@@ -28,7 +31,7 @@ import {
 
 export interface IAlarm {
   message: string;
-  date: Date;
+  date: string;
   repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
@@ -44,7 +47,9 @@ const Alarm: React.FC = () => {
 
   const [alarms, setAlarms] = useState<IAlarm[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() =>
+    format(new Date(), "yyyy-MM-dd'T'HH:mm:ssxxx", { locale: pt }),
+  );
   const [addAlarmModalVisible, setAddAlarmModalVisible] = useState(false);
 
   const { getAlarmByDate } = useAlarm();
@@ -85,6 +90,11 @@ const Alarm: React.FC = () => {
     [alarms],
   );
 
+  const medicine = useMemo(
+    () => alarms.filter(alarm => alarm.userInfo.category === 'medicine'),
+    [alarms],
+  );
+
   const withoutCategory = useMemo(
     () => alarms.filter(alarm => alarm.userInfo.category === ''),
     [alarms],
@@ -96,13 +106,15 @@ const Alarm: React.FC = () => {
         <HeaderContainer>
           <OpenDrawerButton />
 
-          <DateInput
-            mode="calendar"
-            selectedDate={selectedDate}
-            onSelectedDateChange={setSelectedDate}
-            showDateTimePicker={showDatePicker}
-            onShowDateTimePickerChange={setShowDatePicker}
-          />
+          <HeaderDateInputView>
+            <DateInput
+              mode="calendar"
+              selectedDate={selectedDate}
+              onSelectedDateChange={setSelectedDate}
+              showDateTimePicker={showDatePicker}
+              onShowDateTimePickerChange={setShowDatePicker}
+            />
+          </HeaderDateInputView>
         </HeaderContainer>
 
         <AlarmContainer>
@@ -164,6 +176,21 @@ const Alarm: React.FC = () => {
             </AlarmCardListContainer>
           )}
 
+          {medicine.length > 0 && (
+            <AlarmCardListContainer>
+              <AlarmCategoryText>Medicamento</AlarmCategoryText>
+
+              {medicine.map(alarm => (
+                <AlarmCard
+                  selectedDate={selectedDate}
+                  key={alarm.userInfo.alarm_id}
+                  alarm={alarm}
+                  onChangeAlarms={setAlarms}
+                />
+              ))}
+            </AlarmCardListContainer>
+          )}
+
           {withoutCategory.length > 0 && (
             <AlarmCardListContainer>
               <AlarmCategoryText>Sem categoria</AlarmCategoryText>
@@ -184,6 +211,7 @@ const Alarm: React.FC = () => {
           selectedDate={selectedDate}
           modalVisible={addAlarmModalVisible}
           onModalVisibleChange={setAddAlarmModalVisible}
+          onSelectedDateChange={setSelectedDate}
         />
       </ScrollView>
 

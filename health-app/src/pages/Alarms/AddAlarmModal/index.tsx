@@ -27,8 +27,9 @@ import {
 } from './styles';
 
 interface IAddAlarmModalProps {
-  selectedDate: Date;
+  selectedDate: string;
   modalVisible: boolean;
+  onSelectedDateChange: React.Dispatch<React.SetStateAction<string>>;
   onModalVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -38,19 +39,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   selectedDate,
   modalVisible,
   onModalVisibleChange,
+  onSelectedDateChange,
 }) => {
   const { createAlarm } = useAlarm();
-  const navigation = useNavigation();
 
-  const [selectedHour, setSelectedHour] = useState(
-    new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate(),
-      new Date().getHours(),
-      new Date().getMinutes(),
-    ),
-  );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [category, setCategory] = useState('');
   const [repeatType, setRepeatType] = useState<IRepeat>(undefined);
@@ -63,16 +55,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
     setCategory('');
     setRepeatType(undefined);
     setMessage('');
-    setSelectedHour(
-      new Date(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate(),
-        new Date().getHours(),
-        new Date().getMinutes(),
-      ),
-    );
-  }, [onModalVisibleChange, selectedDate]);
+  }, [onModalVisibleChange]);
 
   const handleAddAlarm = useCallback(async () => {
     let autoMessage: string | undefined;
@@ -129,8 +112,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
           <DateInput
             mode="time"
-            selectedDate={selectedHour}
-            onSelectedDateChange={setSelectedHour}
+            selectedDate={selectedDate}
+            onSelectedDateChange={onSelectedDateChange}
             showDateTimePicker={showDatePicker}
             onShowDateTimePickerChange={setShowDatePicker}
             containerStyle={{ marginTop: -10 }}
@@ -185,20 +168,6 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                   Diariamente
                 </ModalRepetitionButtonText>
               </ModalRadioContainer>
-
-              {/* <ModalRadioContainer
-                onPress={() =>
-                  setRepeatType(prevState =>
-                    prevState === 'month' ? undefined : 'month',
-                  )
-                }
-              >
-                <ModalRepetitionButton selected={repeatType === 'month'} />
-
-                <ModalRepetitionButtonText selected={repeatType === 'month'}>
-                  Mensalmente
-                </ModalRepetitionButtonText>
-              </ModalRadioContainer> */}
             </ModalRepetitionContainer>
           </ModalRepetitionColumn>
 
@@ -246,7 +215,20 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
               <ModalCategoryButtonText
                 selected={category === 'insulin-therapy'}
               >
-                Insulinoterapia
+                Insulina
+              </ModalCategoryButtonText>
+            </ModalCategoryButton>
+
+            <ModalCategoryButton
+              selected={category === 'medicine'}
+              onPress={() =>
+                setCategory(prevState =>
+                  prevState === 'medicine' ? '' : 'medicine',
+                )
+              }
+            >
+              <ModalCategoryButtonText selected={category === 'medicine'}>
+                Medicamento
               </ModalCategoryButtonText>
             </ModalCategoryButton>
           </ModalCategoryContainer>

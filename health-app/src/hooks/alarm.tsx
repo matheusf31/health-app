@@ -7,16 +7,15 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
-import { isSameDay, parseISO } from 'date-fns';
+import { isSameDay, parseISO, differenceInMinutes } from 'date-fns';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 
 import { useAuth } from './auth';
-// import api from '../services/api';
 
 interface ICreateAlarmDTO {
   message: string;
-  date: Date;
+  date: string;
   repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
@@ -25,7 +24,7 @@ interface ICreateAlarmDTO {
 
 interface IAlarm {
   message: string;
-  date: Date;
+  date: string;
   repeatType: 'time' | 'week' | 'day' | 'hour' | 'minute' | undefined;
   userInfo: {
     category: string;
@@ -46,7 +45,8 @@ interface IParsedAlarm {
 }
 
 interface IAlarmContextData {
-  getAlarmByDate(selectedDate: Date): IAlarm[];
+  getAlarmByRange(selectedDate: string): IAlarm | undefined;
+  getAlarmByDate(selectedDate: string): IAlarm[];
   deleteAlarmById(id: string): Promise<IAlarm[]>;
   createAlarm(alarm: ICreateAlarmDTO): Promise<void>;
   updateAlarm(alarm: IAlarm): Promise<void>;
@@ -64,14 +64,7 @@ const AlarmProvider: React.FC = ({ children }) => {
     if (alarmsExists) {
       const parsedAlarms: IParsedAlarm[] = JSON.parse(alarmsExists);
 
-      const allAlarms = parsedAlarms.map(alarm => ({
-        message: alarm.message,
-        date: parseISO(alarm.date),
-        repeatType: alarm.repeatType,
-        userInfo: alarm.userInfo,
-      }));
-
-      setAlarms(allAlarms);
+      setAlarms(parsedAlarms);
     }
   }, []);
 
@@ -80,10 +73,33 @@ const AlarmProvider: React.FC = ({ children }) => {
   }, [loadAlarms]);
 
   const getAlarmByDate = useCallback(
-    (selectedDate: Date) => {
+    (selectedDate: string) => {
       const filterAlarms = alarms.filter(alarm =>
-        isSameDay(alarm.date, selectedDate),
+        isSameDay(parseISO(alarm.date), parseISO(selectedDate)),
       );
+
+      return filterAlarms;
+    },
+    [alarms],
+  );
+
+  const getAlarmByRange = useCallback(
+    (selectedDate: string) => {
+      const filterAlarms = alarms.find(alarm => {
+        const resultDifferenceInMinutes = differenceInMinutes(
+          parseISO(alarm.date),
+          parseISO(selectedDate),
+        );
+
+        if (
+          resultDifferenceInMinutes <= 10 &&
+          resultDifferenceInMinutes >= -10
+        ) {
+          return true;
+        }
+
+        return false;
+      });
 
       return filterAlarms;
     },
@@ -96,8 +112,19 @@ const AlarmProvider: React.FC = ({ children }) => {
 
       Object.assign(userInfo, { alarm_id: uuid(), user_id: user.id });
 
-      const newAlarm = {
+      const newAlarmWithDateAsString = {
         date,
+        message,
+        repeatType,
+        userInfo,
+      };
+
+      console.log('newAlarmWithDateAsString == ', newAlarmWithDateAsString);
+
+      const parsedDate = parseISO(date);
+
+      const newAlarm = {
+        date: parsedDate,
         message,
         repeatType,
         userInfo,
@@ -106,15 +133,10 @@ const AlarmProvider: React.FC = ({ children }) => {
       if (storage && storage.length > 0) {
         const parsedStorage: IParsedAlarm[] = JSON.parse(storage);
 
-        // meu date após fazer o parse vem como string
-        const allAlarms = parsedStorage.map(alarm => ({
-          message: alarm.message,
-          date: parseISO(alarm.date),
-          repeatType: alarm.repeatType,
-          userInfo: alarm.userInfo,
-        }));
-
-        const updatedStorage = JSON.stringify([...allAlarms, newAlarm]);
+        const updatedStorage = JSON.stringify([
+          ...parsedStorage,
+          newAlarmWithDateAsString,
+        ]);
 
         await AsyncStorage.setItem('@HealthApp:user:alarm', updatedStorage);
       } else {
@@ -138,14 +160,7 @@ const AlarmProvider: React.FC = ({ children }) => {
       if (storage && storage.length > 0) {
         const parsedStorage: IParsedAlarm[] = JSON.parse(storage);
 
-        const allAlarms = parsedStorage.map(alarm => ({
-          message: alarm.message,
-          date: parseISO(alarm.date),
-          repeatType: alarm.repeatType,
-          userInfo: alarm.userInfo,
-        }));
-
-        const updatedStorage = allAlarms.filter(
+        const updatedStorage = parsedStorage.filter(
           alarm => alarm.userInfo.alarm_id !== id,
         );
 
@@ -173,31 +188,38 @@ const AlarmProvider: React.FC = ({ children }) => {
       if (storage && storage.length > 0) {
         const parsedStorage: IParsedAlarm[] = JSON.parse(storage);
 
-        const allAlarms = parsedStorage.map(alarm => ({
-          message: alarm.message,
-          date: parseISO(alarm.date),
-          repeatType: alarm.repeatType,
-          userInfo: alarm.userInfo,
-        }));
-
-        const updatedAlarms = allAlarms.filter(
+        const updatedAlarms = parsedStorage.filter(
           alarm => alarm.userInfo.alarm_id !== userInfo.alarm_id,
         );
 
         PushNotification.cancelLocalNotifications({ id: userInfo.alarm_id });
 
-        const newAlarm = {
+        const newAlarmWithDateAsString = {
           date,
           message,
           repeatType,
           userInfo,
         };
 
-        const stringifyAlarms = JSON.stringify([...updatedAlarms, newAlarm]);
+        console.log(newAlarmWithDateAsString);
 
-        PushNotification.localNotificationSchedule(newAlarm);
+        const stringifyAlarms = JSON.stringify([
+          ...updatedAlarms,
+          newAlarmWithDateAsString,
+        ]);
 
         await AsyncStorage.setItem('@HealthApp:user:alarm', stringifyAlarms);
+
+        const parsedDate = parseISO(date);
+
+        const newAlarm = {
+          date: parsedDate,
+          message,
+          repeatType,
+          userInfo,
+        };
+
+        PushNotification.localNotificationSchedule(newAlarm);
 
         return loadAlarms();
       }
@@ -210,6 +232,7 @@ const AlarmProvider: React.FC = ({ children }) => {
   return (
     <AlarmContext.Provider
       value={{
+        getAlarmByRange,
         deleteAlarmById,
         getAlarmByDate,
         createAlarm,

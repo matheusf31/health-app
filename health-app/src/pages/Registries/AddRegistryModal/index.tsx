@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
+import { parseISO } from 'date-fns';
 
 import { IStoreState } from '../../../store/createStore';
 import { interactionSuccess } from '../../../store/modules/notification/actions';
@@ -39,8 +40,9 @@ import {
 } from './styles';
 
 interface IAddAlarmModalProps {
-  selectedDate: Date;
+  selectedDate: string;
   modalVisible: boolean;
+  onSelectedDateChange: React.Dispatch<React.SetStateAction<string>>;
   onModalVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -48,22 +50,13 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   selectedDate,
   modalVisible,
   onModalVisibleChange,
+  onSelectedDateChange,
 }) => {
   const notification = useSelector((state: IStoreState) => state.notification);
-  const { insulinLogic } = useGame();
+  const { insulinLogic, medicineLogic } = useGame();
   const { user } = useAuth();
 
   const dispatch = useDispatch();
-
-  const [selectedHour, setSelectedHour] = useState(
-    new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate(),
-      new Date().getHours(),
-      new Date().getMinutes(),
-    ),
-  );
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [category, setCategory] = useState('');
@@ -82,21 +75,21 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
     onModalVisibleChange(false);
     setCategory('');
     setMessage('');
-    setSelectedHour(
-      new Date(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate(),
-        new Date().getHours(),
-        new Date().getMinutes(),
-      ),
-    );
 
     dispatch(interactionSuccess());
-  }, [onModalVisibleChange, selectedDate, dispatch]);
+  }, [onModalVisibleChange, dispatch]);
 
   const handleAddRegistry = useCallback(async () => {
-    await insulinLogic(selectedDate);
+    if (category === 'insulin-therapy' && user.goals['aplicar insulina']) {
+      await insulinLogic(selectedDate);
+    }
+
+    if (
+      category === 'medicine' &&
+      user.goals['tomar os medicamentos seguindo os alarmes']
+    ) {
+      await medicineLogic(selectedDate);
+    }
 
     await api.post('/registries', {
       user_id: user.id,
@@ -104,9 +97,9 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
       category,
       selfState,
       message,
-      day: selectedDate.getDate(),
-      month: selectedDate.getMonth(),
-      year: selectedDate.getFullYear(),
+      day: parseISO(selectedDate).getDate(),
+      month: parseISO(selectedDate).getMonth(),
+      year: parseISO(selectedDate).getFullYear(),
     });
 
     handleLeaveModal();
@@ -118,6 +111,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
     message,
     handleLeaveModal,
     insulinLogic,
+    medicineLogic,
   ]);
 
   const handleCategoryChange = useCallback(() => {
@@ -150,8 +144,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
           <DateInput
             mode="time"
-            selectedDate={selectedHour}
-            onSelectedDateChange={setSelectedHour}
+            selectedDate={selectedDate}
+            onSelectedDateChange={onSelectedDateChange}
             showDateTimePicker={showDatePicker}
             onShowDateTimePickerChange={setShowDatePicker}
             containerStyle={{ marginTop: -10, marginBottom: 10 }}
@@ -210,6 +204,19 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 selected={category === 'insulin-therapy'}
               >
                 Insulina
+              </ModalCategoryButtonText>
+            </ModalCategoryButton>
+
+            <ModalCategoryButton
+              selected={category === 'medicine'}
+              onPress={() =>
+                setCategory(prevState =>
+                  prevState === 'medicine' ? '' : 'medicine',
+                )
+              }
+            >
+              <ModalCategoryButtonText selected={category === 'medicine'}>
+                Medicamento
               </ModalCategoryButtonText>
             </ModalCategoryButton>
           </ModalCategoryContainer>
@@ -369,6 +376,36 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
                 <TextInputIconContainer>
                   <Icon
                     name="eyedropper-variant"
+                    size={20}
+                    color={isFocused || isFilled ? '#146ba8' : '#89828E'}
+                  />
+                </TextInputIconContainer>
+
+                <TextInput
+                  keyboardAppearance="dark"
+                  keyboardType="numeric"
+                  placeholderTextColor="#89828E"
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                  defaultValue={message}
+                  onChangeText={value => {
+                    setMessage(value);
+                  }}
+                />
+              </TextInputContainer>
+            </FadeInView>
+          )}
+
+          {category === 'medicine' && (
+            <FadeInView>
+              <ModalTitleContainer>
+                <ModalTitle>Medicamento(s)</ModalTitle>
+              </ModalTitleContainer>
+
+              <TextInputContainer isFocused={isFocused}>
+                <TextInputIconContainer>
+                  <Icon
+                    name="medical-bag"
                     size={20}
                     color={isFocused || isFilled ? '#146ba8' : '#89828E'}
                   />

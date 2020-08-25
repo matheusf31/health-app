@@ -24,12 +24,21 @@ interface IUser {
   avatar_url: string;
   password: string;
   firstLogin: boolean;
-  goals: string[];
+  goals: {
+    [key: string]: boolean;
+  };
   game: {
     lvl: number;
     xp: number;
-    daySequence: number;
+    insulinDaySequence: number;
+    medicineDaySequence: {
+      sequency: number;
+      lastDay: string;
+    };
   };
+  height: number;
+  weight: number;
+  imc: number;
 }
 
 interface IAuthContextData {
@@ -93,15 +102,12 @@ const AuthProvider: React.FC = ({ children }) => {
       secondQuestion,
     }: ISubmitFirstLogin) => {
       const imc = parseFloat((weight / height ** 2).toFixed(2));
-      const goals = [];
 
-      if (firstQuestion) {
-        goals.push('aplicar insulina');
-      }
+      const goals = {} as { [key: string]: boolean };
 
-      if (secondQuestion) {
-        goals.push('tomar os medicamentos seguindo os alarmes');
-      }
+      goals['aplicar insulina'] = firstQuestion;
+
+      goals['tomar os medicamentos seguindo os alarmes'] = secondQuestion;
 
       const response = await api.put(`/users/${user.id}`, {
         ...user,
@@ -133,6 +139,7 @@ const AuthProvider: React.FC = ({ children }) => {
         submitFirstLogin,
       }}
     >
+      {/* {console.log('USUÁRIO LOGADO => ', user, '\n')} */}
       {children}
     </AuthContext.Provider>
   );

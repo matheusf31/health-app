@@ -46,6 +46,7 @@ const ThirdQuestion: React.FC = () => {
   return (
     <Container>
       <DoctorsImage source={medicineImg} />
+
       <QuestionsContainer>
         <QuestionContainer>
           <QuestionText>Qual é o seu peso?</QuestionText>

@@ -1,14 +1,11 @@
 import React from 'react';
-import { Text } from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItem,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { Button as PaperButton, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
 
 import {
@@ -32,7 +29,6 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
     <Container>
       <DrawerContentScrollView {...props}>
         <MainContentContainer>
-          {/** User Section */}
           <UserInfoContainer>
             <UserAvatar source={{ uri: user.avatar_url }} size={80} />
 
@@ -54,7 +50,6 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
             </UserGameContainer>
           </UserInfoContainer>
 
-          {/** Pages Section */}
           <DrawerSection style={{ marginTop: 20 }}>
             <DrawerItem
               onPress={() => props.navigation.navigate('Home')}
@@ -101,11 +96,21 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
                 fontFamily: 'Roboto-Regular',
               }}
             />
+
+            <DrawerItem
+              onPress={() => props.navigation.navigate('Imc')}
+              label="IMC"
+              icon={() => <Icon name="altimeter" color="#146ba8" size={28} />}
+              labelStyle={{
+                color: '#17181d',
+                fontSize: 18,
+                fontFamily: 'Roboto-Regular',
+              }}
+            />
           </DrawerSection>
         </MainContentContainer>
       </DrawerContentScrollView>
 
-      {/** Logout */}
       <DrawerSection>
         <DrawerItem
           onPress={() => signOut()}

@@ -6,12 +6,13 @@ import React, {
   useEffect,
 } from 'react';
 import { Alert } from 'react-native';
-import { subDays } from 'date-fns';
+import { subDays, differenceInDays, parseISO } from 'date-fns';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../services/api';
 
 import { useAuth } from './auth';
+import { useAlarm } from './alarm';
 
 interface IUser {
   id: string;
@@ -20,16 +21,25 @@ interface IUser {
   password: string;
   avatar_url: string;
   firstLogin: boolean;
-  goals: string[];
+  goals: {
+    [key: string]: boolean;
+  };
   game: {
     lvl: number;
     xp: number;
-    daySequence: number;
+    insulinDaySequence: number;
+    medicineDaySequence: {
+      sequency: number;
+      lastDay: string;
+    };
   };
+  height: number;
+  weight: number;
+  imc: number;
 }
 
 interface IRegistries {
-  date: Date;
+  date: string;
   category: string;
   selfState: string;
   message: string;
@@ -42,7 +52,8 @@ interface IRegistries {
 // talvez eu não precise do usuário logado no meu contexto
 interface IGameContextData {
   loggedUser: IUser;
-  insulinLogic(selectedDate: Date): Promise<void>;
+  insulinLogic(selectedDate: string): Promise<void>;
+  medicineLogic(selectedDate: string): Promise<void>;
 }
 
 const GameContext = createContext<IGameContextData>({} as IGameContextData);
@@ -52,6 +63,7 @@ const GameContext = createContext<IGameContextData>({} as IGameContextData);
  */
 const GameProvider: React.FC = ({ children }) => {
   const { user } = useAuth();
+  const { getAlarmByRange } = useAlarm();
 
   const [loggedUser, setLoggedUser] = useState(user);
 
@@ -88,61 +100,123 @@ const GameProvider: React.FC = ({ children }) => {
     Alert.alert('Parabéns!', `Você ganhou ${newXp} xp`);
   }, []);
 
+  const verifySequence = useCallback(
+    async (sequence: number, updatedUser: IUser) => {
+      if (sequence % 7 === 0) {
+        await winXp(10, updatedUser);
+      }
+
+      if (sequence % 30 === 0) {
+        await winXp(25, updatedUser);
+      }
+
+      return false;
+    },
+    [winXp],
+  );
+
   const insulinLogic = useCallback(
-    async (selectedDate: Date) => {
+    async (selectedDate: string) => {
+      const updatedUser = loggedUser;
+      const parsedSelectedDate = parseISO(selectedDate);
+      const searchDate = subDays(parsedSelectedDate, 1);
+
+      // chegando se existe registro no dia selecionado
+      let response = await api.get<IRegistries[]>(
+        `/registries?day=${parsedSelectedDate.getDate()}&month=${parsedSelectedDate.getMonth()}&year=${parsedSelectedDate.getFullYear()}&category=insulin-therapy`,
+      );
+
+      const hasTodayRegistry = response.data;
+
+      if (hasTodayRegistry.length > 0) {
+        return;
+      }
+
+      await winXp(5, updatedUser);
+
+      // checando se existe registro 1 dia antes do dia selecionado
+      response = await api.get<IRegistries[]>(
+        `/registries?day=${searchDate.getDate()}&month=${searchDate.getMonth()}&year=${searchDate.getFullYear()}&category=insulin-therapy`,
+      );
+
+      const hasOldRegistry = response.data;
+
+      if (hasOldRegistry.length > 0) {
+        verifySequence(updatedUser.game.insulinDaySequence, updatedUser);
+
+        updatedUser.game.insulinDaySequence += 1;
+
+        await updateUser(updatedUser);
+      } else {
+        updatedUser.game.insulinDaySequence = 1;
+
+        await updateUser(updatedUser);
+      }
+    },
+    [loggedUser, winXp, updateUser, verifySequence],
+  );
+
+  const medicineLogic = useCallback(
+    async (selectedDate: string) => {
+      const hasAlarmInSameTimeAsRegistry = getAlarmByRange(selectedDate);
       const updatedUser = loggedUser;
 
-      if (loggedUser.goals.includes('aplicar insulina')) {
-        const searchDate = subDays(selectedDate, 1);
+      if (hasAlarmInSameTimeAsRegistry) {
+        if (!updatedUser.game.medicineDaySequence.lastDay) {
+          updatedUser.game.medicineDaySequence.lastDay = selectedDate;
 
-        // chegando se existe registro no dia selecionado
-        let response = await api.get<IRegistries[]>(
-          `/registries?day=${selectedDate.getDate()}&month=${selectedDate.getMonth()}&year=${selectedDate.getFullYear()}&category=insulin-therapy`,
-        );
+          updatedUser.game.medicineDaySequence.sequency += 1;
 
-        const hasTodayRegistry = response.data;
+          winXp(5, updatedUser);
 
-        if (hasTodayRegistry.length > 0) {
+          await updateUser(updatedUser);
+
           return;
         }
 
-        await winXp(5, updatedUser);
-
-        // checando se existe registro 1 dia antes do dia selecionado
-        response = await api.get<IRegistries[]>(
-          `/registries?day=${searchDate.getDate()}&month=${searchDate.getMonth()}&year=${searchDate.getFullYear()}&category=insulin-therapy`,
+        const differenceBetweenRegistryDayAndLastMedicineRegister = differenceInDays(
+          parseISO(selectedDate),
+          parseISO(updatedUser.game.medicineDaySequence.lastDay),
         );
 
-        const hasOldRegistry = response.data;
+        if (differenceBetweenRegistryDayAndLastMedicineRegister < 0) {
+          winXp(5, updatedUser);
 
-        if (hasOldRegistry.length > 0) {
-          // marcou 7 dias seguidos (10 xp)
-          if (updatedUser.game.daySequence % 7 === 0) {
-            await winXp(10, updatedUser);
-          }
+          updatedUser.game.medicineDaySequence.lastDay = selectedDate;
 
-          // marcou 30 dias seguidos (25 xp)
-          if (updatedUser.game.daySequence % 30 === 0) {
-            await winXp(25, updatedUser);
-          }
-
-          updatedUser.game.daySequence += 1;
+          updatedUser.game.medicineDaySequence.sequency = 1;
 
           await updateUser(updatedUser);
-        } else {
-          updatedUser.game.daySequence = 1;
+        } else if (differenceBetweenRegistryDayAndLastMedicineRegister === 1) {
+          updatedUser.game.medicineDaySequence.lastDay = selectedDate;
+
+          verifySequence(
+            updatedUser.game.medicineDaySequence.sequency,
+            updatedUser,
+          );
+
+          updatedUser.game.medicineDaySequence.sequency += 1;
+
+          winXp(5, updatedUser);
+
+          await updateUser(updatedUser);
+        } else if (differenceBetweenRegistryDayAndLastMedicineRegister >= 2) {
+          updatedUser.game.medicineDaySequence.lastDay = selectedDate;
+
+          updatedUser.game.medicineDaySequence.sequency = 1;
 
           await updateUser(updatedUser);
         }
       }
     },
-    [loggedUser, winXp, updateUser],
+    [loggedUser, winXp, updateUser, getAlarmByRange, verifySequence],
   );
 
   return (
     <GameContext.Provider
       value={{
         loggedUser,
+        medicineLogic,
         insulinLogic,
       }}
     >
