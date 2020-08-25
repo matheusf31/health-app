@@ -35,19 +35,28 @@ export const ModalTitle = styled.Text`
 `;
 
 export const ModalCategoryContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
   margin-top: 20px;
   margin-bottom: 30px;
+`;
+
+export const ModalCategoryView = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-top: 10px;
 `;
 
 export const ModalCategoryButton = styled.TouchableOpacity.attrs({
   activeOpacity: 0.8,
 })<IModalCategoryButton>`
+  flex: 1;
   border-radius: 10px;
   border-width: 1px;
   border-color: #146ba8;
   padding: 8px;
+  margin-right: 5px;
+  margin-left: 5px;
+  align-items: center;
 
   ${props =>
     props.selected &&
@@ -144,3 +153,35 @@ export const StateOptionText = styled.Text`
 `;
 
 export const ModalCreateRegisterButton = styled(Button)``;
+
+/** Height and weight */
+export const QuestionContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
+
+export const QuestionText = styled.Text`
+  color: #17181d;
+  font-family: 'Roboto-Medium';
+  font-size: 24px;
+`;
+
+export const InputContainer = styled.View`
+  border-bottom-width: 1px;
+  border-bottom-color: #146ba8;
+
+  flex-direction: row;
+  align-items: center;
+
+  margin-left: 20px;
+
+  width: 140px;
+`;
+
+export const QuestionInput = styled.TextInput`
+  flex: 1;
+  padding: 0 6px;
+`;
+
+export const UnitText = styled.Text``;

@@ -56,18 +56,17 @@
       "id": 3,
       "game": {
         "lvl": 1,
-        "xp": 20,
-        "insulinDaySequence": 1,
-        "medicineDaySequence": {
-          "sequency": 0,
-          "lastDay": ""
-        }
+        "xp": 50,
+        "daySequence": 5
       },
       "height": 1.77,
-      "weight": 50,
-      "imc": 15.96,
-      "goals": {},
-      "firstLogin": false
+      "goals": [
+        "aplicar insulina",
+        "tomar os medicamentos seguindo os alarmes"
+      ],
+      "firstLogin": false,
+      "weight": 80,
+      "imc": 25.54
     }
   ],
   "registries": [
@@ -92,6 +91,17 @@
       "month": 7,
       "year": 2020,
       "id": 2
+    },
+    {
+      "user_id": 3,
+      "date": "2020-08-25T14:01:26-04:00",
+      "category": "weight",
+      "selfState": "",
+      "message": "seu peso atual é 80kg e sua altura é 1.77m",
+      "day": 25,
+      "month": 7,
+      "year": 2020,
+      "id": 3
     }
   ]
 }

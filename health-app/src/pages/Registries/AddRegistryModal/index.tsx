@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { parseISO } from 'date-fns';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { IStoreState } from '../../../store/createStore';
 import { interactionSuccess } from '../../../store/modules/notification/actions';
@@ -26,6 +27,7 @@ import {
   ModalTitle,
   ModalTitleContainer,
   ModalCategoryContainer,
+  ModalCategoryView,
   ModalCategoryButton,
   ModalCategoryButtonText,
   TextInputContainer,
@@ -37,6 +39,11 @@ import {
   StateOptionContainer,
   StateOptionButton,
   StateOptionText,
+  QuestionContainer,
+  QuestionText,
+  InputContainer,
+  QuestionInput,
+  UnitText,
 } from './styles';
 
 interface IAddAlarmModalProps {
@@ -64,6 +71,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   const [message, setMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+  const [weight, setWeight] = useState(user.weight); // peso
+  const [height, setHeight] = useState(user.height); // altura
 
   useEffect(() => {
     if (notification.hasNotificationInteraction) {
@@ -79,40 +88,43 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
     dispatch(interactionSuccess());
   }, [onModalVisibleChange, dispatch]);
 
-  const handleAddRegistry = useCallback(async () => {
-    if (category === 'insulin-therapy' && user.goals['aplicar insulina']) {
-      await insulinLogic(selectedDate);
-    }
+  const handleAddRegistry = useCallback(
+    async (customMessage?: string) => {
+      if (category === 'insulin-therapy' && user.goals['aplicar insulina']) {
+        await insulinLogic(selectedDate);
+      }
 
-    if (
-      category === 'medicine' &&
-      user.goals['tomar os medicamentos seguindo os alarmes']
-    ) {
-      await medicineLogic(selectedDate);
-    }
+      if (
+        category === 'medicine' &&
+        user.goals['tomar os medicamentos seguindo os alarmes']
+      ) {
+        await medicineLogic(selectedDate);
+      }
 
-    await api.post('/registries', {
-      user_id: user.id,
-      date: selectedDate,
+      await api.post('/registries', {
+        user_id: user.id,
+        date: selectedDate,
+        category,
+        selfState,
+        message: customMessage || message,
+        day: parseISO(selectedDate).getDate(),
+        month: parseISO(selectedDate).getMonth(),
+        year: parseISO(selectedDate).getFullYear(),
+      });
+
+      handleLeaveModal();
+    },
+    [
+      user,
+      selectedDate,
       category,
       selfState,
       message,
-      day: parseISO(selectedDate).getDate(),
-      month: parseISO(selectedDate).getMonth(),
-      year: parseISO(selectedDate).getFullYear(),
-    });
-
-    handleLeaveModal();
-  }, [
-    user,
-    selectedDate,
-    category,
-    selfState,
-    message,
-    handleLeaveModal,
-    insulinLogic,
-    medicineLogic,
-  ]);
+      handleLeaveModal,
+      insulinLogic,
+      medicineLogic,
+    ],
+  );
 
   const handleCategoryChange = useCallback(() => {
     setMessage('');
@@ -128,6 +140,28 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
     setIsFilled(message !== '');
   }, [message]);
+
+  const imc = useMemo(() => parseFloat((weight / height ** 2).toFixed(2)), [
+    weight,
+    height,
+  ]);
+
+  const handleUpdateUserImc = useCallback(async () => {
+    const response = await api.put(`/users/${user.id}`, {
+      ...user,
+      height,
+      weight,
+      imc,
+    });
+
+    const updatedUser = response.data;
+
+    await AsyncStorage.setItem('@HealthApp:user', JSON.stringify(updatedUser));
+
+    await handleAddRegistry(
+      `seu peso atual é ${weight}kg e sua altura é ${height}m`,
+    );
+  }, [imc, user, handleAddRegistry]);
 
   return (
     <Modal
@@ -156,69 +190,88 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
           </ModalTitleContainer>
 
           <ModalCategoryContainer>
-            <ModalCategoryButton
-              selected={category === 'physical-activity'}
-              onPress={() => {
-                setCategory(oldCategory =>
-                  oldCategory === 'physical-activity'
-                    ? ''
-                    : 'physical-activity',
-                );
-
-                return handleCategoryChange();
-              }}
-            >
-              <ModalCategoryButtonText
+            <ModalCategoryView>
+              <ModalCategoryButton
                 selected={category === 'physical-activity'}
+                onPress={() => {
+                  setCategory(oldCategory =>
+                    oldCategory === 'physical-activity'
+                      ? ''
+                      : 'physical-activity',
+                  );
+
+                  return handleCategoryChange();
+                }}
               >
-                Atividade física
-              </ModalCategoryButtonText>
-            </ModalCategoryButton>
+                <ModalCategoryButtonText
+                  selected={category === 'physical-activity'}
+                >
+                  Atividade física
+                </ModalCategoryButtonText>
+              </ModalCategoryButton>
 
-            <ModalCategoryButton
-              selected={category === 'blood-glucose'}
-              onPress={() => {
-                setCategory(oldCategory =>
-                  oldCategory === 'blood-glucose' ? '' : 'blood-glucose',
-                );
+              <ModalCategoryButton
+                selected={category === 'blood-glucose'}
+                onPress={() => {
+                  setCategory(oldCategory =>
+                    oldCategory === 'blood-glucose' ? '' : 'blood-glucose',
+                  );
 
-                return handleCategoryChange();
-              }}
-            >
-              <ModalCategoryButtonText selected={category === 'blood-glucose'}>
-                Glicemia
-              </ModalCategoryButtonText>
-            </ModalCategoryButton>
+                  return handleCategoryChange();
+                }}
+              >
+                <ModalCategoryButtonText
+                  selected={category === 'blood-glucose'}
+                >
+                  Glicemia
+                </ModalCategoryButtonText>
+              </ModalCategoryButton>
 
-            <ModalCategoryButton
-              selected={category === 'insulin-therapy'}
-              onPress={() => {
-                setCategory(oldCategory =>
-                  oldCategory === 'insulin-therapy' ? '' : 'insulin-therapy',
-                );
-
-                return handleCategoryChange();
-              }}
-            >
-              <ModalCategoryButtonText
+              <ModalCategoryButton
                 selected={category === 'insulin-therapy'}
-              >
-                Insulina
-              </ModalCategoryButtonText>
-            </ModalCategoryButton>
+                onPress={() => {
+                  setCategory(oldCategory =>
+                    oldCategory === 'insulin-therapy' ? '' : 'insulin-therapy',
+                  );
 
-            <ModalCategoryButton
-              selected={category === 'medicine'}
-              onPress={() =>
-                setCategory(prevState =>
-                  prevState === 'medicine' ? '' : 'medicine',
-                )
-              }
-            >
-              <ModalCategoryButtonText selected={category === 'medicine'}>
-                Medicamento
-              </ModalCategoryButtonText>
-            </ModalCategoryButton>
+                  return handleCategoryChange();
+                }}
+              >
+                <ModalCategoryButtonText
+                  selected={category === 'insulin-therapy'}
+                >
+                  Insulina
+                </ModalCategoryButtonText>
+              </ModalCategoryButton>
+            </ModalCategoryView>
+
+            <ModalCategoryView>
+              <ModalCategoryButton
+                selected={category === 'medicine'}
+                onPress={() =>
+                  setCategory(prevState =>
+                    prevState === 'medicine' ? '' : 'medicine',
+                  )
+                }
+              >
+                <ModalCategoryButtonText selected={category === 'medicine'}>
+                  Medicamento
+                </ModalCategoryButtonText>
+              </ModalCategoryButton>
+
+              <ModalCategoryButton
+                selected={category === 'weight'}
+                onPress={() =>
+                  setCategory(prevState =>
+                    prevState === 'weight' ? '' : 'weight',
+                  )
+                }
+              >
+                <ModalCategoryButtonText selected={category === 'weight'}>
+                  Peso
+                </ModalCategoryButtonText>
+              </ModalCategoryButton>
+            </ModalCategoryView>
           </ModalCategoryContainer>
 
           {category === 'physical-activity' && (
@@ -425,10 +478,56 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
               </TextInputContainer>
             </FadeInView>
           )}
+
+          {category === 'weight' && (
+            <FadeInView>
+              <QuestionContainer>
+                <QuestionText>Atualize seu peso</QuestionText>
+
+                <InputContainer>
+                  <QuestionInput
+                    keyboardType="numeric"
+                    placeholderTextColor="#89828E"
+                    defaultValue={weight.toString()}
+                    onChangeText={value => {
+                      setWeight(Number(value));
+                    }}
+                  />
+
+                  <UnitText>kg</UnitText>
+                </InputContainer>
+              </QuestionContainer>
+
+              <QuestionContainer>
+                <QuestionText>Atualize sua altura</QuestionText>
+
+                <InputContainer>
+                  <QuestionInput
+                    keyboardType="numeric"
+                    placeholderTextColor="#89828E"
+                    defaultValue={height.toString()}
+                    onChangeText={value => {
+                      setHeight(Number(value));
+                    }}
+                  />
+
+                  <UnitText>m</UnitText>
+                </InputContainer>
+              </QuestionContainer>
+            </FadeInView>
+          )}
         </ModalContainer>
       </TouchableWithoutFeedback>
 
-      <ModalCreateRegisterButton onPress={handleAddRegistry}>
+      <ModalCreateRegisterButton
+        onPress={() => {
+          if (category === 'weight') {
+            return handleUpdateUserImc();
+          }
+
+          return handleAddRegistry();
+        }}
+      >
         Criar registro
       </ModalCreateRegisterButton>
     </Modal>
