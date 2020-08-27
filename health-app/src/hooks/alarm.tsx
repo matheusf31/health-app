@@ -44,8 +44,15 @@ interface IParsedAlarm {
   };
 }
 
+interface IGetAlarmByRangeAndCategory {
+  selectedDate: string;
+  category: string;
+}
+
 interface IAlarmContextData {
-  getAlarmByRange(selectedDate: string): IAlarm | undefined;
+  getAlarmByRangeAndCategory(
+    data: IGetAlarmByRangeAndCategory,
+  ): IAlarm | undefined;
   getAlarmByDate(selectedDate: string): IAlarm[];
   deleteAlarmById(id: string): Promise<IAlarm[]>;
   createAlarm(alarm: ICreateAlarmDTO): Promise<void>;
@@ -83,9 +90,13 @@ const AlarmProvider: React.FC = ({ children }) => {
     [alarms],
   );
 
-  const getAlarmByRange = useCallback(
-    (selectedDate: string) => {
+  const getAlarmByRangeAndCategory = useCallback(
+    ({ selectedDate, category }: IGetAlarmByRangeAndCategory) => {
       const filterAlarms = alarms.find(alarm => {
+        if (alarm.userInfo.category !== category) {
+          return false;
+        }
+
         const resultDifferenceInMinutes = differenceInMinutes(
           parseISO(alarm.date),
           parseISO(selectedDate),
@@ -119,7 +130,7 @@ const AlarmProvider: React.FC = ({ children }) => {
         userInfo,
       };
 
-      console.log('newAlarmWithDateAsString == ', newAlarmWithDateAsString);
+      // console.log('newAlarmWithDateAsString == ', newAlarmWithDateAsString);
 
       const parsedDate = parseISO(date);
 
@@ -201,7 +212,7 @@ const AlarmProvider: React.FC = ({ children }) => {
           userInfo,
         };
 
-        console.log(newAlarmWithDateAsString);
+        // console.log(newAlarmWithDateAsString);
 
         const stringifyAlarms = JSON.stringify([
           ...updatedAlarms,
@@ -232,7 +243,7 @@ const AlarmProvider: React.FC = ({ children }) => {
   return (
     <AlarmContext.Provider
       value={{
-        getAlarmByRange,
+        getAlarmByRangeAndCategory,
         deleteAlarmById,
         getAlarmByDate,
         createAlarm,

@@ -35,6 +35,10 @@ interface IUser {
       sequency: number;
       lastDay: string;
     };
+    physicalActivityDaySequence: {
+      sequency: number;
+      lastDay: string;
+    };
   };
   height: number;
   weight: number;
