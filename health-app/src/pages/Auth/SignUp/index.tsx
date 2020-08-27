@@ -76,6 +76,10 @@ const SignUp: React.FC = () => {
               sequency: 0,
               lastDay: '',
             },
+            physicalActivityDaySequence: {
+              sequency: 0,
+              lastDay: '',
+            },
           },
         });
 

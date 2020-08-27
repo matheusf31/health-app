@@ -14,6 +14,10 @@
         "medicineDaySequence": {
           "sequency": 3,
           "lastDay": "2020-08-26T23:30:59-03:00"
+        },
+        "physicalActivityDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
         }
       },
       "goals": {
@@ -37,6 +41,10 @@
         "medicineDaySequence": {
           "sequency": 0,
           "lastDay": ""
+        },
+        "physicalActivityDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
         }
       },
       "height": 1.88,
@@ -49,26 +57,6 @@
       "firstLogin": false
     },
     {
-      "name": "teste",
-      "email": "teste@gmail.com",
-      "password": "123456",
-      "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
-      "id": 3,
-      "game": {
-        "lvl": 1,
-        "xp": 50,
-        "daySequence": 5
-      },
-      "height": 1.77,
-      "goals": [
-        "aplicar insulina",
-        "tomar os medicamentos seguindo os alarmes"
-      ],
-      "firstLogin": false,
-      "weight": 80,
-      "imc": 25.54
-    },
-    {
       "name": "teste2",
       "email": "teste2@gmail.com",
       "password": "123456",
@@ -79,6 +67,10 @@
         "xp": 15,
         "insulinDaySequence": 0,
         "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        },
+        "physicalActivityDaySequence": {
           "sequency": 0,
           "lastDay": ""
         }
@@ -94,6 +86,10 @@
         "xp": 40,
         "insulinDaySequence": 1,
         "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        },
+        "physicalActivityDaySequence": {
           "sequency": 0,
           "lastDay": ""
         }
@@ -130,6 +126,17 @@
       "month": 7,
       "year": 2020,
       "id": 3
+    },
+    {
+      "user_id": 3,
+      "date": "2020-08-27T15:05:23-04:00",
+      "category": "weight",
+      "selfState": "",
+      "message": "seu peso atual é 65kg e sua altura é 1.77m",
+      "day": 27,
+      "month": 7,
+      "year": 2020,
+      "id": 4
     }
   ]
 }
