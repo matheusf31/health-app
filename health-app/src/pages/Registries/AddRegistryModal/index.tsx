@@ -60,7 +60,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   onSelectedDateChange,
 }) => {
   const notification = useSelector((state: IStoreState) => state.notification);
-  const { insulinLogic, medicineLogic } = useGame();
+  const { insulinLogic, medicineLogic, imcLogic } = useGame();
   const { user } = useAuth();
 
   const dispatch = useDispatch();
@@ -147,21 +147,19 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   ]);
 
   const handleUpdateUserImc = useCallback(async () => {
-    const response = await api.put(`/users/${user.id}`, {
+    const updatedUser = {
       ...user,
-      height,
       weight,
+      height,
       imc,
-    });
+    };
 
-    const updatedUser = response.data;
-
-    await AsyncStorage.setItem('@HealthApp:user', JSON.stringify(updatedUser));
+    await imcLogic(updatedUser);
 
     await handleAddRegistry(
       `seu peso atual é ${weight}kg e sua altura é ${height}m`,
     );
-  }, [imc, user, handleAddRegistry]);
+  }, [imc, imcLogic, handleAddRegistry, user]);
 
   return (
     <Modal

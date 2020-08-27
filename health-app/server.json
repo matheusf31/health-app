@@ -21,8 +21,8 @@
         "tomar os medicamentos seguindo os alarmes": true
       },
       "firstLogin": false,
-      "weight": 100,
-      "imc": 31.92
+      "weight": 65,
+      "imc": 20.75
     },
     {
       "id": 2,
@@ -67,6 +67,45 @@
       "firstLogin": false,
       "weight": 80,
       "imc": 25.54
+    },
+    {
+      "name": "teste2",
+      "email": "teste2@gmail.com",
+      "password": "123456",
+      "firstLogin": true,
+      "id": 4,
+      "game": {
+        "lvl": 1,
+        "xp": 15,
+        "insulinDaySequence": 0,
+        "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        }
+      }
+    },
+    {
+      "name": "teste3",
+      "email": "teste3@gmail.com",
+      "password": "123456",
+      "firstLogin": false,
+      "game": {
+        "lvl": 1,
+        "xp": 40,
+        "insulinDaySequence": 1,
+        "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        }
+      },
+      "id": 5,
+      "height": 1.77,
+      "goals": {
+        "aplicar insulina": true,
+        "tomar os medicamentos seguindo os alarmes": false
+      },
+      "weight": 65,
+      "imc": 20.75
     }
   ],
   "registries": [
@@ -80,17 +119,6 @@
       "month": 7,
       "year": 2020,
       "id": 1
-    },
-    {
-      "user_id": 1,
-      "date": "2020-08-26T23:30:59-03:00",
-      "category": "medicine",
-      "selfState": "",
-      "message": "",
-      "day": 26,
-      "month": 7,
-      "year": 2020,
-      "id": 2
     },
     {
       "user_id": 3,

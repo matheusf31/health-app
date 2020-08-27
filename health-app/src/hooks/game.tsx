@@ -49,11 +49,17 @@ interface IRegistries {
   id: number;
 }
 
+interface IImcLogicParams {
+  weight: number;
+  height: number;
+  newImc: number;
+}
+
 // talvez eu não precise do usuário logado no meu contexto
 interface IGameContextData {
-  loggedUser: IUser;
   insulinLogic(selectedDate: string): Promise<void>;
   medicineLogic(selectedDate: string): Promise<void>;
+  imcLogic(updatedUser: IUser): Promise<void>;
 }
 
 const GameContext = createContext<IGameContextData>({} as IGameContextData);
@@ -62,29 +68,26 @@ const GameContext = createContext<IGameContextData>({} as IGameContextData);
  * Lógica do jogo
  */
 const GameProvider: React.FC = ({ children }) => {
-  const { user } = useAuth();
+  const { user, onUpdateUser } = useAuth();
   const { getAlarmByRange } = useAlarm();
 
-  const [loggedUser, setLoggedUser] = useState(user);
+  const updateUser = useCallback(
+    async (userToUpdate: IUser) => {
+      const response = await api.put<IUser>(`users/${userToUpdate.id}`, {
+        ...userToUpdate,
+      });
 
-  useEffect(() => {
-    setLoggedUser(user);
-  }, [user]);
+      await AsyncStorage.setItem(
+        '@HealthApp:user',
+        JSON.stringify(response.data),
+      );
 
-  const updateUser = useCallback(async (userToUpdate: IUser) => {
-    const response = await api.put<IUser>(`users/${userToUpdate.id}`, {
-      ...userToUpdate,
-    });
+      onUpdateUser(userToUpdate);
+    },
+    [onUpdateUser],
+  );
 
-    await AsyncStorage.setItem(
-      '@HealthApp:user',
-      JSON.stringify(response.data),
-    );
-
-    setLoggedUser(userToUpdate);
-  }, []);
-
-  const winXp = useCallback(async (newXp: number, updatedUser: IUser) => {
+  const winXp = useCallback((newXp: number, updatedUser: IUser) => {
     // true: quer dizer que o usuário upou de nível
     if (updatedUser.game.xp + newXp >= updatedUser.game.lvl * 100) {
       updatedUser.game.xp =
@@ -101,13 +104,13 @@ const GameProvider: React.FC = ({ children }) => {
   }, []);
 
   const verifySequence = useCallback(
-    async (sequence: number, updatedUser: IUser) => {
+    (sequence: number, updatedUser: IUser) => {
       if (sequence % 7 === 0) {
-        await winXp(10, updatedUser);
+        winXp(10, updatedUser);
       }
 
       if (sequence % 30 === 0) {
-        await winXp(25, updatedUser);
+        winXp(25, updatedUser);
       }
 
       return false;
@@ -117,7 +120,7 @@ const GameProvider: React.FC = ({ children }) => {
 
   const insulinLogic = useCallback(
     async (selectedDate: string) => {
-      const updatedUser = loggedUser;
+      const updatedUser = user;
       const parsedSelectedDate = parseISO(selectedDate);
       const searchDate = subDays(parsedSelectedDate, 1);
 
@@ -132,7 +135,7 @@ const GameProvider: React.FC = ({ children }) => {
         return;
       }
 
-      await winXp(5, updatedUser);
+      winXp(5, updatedUser);
 
       // checando se existe registro 1 dia antes do dia selecionado
       response = await api.get<IRegistries[]>(
@@ -153,13 +156,13 @@ const GameProvider: React.FC = ({ children }) => {
         await updateUser(updatedUser);
       }
     },
-    [loggedUser, winXp, updateUser, verifySequence],
+    [user, winXp, updateUser, verifySequence],
   );
 
   const medicineLogic = useCallback(
     async (selectedDate: string) => {
       const hasAlarmInSameTimeAsRegistry = getAlarmByRange(selectedDate);
-      const updatedUser = loggedUser;
+      const updatedUser = user;
 
       if (hasAlarmInSameTimeAsRegistry) {
         if (!updatedUser.game.medicineDaySequence.lastDay) {
@@ -209,15 +212,50 @@ const GameProvider: React.FC = ({ children }) => {
         }
       }
     },
-    [loggedUser, winXp, updateUser, getAlarmByRange, verifySequence],
+    [user, winXp, updateUser, getAlarmByRange, verifySequence],
+  );
+
+  const imcLogic = useCallback(
+    async (updatedUser: IUser) => {
+      if (
+        updatedUser.firstLogin &&
+        updatedUser.imc >= 18.5 &&
+        updatedUser.imc <= 24.9
+      ) {
+        winXp(5, updatedUser);
+
+        updatedUser.firstLogin = false;
+
+        await updateUser(updatedUser);
+
+        return;
+      }
+
+      // imc estava abaixo do ideal e ele aumentou no máx até a faixa ideal
+      if (user.imc < 18.5) {
+        if (updatedUser.imc > user.imc && updatedUser.imc <= 24.9) {
+          winXp(10, updatedUser);
+        }
+      }
+
+      // imc estava acima do ideal e ele diminuiu no máx até a faixa ideal
+      if (user.imc > 24.9) {
+        if (updatedUser.imc < user.imc && updatedUser.imc >= 18.5) {
+          winXp(10, updatedUser);
+        }
+      }
+
+      await updateUser(updatedUser);
+    },
+    [user, updateUser, winXp],
   );
 
   return (
     <GameContext.Provider
       value={{
-        loggedUser,
         medicineLogic,
         insulinLogic,
+        imcLogic,
       }}
     >
       {children}

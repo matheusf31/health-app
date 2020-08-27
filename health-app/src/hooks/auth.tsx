@@ -45,14 +45,7 @@ interface IAuthContextData {
   user: IUser;
   signIn(credentials: ISignInCredentials): Promise<void>;
   signOut(): Promise<void>;
-  submitFirstLogin(data: ISubmitFirstLogin): Promise<void>;
-}
-
-interface ISubmitFirstLogin {
-  height: number;
-  weight: number;
-  firstQuestion: boolean;
-  secondQuestion: boolean;
+  onUpdateUser: React.Dispatch<React.SetStateAction<IUser>>;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -93,50 +86,13 @@ const AuthProvider: React.FC = ({ children }) => {
     setUser({} as IUser);
   }, [dispatch]);
 
-  // definir as metas aqui dentro
-  const submitFirstLogin = useCallback(
-    async ({
-      height,
-      weight,
-      firstQuestion,
-      secondQuestion,
-    }: ISubmitFirstLogin) => {
-      const imc = parseFloat((weight / height ** 2).toFixed(2));
-
-      const goals = {} as { [key: string]: boolean };
-
-      goals['aplicar insulina'] = firstQuestion;
-
-      goals['tomar os medicamentos seguindo os alarmes'] = secondQuestion;
-
-      const response = await api.put(`/users/${user.id}`, {
-        ...user,
-        height,
-        weight,
-        imc,
-        goals,
-        firstLogin: false,
-      });
-
-      const updatedUser = response.data;
-
-      await AsyncStorage.setItem(
-        '@HealthApp:user',
-        JSON.stringify(updatedUser),
-      );
-
-      setUser(updatedUser);
-    },
-    [user],
-  );
-
   return (
     <AuthContext.Provider
       value={{
         user,
         signIn,
         signOut,
-        submitFirstLogin,
+        onUpdateUser: setUser,
       }}
     >
       {/* {console.log('USUÁRIO LOGADO => ', user, '\n')} */}

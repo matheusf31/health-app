@@ -67,8 +67,15 @@ const SignUp: React.FC = () => {
           name,
           email,
           password,
-          userInfo: {
-            firstLogin: true,
+          firstLogin: true,
+          game: {
+            lvl: 1,
+            xp: 0,
+            insulinDaySequence: 0,
+            medicineDaySequence: {
+              sequency: 0,
+              lastDay: '',
+            },
           },
         });
 

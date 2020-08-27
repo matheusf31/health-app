@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useRoute } from '@react-navigation/native';
 
 import { useAuth } from '../../../../hooks/auth';
+import { useGame } from '../../../../hooks/game';
 
 import medicineImg from '../../../../assets/medicine.png';
 
@@ -30,18 +31,37 @@ interface IRoute {
  */
 
 const ThirdQuestion: React.FC = () => {
-  const { submitFirstLogin } = useAuth();
+  const { user, onUpdateUser } = useAuth();
+  const { imcLogic } = useGame();
   const [weight, setWeight] = useState(0); // peso
   const [height, setHeight] = useState(0); // altura
 
   const route = useRoute();
   const routeParams = route.params as IRoute;
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     const { firstQuestion, secondQuestion } = routeParams;
 
-    submitFirstLogin({ height, weight, firstQuestion, secondQuestion });
-  }, [weight, height, routeParams, submitFirstLogin]);
+    const imc = parseFloat((weight / height ** 2).toFixed(2));
+
+    const goals = {} as { [key: string]: boolean };
+
+    goals['aplicar insulina'] = firstQuestion;
+
+    goals['tomar os medicamentos seguindo os alarmes'] = secondQuestion;
+
+    const updatedUser = {
+      ...user,
+      height,
+      weight,
+      imc,
+      goals,
+    };
+
+    await imcLogic(updatedUser);
+
+    onUpdateUser(updatedUser);
+  }, [weight, height, routeParams, onUpdateUser, imcLogic, user]);
 
   return (
     <Container>
