@@ -3,7 +3,6 @@ import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Modal from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { parseISO } from 'date-fns';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { IStoreState } from '../../../store/createStore';
 import { interactionSuccess } from '../../../store/modules/notification/actions';
@@ -60,7 +59,12 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
   onSelectedDateChange,
 }) => {
   const notification = useSelector((state: IStoreState) => state.notification);
-  const { insulinLogic, medicineLogic, imcLogic } = useGame();
+  const {
+    insulinLogic,
+    medicineLogic,
+    imcLogic,
+    physicalActivityLogic,
+  } = useGame();
   const { user } = useAuth();
 
   const dispatch = useDispatch();
@@ -99,6 +103,10 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
         user.goals['tomar os medicamentos seguindo os alarmes']
       ) {
         await medicineLogic(selectedDate);
+      }
+
+      if (category === 'physical-activity') {
+        await physicalActivityLogic(selectedDate);
       }
 
       await api.post('/registries', {

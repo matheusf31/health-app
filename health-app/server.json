@@ -9,15 +9,15 @@
       "height": 1.77,
       "game": {
         "lvl": 4,
-        "xp": 10,
+        "xp": 55,
         "insulinDaySequence": 1,
         "medicineDaySequence": {
           "sequency": 3,
           "lastDay": "2020-08-26T23:30:59-03:00"
         },
         "physicalActivityDaySequence": {
-          "sequency": 0,
-          "lastDay": ""
+          "sequency": 3,
+          "lastDay": "2020-08-29T15:40:55-04:00"
         }
       },
       "goals": {
@@ -137,6 +137,39 @@
       "month": 7,
       "year": 2020,
       "id": 4
+    },
+    {
+      "user_id": 1,
+      "date": "2020-08-27T15:40:55-04:00",
+      "category": "physical-activity",
+      "selfState": "",
+      "message": "andei",
+      "day": 27,
+      "month": 7,
+      "year": 2020,
+      "id": 5
+    },
+    {
+      "user_id": 1,
+      "date": "2020-08-28T15:40:55-04:00",
+      "category": "physical-activity",
+      "selfState": "",
+      "message": "pulei corda",
+      "day": 28,
+      "month": 7,
+      "year": 2020,
+      "id": 6
+    },
+    {
+      "user_id": 1,
+      "date": "2020-08-29T15:40:55-04:00",
+      "category": "physical-activity",
+      "selfState": "",
+      "message": "",
+      "day": 29,
+      "month": 7,
+      "year": 2020,
+      "id": 7
     }
   ]
 }

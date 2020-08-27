@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
+import React, { createContext, useContext, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { subDays, differenceInDays, parseISO } from 'date-fns';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -32,6 +26,10 @@ interface IUser {
       sequency: number;
       lastDay: string;
     };
+    physicalActivityDaySequence: {
+      sequency: number;
+      lastDay: string;
+    };
   };
   height: number;
   weight: number;
@@ -49,17 +47,11 @@ interface IRegistries {
   id: number;
 }
 
-interface IImcLogicParams {
-  weight: number;
-  height: number;
-  newImc: number;
-}
-
-// talvez eu não precise do usuário logado no meu contexto
 interface IGameContextData {
   insulinLogic(selectedDate: string): Promise<void>;
   medicineLogic(selectedDate: string): Promise<void>;
   imcLogic(updatedUser: IUser): Promise<void>;
+  physicalActivityLogic(selectedDate: string): Promise<void>;
 }
 
 const GameContext = createContext<IGameContextData>({} as IGameContextData);
@@ -69,7 +61,7 @@ const GameContext = createContext<IGameContextData>({} as IGameContextData);
  */
 const GameProvider: React.FC = ({ children }) => {
   const { user, onUpdateUser } = useAuth();
-  const { getAlarmByRange } = useAlarm();
+  const { getAlarmByRangeAndCategory } = useAlarm();
 
   const updateUser = useCallback(
     async (userToUpdate: IUser) => {
@@ -106,7 +98,7 @@ const GameProvider: React.FC = ({ children }) => {
   const verifySequence = useCallback(
     (sequence: number, updatedUser: IUser) => {
       if (sequence % 7 === 0) {
-        winXp(10, updatedUser);
+        winXp(15, updatedUser);
       }
 
       if (sequence % 30 === 0) {
@@ -120,7 +112,7 @@ const GameProvider: React.FC = ({ children }) => {
 
   const insulinLogic = useCallback(
     async (selectedDate: string) => {
-      const updatedUser = user;
+      const updatedUser = { ...user };
       const parsedSelectedDate = parseISO(selectedDate);
       const searchDate = subDays(parsedSelectedDate, 1);
 
@@ -161,8 +153,11 @@ const GameProvider: React.FC = ({ children }) => {
 
   const medicineLogic = useCallback(
     async (selectedDate: string) => {
-      const hasAlarmInSameTimeAsRegistry = getAlarmByRange(selectedDate);
-      const updatedUser = user;
+      const hasAlarmInSameTimeAsRegistry = getAlarmByRangeAndCategory({
+        selectedDate,
+        category: 'medicine',
+      });
+      const updatedUser = { ...user };
 
       if (hasAlarmInSameTimeAsRegistry) {
         if (!updatedUser.game.medicineDaySequence.lastDay) {
@@ -212,7 +207,7 @@ const GameProvider: React.FC = ({ children }) => {
         }
       }
     },
-    [user, winXp, updateUser, getAlarmByRange, verifySequence],
+    [user, winXp, updateUser, getAlarmByRangeAndCategory, verifySequence],
   );
 
   const imcLogic = useCallback(
@@ -250,12 +245,74 @@ const GameProvider: React.FC = ({ children }) => {
     [user, updateUser, winXp],
   );
 
+  const physicalActivityLogic = useCallback(
+    async (selectedDate: string) => {
+      const hasAlarmInSameTimeAsRegistry = getAlarmByRangeAndCategory({
+        selectedDate,
+        category: 'physical-activity',
+      });
+      const updatedUser = { ...user };
+
+      if (hasAlarmInSameTimeAsRegistry) {
+        if (!updatedUser.game.physicalActivityDaySequence.lastDay) {
+          updatedUser.game.physicalActivityDaySequence.lastDay = selectedDate;
+
+          updatedUser.game.physicalActivityDaySequence.sequency += 1;
+
+          winXp(15, updatedUser);
+
+          await updateUser(updatedUser);
+
+          return;
+        }
+
+        const differenceBetweenRegistryDayAndLastMedicineRegister = differenceInDays(
+          parseISO(selectedDate),
+          parseISO(updatedUser.game.physicalActivityDaySequence.lastDay),
+        );
+
+        if (differenceBetweenRegistryDayAndLastMedicineRegister < 0) {
+          winXp(15, updatedUser);
+
+          updatedUser.game.physicalActivityDaySequence.lastDay = selectedDate;
+
+          updatedUser.game.physicalActivityDaySequence.sequency = 1;
+
+          await updateUser(updatedUser);
+        } else if (differenceBetweenRegistryDayAndLastMedicineRegister === 1) {
+          updatedUser.game.physicalActivityDaySequence.lastDay = selectedDate;
+
+          verifySequence(
+            updatedUser.game.physicalActivityDaySequence.sequency,
+            updatedUser,
+          );
+
+          updatedUser.game.physicalActivityDaySequence.sequency += 1;
+
+          winXp(15, updatedUser);
+
+          await updateUser(updatedUser);
+        } else if (differenceBetweenRegistryDayAndLastMedicineRegister >= 2) {
+          winXp(15, updatedUser);
+
+          updatedUser.game.physicalActivityDaySequence.lastDay = selectedDate;
+
+          updatedUser.game.physicalActivityDaySequence.sequency = 1;
+
+          await updateUser(updatedUser);
+        }
+      }
+    },
+    [getAlarmByRangeAndCategory, user, updateUser, verifySequence, winXp],
+  );
+
   return (
     <GameContext.Provider
       value={{
         medicineLogic,
         insulinLogic,
         imcLogic,
+        physicalActivityLogic,
       }}
     >
       {children}
