@@ -5,6 +5,7 @@ import TabRoutes from './tab.routes';
 import Forum from '../pages/DrawerContent/Forum';
 import Medals from '../pages/DrawerContent/Medals';
 import Goals from '../pages/DrawerContent/Goals';
+import Ranking from '../pages/DrawerContent/Ranking';
 import Imc from '../pages/DrawerContent/Imc';
 
 import DrawerContent from '../pages/DrawerContent';
@@ -17,6 +18,7 @@ const DrawerRoutes: React.FC = () => (
     <Drawer.Screen name="Forum" component={Forum} />
     <Drawer.Screen name="Medals" component={Medals} />
     <Drawer.Screen name="Goals" component={Goals} />
+    <Drawer.Screen name="Ranking" component={Ranking} />
     <Drawer.Screen name="Imc" component={Imc} />
   </Drawer.Navigator>
 );

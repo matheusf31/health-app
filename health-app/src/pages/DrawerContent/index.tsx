@@ -98,6 +98,19 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
             />
 
             <DrawerItem
+              onPress={() => props.navigation.navigate('Ranking')}
+              label="Ranking"
+              icon={() => (
+                <Icon name="trophy-award" color="#146ba8" size={28} />
+              )}
+              labelStyle={{
+                color: '#17181d',
+                fontSize: 18,
+                fontFamily: 'Roboto-Regular',
+              }}
+            />
+
+            <DrawerItem
               onPress={() => props.navigation.navigate('Imc')}
               label="IMC"
               icon={() => <Icon name="altimeter" color="#146ba8" size={28} />}

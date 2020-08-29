@@ -35,8 +35,8 @@
       "password": "123456",
       "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
       "game": {
-        "lvl": 1,
-        "xp": 15,
+        "lvl": 2,
+        "xp": 65,
         "insulinDaySequence": 0,
         "medicineDaySequence": {
           "sequency": 0,
@@ -63,8 +63,8 @@
       "firstLogin": true,
       "id": 4,
       "game": {
-        "lvl": 1,
-        "xp": 15,
+        "lvl": 5,
+        "xp": 10,
         "insulinDaySequence": 0,
         "medicineDaySequence": {
           "sequency": 0,

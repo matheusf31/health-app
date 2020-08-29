@@ -1,19 +1,13 @@
 import React from 'react';
+import { View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import Emoji from 'react-native-emoji';
 
 import { useAuth } from '../../../hooks/auth';
 
-import OpenDrawerButton from '../../../components/OpenDrawerButton';
+import Header from '../components/Header';
 
-import {
-  Container,
-  HeaderContainer,
-  TitleView,
-  Title,
-  ImcRowText,
-  ImcHeaderText,
-} from './styles';
+import { Container, ImcRowText, ImcHeaderText } from './styles';
 
 interface ImcRow {
   firstCellText: string;
@@ -30,19 +24,23 @@ const ImcRow: React.FC<ImcRow> = ({
 }) => {
   return (
     <DataTable.Row>
-      <DataTable.Cell>
+      <DataTable.Cell style={{ flex: 4 }}>
         <ImcRowText style={{ color: textColor, fontSize: 13 }}>
           {firstCellText}
         </ImcRowText>
       </DataTable.Cell>
 
-      <DataTable.Cell style={{ right: -20 }}>
+      <DataTable.Cell style={{ flex: 4 }}>
         <ImcRowText style={{ color: textColor }}>{secondCellText}</ImcRowText>
       </DataTable.Cell>
 
-      <DataTable.Cell style={{ right: -60 }}>
+      <DataTable.Cell style={{ flex: 1 }}>
         {imcValue && (
-          <ImcRowText style={{ color: textColor }}>
+          <ImcRowText
+            style={{
+              color: textColor,
+            }}
+          >
             <Emoji name=":point_left:" style={{ fontSize: 20 }} />
           </ImcRowText>
         )}
@@ -55,29 +53,20 @@ const Imc: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <Container
-      contentContainerStyle={{ paddingBottom: 400 }}
-      showsVerticalScrollIndicator={false}
-    >
-      <HeaderContainer>
-        <OpenDrawerButton />
-
-        <TitleView>
-          <Title>Controle seu IMC</Title>
-        </TitleView>
-      </HeaderContainer>
+    <Container showsVerticalScrollIndicator={false}>
+      <Header title="Controle seu IMC" />
 
       <DataTable>
         <DataTable.Header>
-          <DataTable.Title>
+          <DataTable.Title style={{ flex: 2 }}>
             <ImcHeaderText>Classificação</ImcHeaderText>
           </DataTable.Title>
 
-          <DataTable.Title style={{ right: -20 }}>
+          <DataTable.Title style={{ flex: 2 }}>
             <ImcHeaderText>Valor do IMC</ImcHeaderText>
           </DataTable.Title>
 
-          <DataTable.Title style={{ right: -30 }}>
+          <DataTable.Title style={{ flex: 1 }}>
             <ImcHeaderText>Seu IMC</ImcHeaderText>
           </DataTable.Title>
         </DataTable.Header>
