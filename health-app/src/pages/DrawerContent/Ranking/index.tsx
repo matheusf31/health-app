@@ -13,6 +13,8 @@ import {
 import { IUser } from '../../../hooks/auth';
 import api from '../../../services/api';
 
+import { useAuth } from '../../../hooks/auth';
+
 import Header from '../components/Header';
 
 interface RankingRow {
@@ -21,27 +23,40 @@ interface RankingRow {
 }
 
 const RankingRow: React.FC<RankingRow> = ({ user, ranking }) => {
+  const { user: loggedUser } = useAuth();
+
   return (
     <DataTable.Row style={{ paddingVertical: 30 }}>
       <DataTable.Cell style={{ flex: 3 }}>
         {ranking === 1 ? (
           <Emoji name=":crown:" style={{ fontSize: 20 }} />
         ) : (
-          <RankingRowText>{ranking}</RankingRowText>
+          <RankingRowText loggedUser={loggedUser.id === user.id}>
+            {ranking}
+          </RankingRowText>
         )}
       </DataTable.Cell>
 
       <UserAvatarView>
         <UserAvatar source={{ uri: user.avatar_url }} size={30} />
-        <RankingRowText numberOfLines={2}>{user.name}</RankingRowText>
+        <RankingRowText
+          numberOfLines={2}
+          loggedUser={loggedUser.id === user.id}
+        >
+          {user.name}
+        </RankingRowText>
       </UserAvatarView>
 
       <DataTable.Cell style={{ flex: 1.9 }}>
-        <RankingRowText>{user.game.xp}</RankingRowText>
+        <RankingRowText loggedUser={loggedUser.id === user.id}>
+          {user.game.xp}
+        </RankingRowText>
       </DataTable.Cell>
 
       <DataTable.Cell style={{ flex: 0.7 }}>
-        <RankingRowText>{user.game.lvl}</RankingRowText>
+        <RankingRowText loggedUser={loggedUser.id === user.id}>
+          {user.game.lvl}
+        </RankingRowText>
       </DataTable.Cell>
     </DataTable.Row>
   );
@@ -56,7 +71,6 @@ const Ranking: React.FC = () => {
       .get<IUser[]>('/users?_sort=game.lvl&_order=desc')
       .then(response => {
         // ordenar por xp
-
         const orderedUsers = response.data.sort((first, second) => {
           if (first.game.lvl === second.game.lvl) {
             return second.game.xp - first.game.xp;
