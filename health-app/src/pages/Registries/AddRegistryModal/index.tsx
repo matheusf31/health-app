@@ -19,7 +19,7 @@ import BeforeBedtime from '../../../assets/blood-glucose/antes-de-dormir.svg';
 import General from '../../../assets/blood-glucose/geral.svg';
 
 import { useGame } from '../../../hooks/game';
-import { useAuth } from '../../../hooks/auth';
+import { useAuth, IUser } from '../../../hooks/auth';
 
 import {
   ModalContainer,
@@ -64,6 +64,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
     medicineLogic,
     imcLogic,
     physicalActivityLogic,
+    handleCheckGameSequences,
   } = useGame();
   const { user } = useAuth();
 
@@ -94,6 +95,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
 
   const handleAddRegistry = useCallback(
     async (customMessage?: string) => {
+      const userToUpdate = { ...user };
+
       if (category === 'insulin-therapy' && user.goals['aplicar insulina']) {
         await insulinLogic(selectedDate);
       }
@@ -110,7 +113,7 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
       }
 
       await api.post('/registries', {
-        user_id: user.id,
+        user_id: userToUpdate.id,
         date: selectedDate,
         category,
         selfState,
@@ -119,6 +122,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
         month: parseISO(selectedDate).getMonth(),
         year: parseISO(selectedDate).getFullYear(),
       });
+
+      await handleCheckGameSequences({ userToUpdate, selectedDate, category });
 
       handleLeaveModal();
     },
@@ -131,6 +136,8 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
       handleLeaveModal,
       insulinLogic,
       medicineLogic,
+      physicalActivityLogic,
+      handleCheckGameSequences,
     ],
   );
 

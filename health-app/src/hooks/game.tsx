@@ -21,6 +21,12 @@ interface IUser {
   game: {
     lvl: number;
     xp: number;
+    sequences: {
+      [key: string]: number;
+    };
+    medals: {
+      [key: string]: number;
+    };
     insulinDaySequence: number;
     medicineDaySequence: {
       sequency: number;
@@ -47,11 +53,18 @@ interface IRegistries {
   id: number;
 }
 
+interface IHandleCheckGameSequences {
+  userToUpdate: IUser;
+  category: string;
+  selectedDate: string;
+}
+
 interface IGameContextData {
   insulinLogic(selectedDate: string): Promise<void>;
   medicineLogic(selectedDate: string): Promise<void>;
   imcLogic(updatedUser: IUser): Promise<void>;
   physicalActivityLogic(selectedDate: string): Promise<void>;
+  handleCheckGameSequences(data: IHandleCheckGameSequences): Promise<void>;
 }
 
 const GameContext = createContext<IGameContextData>({} as IGameContextData);
@@ -306,9 +319,38 @@ const GameProvider: React.FC = ({ children }) => {
     [getAlarmByRangeAndCategory, user, updateUser, verifySequence, winXp],
   );
 
+  const handleCheckGameSequences = useCallback(
+    async ({
+      userToUpdate,
+      selectedDate,
+      category,
+    }: IHandleCheckGameSequences) => {
+      const yesterdayDate = subDays(parseISO(selectedDate), 1);
+
+      const response = await api.get(
+        `/registries?day=${yesterdayDate.getDate()}&month=${yesterdayDate.getMonth()}&year=${yesterdayDate.getFullYear()}&category=${category}`,
+      );
+
+      const hasYesterdayRegistry = response.data;
+
+      if (hasYesterdayRegistry) {
+        userToUpdate.game.sequences[category] += 1;
+
+        // aumenta a sequência daquela categoria
+        await api.put(`/users/${userToUpdate.id}`, {
+          userToUpdate,
+        });
+
+        await updateUser(userToUpdate);
+      }
+    },
+    [updateUser],
+  );
+
   return (
     <GameContext.Provider
       value={{
+        handleCheckGameSequences,
         medicineLogic,
         insulinLogic,
         imcLogic,

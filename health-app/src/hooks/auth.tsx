@@ -30,6 +30,12 @@ export interface IUser {
   game: {
     lvl: number;
     xp: number;
+    sequences: {
+      [key: string]: number;
+    };
+    medals: {
+      [key: string]: number;
+    };
     insulinDaySequence: number;
     medicineDaySequence: {
       sequency: number;
