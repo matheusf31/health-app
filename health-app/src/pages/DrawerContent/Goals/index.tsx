@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-// import { Container } from './styles';
+import Header from '../components/Header';
+
+import { Container } from './styles';
 
 const Goals: React.FC = () => {
   return (
-    <View>
-      <Text>Goals</Text>
-    </View>
+    <Container>
+      <Header title="Metas" />
+    </Container>
   );
 };
 
