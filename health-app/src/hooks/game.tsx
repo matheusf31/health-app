@@ -93,8 +93,15 @@ const GameProvider: React.FC = ({ children }) => {
   );
 
   const winXp = useCallback((newXp: number, updatedUser: IUser) => {
+    const winLvl = (): boolean => {
+      if (updatedUser.game.xp + newXp >= updatedUser.game.lvl * 100)
+        return true;
+
+      return false;
+    };
+
     // true: quer dizer que o usuário upou de nível
-    if (updatedUser.game.xp + newXp >= updatedUser.game.lvl * 100) {
+    if (winLvl()) {
       updatedUser.game.xp =
         updatedUser.game.xp + newXp - updatedUser.game.lvl * 100;
 
@@ -319,6 +326,29 @@ const GameProvider: React.FC = ({ children }) => {
     [getAlarmByRangeAndCategory, user, updateUser, verifySequence, winXp],
   );
 
+  const verifyGameSequences = useCallback(
+    ({ userToUpdate, category }: { userToUpdate: IUser; category: string }) => {
+      if (
+        userToUpdate.game.sequences[category] >= 1 &&
+        !userToUpdate.game.medals[category]
+      ) {
+        userToUpdate.game.medals[category] += 1;
+        Alert.alert('Parabéns!!', 'Você ganhou uma medalha :D.');
+      }
+
+      if (userToUpdate.game.sequences[category] === 30) {
+        userToUpdate.game.medals[category] += 1;
+        Alert.alert('Parabéns!!', 'Você ganhou uma medalha :D.');
+      }
+
+      if (userToUpdate.game.sequences[category] === 100) {
+        userToUpdate.game.medals[category] += 1;
+        Alert.alert('Parabéns!!', 'Você ganhou uma medalha :D.');
+      }
+    },
+    [],
+  );
+
   const handleCheckGameSequences = useCallback(
     async ({
       userToUpdate,
@@ -336,6 +366,8 @@ const GameProvider: React.FC = ({ children }) => {
       if (hasYesterdayRegistry) {
         userToUpdate.game.sequences[category] += 1;
 
+        verifyGameSequences({ userToUpdate, category });
+
         // aumenta a sequência daquela categoria
         await api.put(`/users/${userToUpdate.id}`, {
           userToUpdate,
@@ -344,7 +376,7 @@ const GameProvider: React.FC = ({ children }) => {
         await updateUser(userToUpdate);
       }
     },
-    [updateUser],
+    [updateUser, verifyGameSequences],
   );
 
   return (

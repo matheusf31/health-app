@@ -9,20 +9,20 @@
       "height": 1.77,
       "game": {
         "lvl": 4,
-        "xp": 125,
+        "xp": 130,
         "sequences": {
           "physical-activity": 0,
-          "blood-glucose": 0,
-          "insulin-therapy": 6,
-          "medicine": 0
+          "blood-glucose": 2,
+          "insulin-therapy": 8,
+          "medicine": 1
         },
         "medals": {
           "physical-activity": 0,
-          "blood-glucose": 0,
-          "insulin-therapy": 0,
-          "medicine": 0
+          "blood-glucose": 1,
+          "insulin-therapy": 1,
+          "medicine": 1
         },
-        "insulinDaySequence": 11,
+        "insulinDaySequence": 12,
         "medicineDaySequence": {
           "sequency": 3,
           "lastDay": "2020-08-26T23:30:59-03:00"
@@ -214,28 +214,6 @@
     },
     {
       "user_id": 1,
-      "date": "2020-09-05T21:03:52-03:00",
-      "category": "insulin-therapy",
-      "selfState": "",
-      "message": "12",
-      "day": 5,
-      "month": 8,
-      "year": 2020,
-      "id": 10
-    },
-    {
-      "user_id": 1,
-      "date": "2020-09-05T21:03:52-03:00",
-      "category": "insulin-therapy",
-      "selfState": "",
-      "message": "12",
-      "day": 5,
-      "month": 8,
-      "year": 2020,
-      "id": 11
-    },
-    {
-      "user_id": 1,
       "date": "2020-09-06T21:07:01-03:00",
       "category": "insulin-therapy",
       "selfState": "",
@@ -266,17 +244,6 @@
       "month": 8,
       "year": 2020,
       "id": 14
-    },
-    {
-      "user_id": 1,
-      "date": "2020-09-05T21:30:49-03:00",
-      "category": "insulin-therapy",
-      "selfState": "",
-      "message": "",
-      "day": 5,
-      "month": 8,
-      "year": 2020,
-      "id": 15
     }
   ]
 }

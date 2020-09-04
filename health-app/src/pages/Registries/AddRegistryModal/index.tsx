@@ -19,7 +19,7 @@ import BeforeBedtime from '../../../assets/blood-glucose/antes-de-dormir.svg';
 import General from '../../../assets/blood-glucose/geral.svg';
 
 import { useGame } from '../../../hooks/game';
-import { useAuth, IUser } from '../../../hooks/auth';
+import { useAuth } from '../../../hooks/auth';
 
 import {
   ModalContainer,

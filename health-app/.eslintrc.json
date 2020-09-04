@@ -25,6 +25,7 @@
   "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
   "rules": {
     "no-nested-ternary": "off",
+    "dot-notation": "off",
     "no-plusplus": "off",
     "react/no-unused-prop-types": "off",
     "react/jsx-props-no-spreading": "off",
