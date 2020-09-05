@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import Emoji from 'react-native-emoji';
 
