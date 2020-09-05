@@ -13,13 +13,13 @@
         "sequences": {
           "physical-activity": 0,
           "blood-glucose": 2,
-          "insulin-therapy": 8,
+          "insulin-therapy": 30,
           "medicine": 1
         },
         "medals": {
           "physical-activity": 0,
           "blood-glucose": 1,
-          "insulin-therapy": 1,
+          "insulin-therapy": 2,
           "medicine": 1
         },
         "insulinDaySequence": 12,
@@ -244,6 +244,17 @@
       "month": 8,
       "year": 2020,
       "id": 14
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-04T11:35:20-03:00",
+      "category": "insulin-therapy",
+      "selfState": "",
+      "message": "23",
+      "day": 4,
+      "month": 8,
+      "year": 2020,
+      "id": 15
     }
   ]
 }

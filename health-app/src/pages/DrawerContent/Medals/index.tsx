@@ -31,7 +31,10 @@ const Medals: React.FC = () => {
   }, [user.game.medals]);
 
   return (
-    <Container contentContainerStyle={{ paddingBottom: 200 }}>
+    <Container
+      contentContainerStyle={{ paddingBottom: 200 }}
+      showsVerticalScrollIndicator={false}
+    >
       <Header title="Suas medalhas" />
 
       <MedalContainer>
@@ -39,13 +42,13 @@ const Medals: React.FC = () => {
 
         <MedalsView>
           {verifyAllSequence() ? (
-            <TrophyColor width={100} height={70} />
+            <TrophyColor width={200} height={130} />
           ) : (
-            <Trophy width={100} height={70} />
+            <Trophy width={200} height={130} />
           )}
         </MedalsView>
 
-        <MedalTitle>Medalhas para atividade física</MedalTitle>
+        <MedalTitle>Atividade física</MedalTitle>
 
         <MedalsView>
           {user.game.medals['physical-activity'] >= 1 ? (
@@ -67,7 +70,7 @@ const Medals: React.FC = () => {
           )}
         </MedalsView>
 
-        <MedalTitle>Medalhas para glicemia</MedalTitle>
+        <MedalTitle>Glicemia</MedalTitle>
 
         <MedalsView>
           {user.game.medals['blood-glucose'] >= 1 ? (
@@ -89,7 +92,7 @@ const Medals: React.FC = () => {
           )}
         </MedalsView>
 
-        <MedalTitle>Medalhas para insulina</MedalTitle>
+        <MedalTitle>Insulina</MedalTitle>
 
         <MedalsView>
           {user.game.medals['insulin-therapy'] >= 1 ? (
@@ -111,7 +114,7 @@ const Medals: React.FC = () => {
           )}
         </MedalsView>
 
-        <MedalTitle>Medalhas para medicamentos</MedalTitle>
+        <MedalTitle>Medicamentos</MedalTitle>
 
         <MedalsView>
           {user.game.medals['medicine'] >= 1 ? (
