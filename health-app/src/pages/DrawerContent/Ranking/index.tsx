@@ -38,7 +38,6 @@ const RankingRow: React.FC<RankingRow> = ({ user, ranking }) => {
       </DataTable.Cell>
 
       <UserAvatarView>
-        <UserAvatar source={{ uri: user.avatar_url }} size={30} />
         <RankingRowText
           numberOfLines={2}
           loggedUser={loggedUser.id === user.id}
