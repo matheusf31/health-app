@@ -69,9 +69,6 @@ interface IGameContextData {
 
 const GameContext = createContext<IGameContextData>({} as IGameContextData);
 
-/**
- * Lógica do jogo
- */
 const GameProvider: React.FC = ({ children }) => {
   const { user, onUpdateUser } = useAuth();
   const { getAlarmByRangeAndCategory } = useAlarm();
@@ -246,17 +243,17 @@ const GameProvider: React.FC = ({ children }) => {
         return;
       }
 
-      // imc estava abaixo do ideal e ele aumentou no máx até a faixa ideal
+      // imc estava abaixo do ideal e ele aumentou (até no máx a faixa ideal)
       if (user.imc < 18.5) {
         if (updatedUser.imc > user.imc && updatedUser.imc <= 24.9) {
-          winXp(10, updatedUser);
+          winXp(20, updatedUser);
         }
       }
 
-      // imc estava acima do ideal e ele diminuiu no máx até a faixa ideal
+      // imc estava acima do ideal e ele diminuiu (até no máx a faixa ideal)
       if (user.imc > 24.9) {
         if (updatedUser.imc < user.imc && updatedUser.imc >= 18.5) {
-          winXp(10, updatedUser);
+          winXp(20, updatedUser);
         }
       }
 
@@ -292,7 +289,7 @@ const GameProvider: React.FC = ({ children }) => {
         );
 
         if (differenceBetweenRegistryDayAndLastMedicineRegister < 0) {
-          winXp(15, updatedUser);
+          winXp(10, updatedUser);
 
           updatedUser.game.physicalActivityDaySequence.lastDay = selectedDate;
 
@@ -309,11 +306,11 @@ const GameProvider: React.FC = ({ children }) => {
 
           updatedUser.game.physicalActivityDaySequence.sequency += 1;
 
-          winXp(15, updatedUser);
+          winXp(10, updatedUser);
 
           await updateUser(updatedUser);
         } else if (differenceBetweenRegistryDayAndLastMedicineRegister >= 2) {
-          winXp(15, updatedUser);
+          winXp(10, updatedUser);
 
           updatedUser.game.physicalActivityDaySequence.lastDay = selectedDate;
 
