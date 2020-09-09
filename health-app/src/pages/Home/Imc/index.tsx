@@ -4,8 +4,6 @@ import Emoji from 'react-native-emoji';
 
 import { useAuth } from '../../../hooks/auth';
 
-import Header from '../components/Header';
-
 import { Container, ImcRowText, ImcHeaderText } from './styles';
 
 interface ImcRow {
@@ -53,8 +51,6 @@ const Imc: React.FC = () => {
 
   return (
     <Container showsVerticalScrollIndicator={false}>
-      <Header title="Controle seu IMC" />
-
       <DataTable>
         <DataTable.Header>
           <DataTable.Title style={{ flex: 2 }}>

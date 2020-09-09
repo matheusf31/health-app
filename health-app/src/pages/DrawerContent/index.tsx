@@ -63,22 +63,9 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
             />
 
             <DrawerItem
-              onPress={() => props.navigation.navigate('Forum')}
-              label="Forum"
-              icon={() => (
-                <Icon name="account-group" color="#146ba8" size={28} />
-              )}
-              labelStyle={{
-                color: '#17181d',
-                fontSize: 18,
-                fontFamily: 'Roboto-Regular',
-              }}
-            />
-
-            <DrawerItem
-              onPress={() => props.navigation.navigate('Medals')}
-              label="Medalhas"
-              icon={() => <Icon name="medal" color="#146ba8" size={28} />}
+              onPress={() => props.navigation.navigate('Registries')}
+              label="Registros"
+              icon={() => <Icon name="pencil-box" color="#146ba8" size={28} />}
               labelStyle={{
                 color: '#17181d',
                 fontSize: 18,
@@ -98,11 +85,9 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
             />
 
             <DrawerItem
-              onPress={() => props.navigation.navigate('Ranking')}
-              label="Ranking"
-              icon={() => (
-                <Icon name="trophy-award" color="#146ba8" size={28} />
-              )}
+              onPress={() => props.navigation.navigate('Medals')}
+              label="Medalhas"
+              icon={() => <Icon name="medal" color="#146ba8" size={28} />}
               labelStyle={{
                 color: '#17181d',
                 fontSize: 18,
@@ -111,9 +96,11 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
             />
 
             <DrawerItem
-              onPress={() => props.navigation.navigate('Imc')}
-              label="IMC"
-              icon={() => <Icon name="altimeter" color="#146ba8" size={28} />}
+              onPress={() => props.navigation.navigate('Ranking')}
+              label="Ranking"
+              icon={() => (
+                <Icon name="trophy-award" color="#146ba8" size={28} />
+              )}
               labelStyle={{
                 color: '#17181d',
                 fontSize: 18,

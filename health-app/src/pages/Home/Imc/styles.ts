@@ -4,7 +4,7 @@ export const Container = styled.ScrollView`
   flex: 1;
   background: #ebf1f3;
 
-  padding: 0 24px;
+  padding: 60px 24px;
 `;
 
 export const ImcHeaderText = styled.Text`
