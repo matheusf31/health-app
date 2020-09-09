@@ -14,7 +14,8 @@
           "physical-activity": 0,
           "blood-glucose": 2,
           "insulin-therapy": 30,
-          "medicine": 1
+          "medicine": 1,
+          "weight": null
         },
         "medals": {
           "physical-activity": 0,
@@ -132,6 +133,39 @@
       },
       "weight": 65,
       "imc": 20.75
+    },
+    {
+      "name": "luma",
+      "email": "luma@gmail.com",
+      "password": "123456",
+      "firstLogin": false,
+      "game": {
+        "lvl": 1,
+        "xp": 45,
+        "sequences": {
+          "physical-activity": 0,
+          "blood-glucose": 0,
+          "insulin-therapy": 0,
+          "medicine": 0
+        },
+        "insulinDaySequence": 0,
+        "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        },
+        "physicalActivityDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        }
+      },
+      "id": 6,
+      "height": 1.5,
+      "goals": {
+        "aplicar insulina": false,
+        "tomar os medicamentos seguindo os alarmes": true
+      },
+      "weight": 70,
+      "imc": 31.11
     }
   ],
   "registries": [
@@ -255,6 +289,17 @@
       "month": 8,
       "year": 2020,
       "id": 15
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-09T17:09:51-04:00",
+      "category": "weight",
+      "selfState": "",
+      "message": "seu peso atual é 90kg e sua altura é 1.77m",
+      "day": 9,
+      "month": 8,
+      "year": 2020,
+      "id": 16
     }
   ]
 }

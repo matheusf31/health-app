@@ -6,7 +6,6 @@ import {
   Container,
   RankingHeaderText,
   UserAvatarView,
-  UserAvatar,
   RankingRowText,
 } from './styles';
 
@@ -48,13 +47,13 @@ const RankingRow: React.FC<RankingRow> = ({ user, ranking }) => {
 
       <DataTable.Cell style={{ flex: 1.9 }}>
         <RankingRowText loggedUser={loggedUser.id === user.id}>
-          {user.game.xp}
+          {user.game.lvl}
         </RankingRowText>
       </DataTable.Cell>
 
       <DataTable.Cell style={{ flex: 0.7 }}>
         <RankingRowText loggedUser={loggedUser.id === user.id}>
-          {user.game.lvl}
+          {user.game.xp}
         </RankingRowText>
       </DataTable.Cell>
     </DataTable.Row>

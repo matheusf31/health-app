@@ -123,7 +123,13 @@ const AddAlarmModal: React.FC<IAddAlarmModalProps> = ({
         year: parseISO(selectedDate).getFullYear(),
       });
 
-      await handleCheckGameSequences({ userToUpdate, selectedDate, category });
+      if (category !== 'weight') {
+        await handleCheckGameSequences({
+          userToUpdate,
+          selectedDate,
+          category,
+        });
+      }
 
       handleLeaveModal();
     },
