@@ -102,39 +102,6 @@
       }
     },
     {
-      "name": "teste3",
-      "email": "teste3@gmail.com",
-      "password": "123456",
-      "firstLogin": false,
-      "game": {
-        "lvl": 1,
-        "xp": 40,
-        "sequences": {
-          "physical-activity": 0,
-          "blood-glucose": 0,
-          "insulin-therapy": 0,
-          "medicine": 0
-        },
-        "insulinDaySequence": 1,
-        "medicineDaySequence": {
-          "sequency": 0,
-          "lastDay": ""
-        },
-        "physicalActivityDaySequence": {
-          "sequency": 0,
-          "lastDay": ""
-        }
-      },
-      "id": 5,
-      "height": 1.77,
-      "goals": {
-        "aplicar insulina": true,
-        "tomar os medicamentos seguindo os alarmes": false
-      },
-      "weight": 65,
-      "imc": 20.75
-    },
-    {
       "name": "luma",
       "email": "luma@gmail.com",
       "password": "123456",
@@ -166,6 +133,45 @@
       },
       "weight": 70,
       "imc": 31.11
+    },
+    {
+      "name": "teste 3",
+      "email": "teste3@gmail.com",
+      "password": "123456",
+      "firstLogin": false,
+      "game": {
+        "lvl": 1,
+        "xp": 5,
+        "insulinDaySequence": 0,
+        "medicineDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        },
+        "physicalActivityDaySequence": {
+          "sequency": 0,
+          "lastDay": ""
+        },
+        "sequences": {
+          "physical-activity": 0,
+          "blood-glucose": 0,
+          "insulin-therapy": 0,
+          "medicine": 0
+        },
+        "medals": {
+          "physical-activity": 0,
+          "blood-glucose": 0,
+          "insulin-therapy": 1,
+          "medicine": 0
+        }
+      },
+      "id": 7,
+      "height": 1.59,
+      "weight": 49,
+      "imc": 19.38,
+      "goals": {
+        "aplicar insulina": true,
+        "tomar os medicamentos seguindo os alarmes": true
+      }
     }
   ],
   "registries": [

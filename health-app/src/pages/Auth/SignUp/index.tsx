@@ -80,6 +80,18 @@ const SignUp: React.FC = () => {
               sequency: 0,
               lastDay: '',
             },
+            sequences: {
+              'physical-activity': 0,
+              'blood-glucose': 0,
+              'insulin-therapy': 0,
+              medicine: 0,
+            },
+            medals: {
+              'physical-activity': 0,
+              'blood-glucose': 0,
+              'insulin-therapy': 0,
+              medicine: 0,
+            },
           },
         });
 
