@@ -300,6 +300,28 @@
       "month": 8,
       "year": 2020,
       "id": 16
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-12T16:21:19-04:00",
+      "category": "weight",
+      "selfState": "",
+      "message": "seu peso atual é 100kg e sua altura é 1.77m",
+      "day": 12,
+      "month": 8,
+      "year": 2020,
+      "id": 17
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-12T16:21:19-04:00",
+      "category": "weight",
+      "selfState": "",
+      "message": "seu peso atual é 65kg e sua altura é 1.77m",
+      "day": 12,
+      "month": 8,
+      "year": 2020,
+      "id": 18
     }
   ]
 }

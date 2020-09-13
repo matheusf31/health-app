@@ -34,7 +34,7 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = props => {
 
             <UserGameContainer>
               <UserLevelView>
-                <UserLevelText> lvl {user.game.lvl}</UserLevelText>
+                <UserLevelText> Nível {user.game.lvl}</UserLevelText>
               </UserLevelView>
 
               <UserXpContainer>

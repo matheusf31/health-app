@@ -99,7 +99,7 @@ const Registries: React.FC = () => {
         <RegisterContainer>
           <TitleContainer>
             <Title>Registros</Title>
-            <Emoji name=":pencil:" style={{ fontSize: 20 }} />
+            {/* <Emoji name=":pencil:" style={{ fontSize: 20 }} /> */}
           </TitleContainer>
 
           {registries.map(registry => (
@@ -119,7 +119,7 @@ const Registries: React.FC = () => {
         <FeelsContainer>
           <TitleContainer>
             <Title>Como está se sentindo hoje?</Title>
-            <Emoji name=":grinning:" style={{ fontSize: 20 }} />
+            {/* <Emoji name=":grinning:" style={{ fontSize: 20 }} /> */}
           </TitleContainer>
 
           <Emojis

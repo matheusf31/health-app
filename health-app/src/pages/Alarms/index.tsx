@@ -120,7 +120,7 @@ const Alarm: React.FC = () => {
         <AlarmContainer>
           <TitleContainer>
             <Title>Alarmes</Title>
-            <Emoji name=":alarm_clock:" style={{ fontSize: 20 }} />
+            {/* <Emoji name=":alarm_clock:" style={{ fontSize: 20 }} /> */}
           </TitleContainer>
 
           {alarms.length === 0 && (

@@ -26,7 +26,7 @@ const RankingRow: React.FC<RankingRow> = ({ user, ranking }) => {
 
   return (
     <DataTable.Row style={{ paddingVertical: 30 }}>
-      <DataTable.Cell style={{ flex: 3 }}>
+      <DataTable.Cell style={{ flex: 4 }}>
         {ranking === 1 ? (
           <Emoji name=":crown:" style={{ fontSize: 20 }} />
         ) : (
@@ -45,15 +45,15 @@ const RankingRow: React.FC<RankingRow> = ({ user, ranking }) => {
         </RankingRowText>
       </UserAvatarView>
 
-      <DataTable.Cell style={{ flex: 1.9 }}>
+      <DataTable.Cell style={{ flex: 2.8 }}>
         <RankingRowText loggedUser={loggedUser.id === user.id}>
-          {user.game.lvl}
+          {user.game.xp}
         </RankingRowText>
       </DataTable.Cell>
 
-      <DataTable.Cell style={{ flex: 0.7 }}>
+      <DataTable.Cell style={{ flex: 1 }}>
         <RankingRowText loggedUser={loggedUser.id === user.id}>
-          {user.game.xp}
+          {user.game.lvl}
         </RankingRowText>
       </DataTable.Cell>
     </DataTable.Row>
@@ -93,15 +93,15 @@ const Ranking: React.FC = () => {
           </DataTable.Title>
 
           <DataTable.Title style={{ flex: 5 }}>
-            <RankingHeaderText>Perfil</RankingHeaderText>
+            <RankingHeaderText>Nome</RankingHeaderText>
           </DataTable.Title>
 
           <DataTable.Title style={{ flex: 2 }}>
             <RankingHeaderText>Xp</RankingHeaderText>
           </DataTable.Title>
 
-          <DataTable.Title style={{ flex: 1 }}>
-            <RankingHeaderText>Lvl</RankingHeaderText>
+          <DataTable.Title style={{ flex: 1.8 }}>
+            <RankingHeaderText>Nível</RankingHeaderText>
           </DataTable.Title>
         </DataTable.Header>
       </DataTable>
