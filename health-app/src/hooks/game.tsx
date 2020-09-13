@@ -42,7 +42,7 @@ interface IUser {
   imc: number;
 }
 
-interface IRegistries {
+export interface IRegistries {
   date: string;
   category: string;
   selfState: string;
