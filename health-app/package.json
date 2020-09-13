@@ -30,6 +30,7 @@
     "path-dirname": "^1.0.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-chart-kit": "^6.6.1",
     "react-native-emoji": "^1.8.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-get-random-values": "^1.4.0",

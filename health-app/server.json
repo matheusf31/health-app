@@ -153,13 +153,13 @@
         },
         "sequences": {
           "physical-activity": 0,
-          "blood-glucose": 0,
+          "blood-glucose": 6,
           "insulin-therapy": 0,
           "medicine": 0
         },
         "medals": {
           "physical-activity": 0,
-          "blood-glucose": 0,
+          "blood-glucose": 1,
           "insulin-therapy": 1,
           "medicine": 0
         }
@@ -328,6 +328,72 @@
       "month": 8,
       "year": 2020,
       "id": 18
+    },
+    {
+      "user_id": 7,
+      "date": "2020-09-13T07:55:05-04:00",
+      "category": "blood-glucose",
+      "selfState": "pré-refeição",
+      "message": "20",
+      "day": 13,
+      "month": 8,
+      "year": 2020,
+      "id": 19
+    },
+    {
+      "user_id": 7,
+      "date": "2020-09-13T07:55:51-04:00",
+      "category": "blood-glucose",
+      "selfState": "pós-refeição",
+      "message": "50",
+      "day": 13,
+      "month": 8,
+      "year": 2020,
+      "id": 20
+    },
+    {
+      "user_id": 7,
+      "date": "2020-09-13T08:08:27-04:00",
+      "category": "blood-glucose",
+      "selfState": "",
+      "message": "10",
+      "day": 13,
+      "month": 8,
+      "year": 2020,
+      "id": 21
+    },
+    {
+      "user_id": 7,
+      "date": "2020-09-23T10:06:48-04:00",
+      "category": "blood-glucose",
+      "selfState": "pré-refeição",
+      "message": "12",
+      "day": 23,
+      "month": 8,
+      "year": 2020,
+      "id": 22
+    },
+    {
+      "user_id": 7,
+      "date": "2020-09-28T10:07:14-04:00",
+      "category": "blood-glucose",
+      "selfState": "pré-refeição",
+      "message": "50",
+      "day": 28,
+      "month": 8,
+      "year": 2020,
+      "id": 23
+    },
+    {
+      "user_id": 7,
+      "date": "2020-09-30T10:13:07-04:00",
+      "category": "blood-glucose",
+      "selfState": "pré-refeição",
+      "message": "5",
+      "day": 30,
+      "month": 8,
+      "year": 2020,
+      "id": 24
     }
   ]
 }
