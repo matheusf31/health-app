@@ -12,7 +12,7 @@
         "xp": 130,
         "sequences": {
           "physical-activity": 0,
-          "blood-glucose": 2,
+          "blood-glucose": 6,
           "insulin-therapy": 30,
           "medicine": 1,
           "weight": null
@@ -414,6 +414,50 @@
       "month": 8,
       "year": 2020,
       "id": 24
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-13T11:24:09-04:00",
+      "category": "blood-glucose",
+      "selfState": "",
+      "message": "30",
+      "day": 13,
+      "month": 8,
+      "year": 2020,
+      "id": 25
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-24T11:24:09-04:00",
+      "category": "blood-glucose",
+      "selfState": "",
+      "message": "150",
+      "day": 24,
+      "month": 8,
+      "year": 2020,
+      "id": 26
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-13T11:32:23-04:00",
+      "category": "blood-glucose",
+      "selfState": "",
+      "message": "30",
+      "day": 13,
+      "month": 8,
+      "year": 2020,
+      "id": 27
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-22T11:38:29-04:00",
+      "category": "blood-glucose",
+      "selfState": "",
+      "message": "100",
+      "day": 22,
+      "month": 8,
+      "year": 2020,
+      "id": 28
     }
   ]
 }

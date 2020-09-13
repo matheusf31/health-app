@@ -5,13 +5,6 @@ export const Container = styled.ScrollView`
   background: #ebf1f3;
 `;
 
-// export const Title = styled.Text`
-//   color: #17181d;
-//   font-family: 'Roboto-Medium';
-//   font-size: 28px;
-//   align-self: center;
-// `;
-
 export const ButtonContainer = styled.TouchableOpacity`
   background: #fff;
 

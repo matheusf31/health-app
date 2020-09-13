@@ -41,17 +41,27 @@ const Home: React.FC = () => {
       const result: number[] = [];
 
       for (let week = 1; week <= 6; week++) {
-        const weekTotal = registries.reduce(
-          (total, registry) =>
+        let count = 0;
+
+        // pega por semana
+        const weekTotal = registries.reduce((total, registry) => {
+          if (
             getWeekOfMonth(parseISO(registry.date), {
               locale: pt,
             }) === week
-              ? total + Number(registry.message)
-              : total,
-          0,
-        );
+          ) {
+            count++;
+            return total + Number(registry.message);
+          }
+          return total;
+        }, 0);
 
-        result.push(weekTotal);
+        // faz a média
+        if (count > 0) {
+          result.push(weekTotal / count);
+        } else {
+          result.push(weekTotal);
+        }
       }
 
       return result;
@@ -66,6 +76,7 @@ const Home: React.FC = () => {
 
       {bloodGlucoseValues.length > 0 && (
         <>
+          {console.log(bloodGlucoseValues)}
           <MonthCalendar
             date={selectedMonth}
             setSelectedMonth={setSelectedMonth}
@@ -80,11 +91,10 @@ const Home: React.FC = () => {
                   color: () => `#0E4B75`, // muda a cor da linha
                 },
               ],
-              legend: ['Registros de glicose'],
+              legend: ['Registros de glicose (mg/dL) no mês'],
             }}
             width={Dimensions.get('window').width} // from react-native
             height={250}
-            yAxisSuffix="mg/dL"
             chartConfig={{
               backgroundGradientFrom: '#fff',
               backgroundGradientTo: '#fff',
