@@ -8,6 +8,11 @@ import api from '../services/api';
 import { useAuth } from './auth';
 import { useAlarm } from './alarm';
 
+type IFeels = Array<{
+  date: string;
+  feel: string;
+}>;
+
 interface IUser {
   id: string;
   name: string;
@@ -40,6 +45,7 @@ interface IUser {
   height: number;
   weight: number;
   imc: number;
+  feels: IFeels;
 }
 
 export interface IRegistries {

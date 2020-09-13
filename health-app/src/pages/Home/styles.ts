@@ -15,7 +15,7 @@ export const Container = styled.ScrollView`
 export const ButtonContainer = styled.TouchableOpacity`
   background: #fff;
 
-  margin: 20px 24px;
+  margin: 20px 24px 0;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -26,6 +26,6 @@ export const ButtonContainer = styled.TouchableOpacity`
 export const ButtonTitle = styled.Text`
   color: #17181d;
   font-family: 'Roboto-Regular';
-  font-size: 24px;
+  font-size: 20px;
   align-self: center;
 `;

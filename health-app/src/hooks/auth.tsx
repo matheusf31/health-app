@@ -17,6 +17,11 @@ interface ISignInCredentials {
   password: string;
 }
 
+type IFeels = Array<{
+  date: string;
+  feel: string;
+}>;
+
 export interface IUser {
   id: string;
   name: string;
@@ -49,6 +54,7 @@ export interface IUser {
   height: number;
   weight: number;
   imc: number;
+  feels: IFeels;
 }
 
 interface IAuthContextData {

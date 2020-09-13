@@ -105,6 +105,7 @@ const Home: React.FC = () => {
               alignItems: 'center',
               marginLeft: 48,
               marginRight: 48,
+              marginTop: 16,
             }}
           />
         </>
@@ -116,7 +117,16 @@ const Home: React.FC = () => {
       >
         <ButtonTitle>Monitore seu IMC</ButtonTitle>
 
-        <Icon name="arrow-right" size={26} color="#17181d" />
+        <Icon name="arrow-right" size={24} color="#17181d" />
+      </ButtonContainer>
+
+      <ButtonContainer
+        onPress={() => navigation.navigate('Registries')}
+        activeOpacity={0.5}
+      >
+        <ButtonTitle>Faça suas anotações</ButtonTitle>
+
+        <Icon name="arrow-right" size={24} color="#17181d" />
       </ButtonContainer>
     </Container>
   );

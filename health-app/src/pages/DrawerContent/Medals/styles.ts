@@ -8,6 +8,7 @@ export const Container = styled.ScrollView`
 `;
 
 export const MedalContainer = styled.View`
+  margin-top: 20px;
   flex: 1;
 `;
 
@@ -15,6 +16,7 @@ export const MedalTitle = styled.Text`
   color: #17181d;
   font-family: 'Roboto-Medium';
   font-size: 26px;
+  align-self: center;
 `;
 
 export const MedalsView = styled.View`

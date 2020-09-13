@@ -16,97 +16,93 @@ import Neutral from '../../../assets/feels/neutral.svg';
 import { EmojiContainer } from './styles';
 
 interface IEmojisProps {
-  selectedFeels: string;
-  onSelectedFeelsChange: React.Dispatch<React.SetStateAction<string>>;
+  selectedFeel: string;
+  handleChangeFeels(feel: string): Promise<void>;
 }
 
 const Emojis: React.FC<IEmojisProps> = ({
-  selectedFeels,
-  onSelectedFeelsChange,
+  selectedFeel,
+  handleChangeFeels,
 }) => {
   return (
     <EmojiContainer>
-      {selectedFeels === 'angry' ? (
+      {selectedFeel === 'angry' ? (
         <AngryColor
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('angry')}
+          onPress={() => handleChangeFeels('angry')}
         />
       ) : (
         <Angry
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('angry')}
+          onPress={() => handleChangeFeels('angry')}
         />
       )}
 
-      {selectedFeels === 'very-sad' ? (
+      {selectedFeel === 'very-sad' ? (
         <VerySadColor
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('very-sad')}
+          onPress={() => handleChangeFeels('very-sad')}
         />
       ) : (
         <VerySad
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('very-sad')}
+          onPress={() => handleChangeFeels('very-sad')}
         />
       )}
 
-      {selectedFeels === 'sad' ? (
+      {selectedFeel === 'sad' ? (
         <SadColor
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('sad')}
+          onPress={() => handleChangeFeels('sad')}
         />
       ) : (
-        <Sad
-          width={60}
-          height={40}
-          onPress={() => onSelectedFeelsChange('sad')}
-        />
+        <Sad width={60} height={40} onPress={() => handleChangeFeels('sad')} />
       )}
 
-      {selectedFeels === 'neutral' ? (
+      {selectedFeel === 'neutral' ? (
         <NeutralColor
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('neutral')}
+          onPress={() => handleChangeFeels('neutral')}
         />
       ) : (
         <Neutral
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('neutral')}
+          onPress={() => handleChangeFeels('neutral')}
         />
       )}
 
-      {selectedFeels === 'happy' ? (
+      {selectedFeel === 'happy' ? (
         <HappyColor
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('happy')}
+          onPress={() => handleChangeFeels('happy')}
         />
       ) : (
         <Happy
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('happy')}
+          onPress={() => handleChangeFeels('happy')}
         />
       )}
 
-      {selectedFeels === 'very-happy' ? (
+      {selectedFeel === 'very-happy' ? (
         <VeryHappyColor
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('very-happy')}
+          onPress={() => handleChangeFeels('very-happy')}
         />
       ) : (
         <VeryHappy
           width={60}
           height={40}
-          onPress={() => onSelectedFeelsChange('very-happy')}
+          onPress={() => handleChangeFeels('very-happy')}
         />
       )}
     </EmojiContainer>
