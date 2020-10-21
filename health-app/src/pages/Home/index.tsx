@@ -76,7 +76,6 @@ const Home: React.FC = () => {
 
       {bloodGlucoseValues.length > 0 && (
         <>
-          {console.log(bloodGlucoseValues)}
           <MonthCalendar
             date={selectedMonth}
             setSelectedMonth={setSelectedMonth}

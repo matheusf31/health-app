@@ -5,14 +5,14 @@
       "name": "Matheus",
       "email": "matheus@gmail.com",
       "password": "123456",
-      "avatar_url": "https://api.adorable.io/avatars/190/abott@adorable.png",
+      "avatar_url": "https://api.adorable.io/avatars/190/happyio.png",
       "height": 1.77,
       "game": {
         "lvl": 4,
         "xp": 130,
         "sequences": {
           "physical-activity": 0,
-          "blood-glucose": 6,
+          "blood-glucose": 7,
           "insulin-therapy": 30,
           "medicine": 1,
           "weight": null
@@ -52,6 +52,54 @@
         {
           "date": "2020-09-15T11:19:53-04:00",
           "feel": "neutral"
+        },
+        {
+          "date": "2020-09-23T17:17:54-04:00",
+          "feel": "sad"
+        },
+        {
+          "date": "2020-09-22T17:18:05-04:00",
+          "feel": "angry"
+        },
+        {
+          "date": "2020-09-22T17:18:17-04:00",
+          "feel": "very-happy"
+        },
+        {
+          "date": "2020-09-22T17:18:18-04:00",
+          "feel": "angry"
+        },
+        {
+          "date": "2020-09-27T14:44:35-04:00",
+          "feel": "very-happy"
+        },
+        {
+          "date": "2020-09-27T14:44:36-04:00",
+          "feel": "sad"
+        },
+        {
+          "date": "2020-09-27T14:44:36-04:00",
+          "feel": "very-sad"
+        },
+        {
+          "date": "2020-09-27T14:44:37-04:00",
+          "feel": "angry"
+        },
+        {
+          "date": "2020-09-27T14:44:38-04:00",
+          "feel": "neutral"
+        },
+        {
+          "date": "2020-09-27T14:44:38-04:00",
+          "feel": "happy"
+        },
+        {
+          "date": "2020-09-27T14:44:39-04:00",
+          "feel": "very-happy"
+        },
+        {
+          "date": "2020-09-27T14:44:39-04:00",
+          "feel": "happy"
         }
       ]
     },
@@ -458,6 +506,17 @@
       "month": 8,
       "year": 2020,
       "id": 28
+    },
+    {
+      "user_id": 1,
+      "date": "2020-09-27T14:42:34-04:00",
+      "category": "blood-glucose",
+      "selfState": "jejum",
+      "message": "32",
+      "day": 27,
+      "month": 8,
+      "year": 2020,
+      "id": 29
     }
   ]
 }
