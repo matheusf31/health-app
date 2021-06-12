@@ -332,19 +332,19 @@ const GameProvider: React.FC = ({ children }) => {
   const verifyGameSequences = useCallback(
     ({ userToUpdate, category }: { userToUpdate: IUser; category: string }) => {
       if (
-        userToUpdate.game.sequences[category] >= 1 &&
-        !userToUpdate.game.medals[category]
+        userToUpdate?.game.sequences[category] >= 1 &&
+        !userToUpdate?.game.medals[category]
       ) {
         userToUpdate.game.medals[category] += 1;
         Alert.alert('Parabéns!!', 'Você ganhou uma medalha :D.');
       }
 
-      if (userToUpdate.game.sequences[category] === 30) {
+      if (userToUpdate?.game.sequences[category] === 30) {
         userToUpdate.game.medals[category] += 1;
         Alert.alert('Parabéns!!', 'Você ganhou uma medalha :D.');
       }
 
-      if (userToUpdate.game.sequences[category] === 100) {
+      if (userToUpdate?.game.sequences[category] === 100) {
         userToUpdate.game.medals[category] += 1;
         Alert.alert('Parabéns!!', 'Você ganhou uma medalha :D.');
       }
